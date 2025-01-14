@@ -1,14 +1,13 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { TabItem, TABS, useLayoutStore } from '@/stores/useLayoutStore';
-import { useCallback } from 'react';
 
 const TabBar: React.FC<any> = (props) => {
   const router = useRouter();
   const { activeTab, setActiveTab, setShowTabBar } = useLayoutStore();
 
-  const handleTabClick = useCallback((tab: TabItem) => {
+  const handleTabClick = (tab: TabItem) => {
     if (tab.isLock) return;
     if (tab.id === 1) {
       setShowTabBar(false);
@@ -17,7 +16,7 @@ const TabBar: React.FC<any> = (props) => {
     }
     setActiveTab(tab.id);
     props?.onTabClick?.(tab);
-  }, [router, setActiveTab]);
+  };
 
   return (
     <div className="fixed left-0 bottom-0 w-full bg-[#FFD335] grid grid-cols-5">

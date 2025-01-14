@@ -32,12 +32,12 @@ export const TabBarWrapper = ({
       const _tabs = TABS.filter((t) => ![4].includes(t.id));
       if (_tabs.some((t) => new RegExp(`^${t.path}`).test(pathname))) {
         router.push(tab.path);
+        return;
       }
       setInviteModalVisible(true);
       return;
     }
     router.push(tab.path);
-    console.log('tab: %o', tab, activeTab);
   };
 
   useEffect(() => {
@@ -48,9 +48,6 @@ export const TabBarWrapper = ({
     }
     if (tab) {
       setActiveTab(tab.id);
-      if (tab.id === 1) {
-        _showTabBar = false;
-      }
     }
     setShowTabBar(_showTabBar);
   }, [pathname]);
