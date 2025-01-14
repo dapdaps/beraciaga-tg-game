@@ -11,7 +11,6 @@ import TelegramProvider from '@/context/TelegramContext';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import OkxTonProvider from '@/context/OkxContext';
 import BitgetProvider from '@/context/BitgetContext';
-import { usePathname } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({
@@ -19,8 +18,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const path = usePathname();
-
   useEffect(() => {
     async function loadPlugin() {
       if (!process.env.NEXT_PUBLIC_APP_LINK?.includes?.('berachain_game_test_bot')) return;
@@ -44,7 +41,7 @@ export default function RootLayout({
             <SkeletonTheme baseColor='#96D6FF' highlightColor='#FFF5A9'>
               <OkxTonProvider isTelegram>
                 <BitgetProvider>
-                  <TabBarWrapper showTabBar={!['/', '/imported-equipments'].includes(path)}>
+                  <TabBarWrapper>
                     {children}
                   </TabBarWrapper>
                 </BitgetProvider>

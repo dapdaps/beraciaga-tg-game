@@ -2,24 +2,20 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { TabItem, TABS, useLayoutStore } from '@/stores/useLayoutStore';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 const TabBar: React.FC<any> = (props) => {
   const router = useRouter();
-  const pathname = usePathname();
-  const { activeTab, setActiveTab } = useLayoutStore();
-
-  useEffect(() => {
-    const tab = TABS.find(tab => tab.path === pathname);
-    if (tab) {
-      setActiveTab(tab.id);
-    }
-  }, [pathname, setActiveTab]);
+  const { activeTab, setActiveTab, setShowTabBar } = useLayoutStore();
 
   const handleTabClick = useCallback((tab: TabItem) => {
     if (tab.isLock) return;
+    if (tab.id === 1) {
+      setShowTabBar(false);
+    } else {
+      setShowTabBar(true);
+    }
     setActiveTab(tab.id);
-    // router.push(tab.path);
     props?.onTabClick?.(tab);
   }, [router, setActiveTab]);
 
@@ -35,7 +31,7 @@ const TabBar: React.FC<any> = (props) => {
             <div
               className="w-full h-[3rem] bg-contain bg-center bg-no-repeat relative"
               style={{
-                backgroundImage: `url("${tab.isLock ? tab.inactiveIcon : tab.icon}")`
+                backgroundImage: `url("${tab.isLock || activeTab !== tab.id ? tab.inactiveIcon : tab.icon}")`
               }}
             >
               {
