@@ -9,11 +9,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLayoutStore } from "@/stores/useLayoutStore";
 import { useBind } from "@/hooks/useBind";
 import Popover, { PopoverPlacement, PopoverTrigger } from '@components/popover';
+import { useUser } from '@/hooks/useUser';
+import Loading from '@components/Loading';
 
 const ImportedEquipmentsView = () => {
 
   const router = useRouter();
   const search = useSearchParams();
+  const { userInfo, getUserInfo, userInfoLoading } = useUser();
 
   const [items, setItems] = useState<any[]>([]);
 
@@ -58,6 +61,7 @@ const ImportedEquipmentsView = () => {
   useEffect(() => {
     fetchGameData();
     fetchAddress();
+    getUserInfo();
   }, []);
 
   const calculateTotalBonus = (items: any[]) => {
@@ -152,12 +156,18 @@ const ImportedEquipmentsView = () => {
           }
         </div>
         <div className="w-full px-5 pt-6 bg-black pb-6">
-          <button className="w-full flex-shrink-0 bg-[#FFD335] rounded-2xl h-[52px] leading-[52px] text-black text-center font-montserrat font-[700]" onClick={() => {
-            if (search.get('from') !== 'home') {
-              setCongratsModalVisible(true);
-            }
-            router.push('/home');
-          }}>Beraciaga Now</button>
+          <button
+            disabled={userInfoLoading}
+            className="w-full flex-shrink-0 bg-[#FFD335] rounded-2xl h-[52px] leading-[52px] text-black text-center font-montserrat font-[700] disabled:opacity-30 disabled:!cursor-not-allowed"
+            onClick={() => {
+              if (search.get('from') !== 'home' && userInfo?.bind_source === 'okx_invite') {
+                setCongratsModalVisible(true);
+              }
+              router.push('/home');
+            }}
+          >
+            {userInfoLoading ? <Loading /> : 'Beraciaga Now'}
+          </button>
         </div>
       </div>
     </div>
