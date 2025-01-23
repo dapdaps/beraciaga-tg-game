@@ -12,8 +12,8 @@ const GameView = () => {
   const gameSource = useMemo(() => {
     if (!WebApp) return null;
     const url = new URL('https://core-game.beratown.app/');
-    url.searchParams.set('initData', WebApp.initData);
-    url.searchParams.set('api', process.env.NEXT_PUBLIC_API || '');
+    url.searchParams.set('initData', btoa(WebApp.initData));
+    url.searchParams.set('api', btoa(process.env.NEXT_PUBLIC_API || ''));
 
     return url.toString();
   }, [WebApp]);
