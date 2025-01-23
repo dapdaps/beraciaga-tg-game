@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
 
 const GameView = () => {
@@ -8,6 +8,15 @@ const GameView = () => {
 
   const gameRef = useRef<any>(null);
   const [loaded, setLoaded] = useState(false);
+
+  const gameSource = useMemo(() => {
+    if (!WebApp) return null;
+    const url = new URL('https://core-game.beratown.app/');
+    url.searchParams.set('initData', WebApp.initData);
+    url.searchParams.set('api', process.env.NEXT_PUBLIC_API || '');
+
+    return url.toString();
+  }, [WebApp]);
 
   useEffect(() => {
     if (!gameRef.current || !WebApp || !loaded) return;
@@ -39,12 +48,16 @@ const GameView = () => {
 
   return (
     <div className="w-full h-full">
-      <iframe
-        ref={gameRef}
-        className="w-full h-full"
-        src="https://core-game.beratown.app/"
-        onLoad={() => setLoaded(true)}
-      />
+      {
+        gameSource && (
+          <iframe
+            ref={gameRef}
+            className="w-full h-full"
+            src={gameSource}
+            onLoad={() => setLoaded(true)}
+          />
+        )
+      }
     </div>
   );
 };
