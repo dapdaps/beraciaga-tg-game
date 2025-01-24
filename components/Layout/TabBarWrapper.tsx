@@ -83,8 +83,8 @@ export const TabBarWrapper = ({
           paddingBottom: showTabBar ? '5.375rem' : 0,
         }}
       >
-        <GameView />
         {!gameVisible && children}
+        <GameView />
       </main>
       {showTabBar && <TabBar onTabClick={handleTabClick} />}
       <Congrats
