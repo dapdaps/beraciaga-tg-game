@@ -34,6 +34,12 @@ export default function RootLayout({
       <head>
         <title>Beraciaga_Test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link
+          rel="preload"
+          as="document"
+          href={process.env.NEXT_PUBLIC_GAME_URL}
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
         <TonConnectUIProvider manifestUrl='https://bera-dapdap.vercel.app/tonconnect-manifest.json'>

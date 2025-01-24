@@ -5,15 +5,10 @@ import { TabItem, TABS, useLayoutStore } from '@/stores/useLayoutStore';
 
 const TabBar: React.FC<any> = (props) => {
   const router = useRouter();
-  const { activeTab, setActiveTab, setShowTabBar } = useLayoutStore();
+  const { activeTab, setActiveTab } = useLayoutStore();
 
   const handleTabClick = (tab: TabItem) => {
     if (tab.isLock) return;
-    if (tab.id === 1) {
-      setShowTabBar(false);
-    } else {
-      setShowTabBar(true);
-    }
     setActiveTab(tab.id);
     props?.onTabClick?.(tab);
   };

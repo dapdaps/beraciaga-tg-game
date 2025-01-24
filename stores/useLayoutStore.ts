@@ -26,6 +26,8 @@ type LayoutState = {
   setInviteModalVisible: (visible: boolean) => void;
   congratsModalVisible: boolean;
   setCongratsModalVisible: (visible: boolean) => void;
+  gameVisible: boolean;
+  setGameVisible: (visible: boolean) => void;
 };
 
 export const useLayoutStore = create<LayoutState>((set) => ({
@@ -35,6 +37,8 @@ export const useLayoutStore = create<LayoutState>((set) => ({
   setActiveTab: (tab) => set({ activeTab: tab }),
   inviteModalVisible: false,
   congratsModalVisible: false,
+  gameVisible: false,
   setInviteModalVisible: (inviteModalVisible) => set({ inviteModalVisible }),
   setCongratsModalVisible: (congratsModalVisible) => set({ congratsModalVisible }),
+  setGameVisible: (visible) => set({ gameVisible: visible }),
 }));

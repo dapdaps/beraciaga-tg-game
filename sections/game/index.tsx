@@ -2,16 +2,22 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
+import { useLayoutStore } from '@/stores/useLayoutStore';
+import { motion } from 'framer-motion';
 
 const GameView = () => {
   const { WebApp } = useTelegram();
+  const {
+    gameVisible,
+    setGameVisible,
+  } = useLayoutStore();
 
   const gameRef = useRef<any>(null);
   const [loaded, setLoaded] = useState(false);
 
   const gameSource = useMemo(() => {
     if (!WebApp) return null;
-    const url = new URL('https://core-game.beratown.app/');
+    const url = new URL(process.env.NEXT_PUBLIC_GAME_URL || '');
     url.searchParams.set('initData', btoa(WebApp.initData));
     url.searchParams.set('api', btoa(process.env.NEXT_PUBLIC_API || ''));
 
@@ -47,7 +53,20 @@ const GameView = () => {
   }, [loaded, WebApp]);
 
   return (
-    <div className="w-full h-full">
+    <motion.div
+      className="w-full h-full"
+      variants={{
+        visible: {
+          display: 'block',
+          opacity: 1,
+        },
+        invisible: {
+          display: 'none',
+          opacity: 0,
+        },
+      }}
+      animate={gameVisible ? 'visible' : 'invisible'}
+    >
       {
         gameSource && (
           <iframe
@@ -58,7 +77,7 @@ const GameView = () => {
           />
         )
       }
-    </div>
+    </motion.div>
   );
 };
 
