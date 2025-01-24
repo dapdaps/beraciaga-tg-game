@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from 'react';
 import "./globals.css";
 import 'swiper/css';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -47,9 +47,11 @@ export default function RootLayout({
             <SkeletonTheme baseColor='#96D6FF' highlightColor='#FFF5A9'>
               <OkxTonProvider isTelegram>
                 <BitgetProvider>
-                  <TabBarWrapper>
-                    {children}
-                  </TabBarWrapper>
+                  <Suspense fallback={<></>}>
+                    <TabBarWrapper>
+                      {children}
+                    </TabBarWrapper>
+                  </Suspense>
                 </BitgetProvider>
               </OkxTonProvider>
             </SkeletonTheme>
