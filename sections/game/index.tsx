@@ -21,7 +21,7 @@ const GameView = () => {
     url.searchParams.set('initData', btoa(WebApp.initData));
     url.searchParams.set('api', btoa(process.env.NEXT_PUBLIC_API || ''));
 
-    url.hash = gameVisible ? '#activated' : '#paused';
+    url.hash = `#activated=${gameVisible ? '1' : '0'}`;
 
     return url.toString();
   }, [WebApp, gameVisible]);
