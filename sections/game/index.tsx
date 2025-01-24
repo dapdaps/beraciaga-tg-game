@@ -69,9 +69,20 @@ const GameView = () => {
     >
       {
         gameSource && (
-          <iframe
+          <motion.iframe
             ref={gameRef}
             className="w-full h-full"
+            variants={{
+              visible: {
+                display: 'block',
+                opacity: 1,
+              },
+              invisible: {
+                display: 'none',
+                opacity: 0,
+              },
+            }}
+            animate={gameVisible ? 'visible' : 'invisible'}
             src={gameSource}
             onLoad={() => setLoaded(true)}
           />
