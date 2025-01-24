@@ -21,8 +21,10 @@ const GameView = () => {
     url.searchParams.set('initData', btoa(WebApp.initData));
     url.searchParams.set('api', btoa(process.env.NEXT_PUBLIC_API || ''));
 
+    url.hash = gameVisible ? '#activated' : '#paused';
+
     return url.toString();
-  }, [WebApp]);
+  }, [WebApp, gameVisible]);
 
   useEffect(() => {
     if (!gameRef.current || !WebApp || !loaded) return;
