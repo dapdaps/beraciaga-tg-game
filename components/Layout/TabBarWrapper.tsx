@@ -34,7 +34,7 @@ export const TabBarWrapper = ({
   const handleTabClick = (tab: any) => {
     const _url = new URL(location.href);
 
-    if (tab.id === 1) {
+    if (tab.name === 'Game') {
       setGameVisible(true);
       _url.searchParams.set('game', '1');
       router.replace(_url.toString());
@@ -45,7 +45,7 @@ export const TabBarWrapper = ({
     router.replace(_url.toString());
     setGameVisible(false);
 
-    if (tab.id === 4) {
+    if (tab.name === 'Home') {
       const _tabs = TABS.filter((t) => ![4].includes(t.id));
       if (_tabs.some((t) => new RegExp(`^${t.path}`).test(pathname))) {
         router.push(tab.path);
@@ -61,6 +61,7 @@ export const TabBarWrapper = ({
 
   useEffect(() => {
     const tab = TABS.find(tab => tab.path === pathname);
+    const gameTab = TABS.find(tab => tab.name === 'Game');
     let _showTabBar = true;
     if (['/', '/imported-equipments'].includes(pathname)) {
       _showTabBar = false;
@@ -68,8 +69,8 @@ export const TabBarWrapper = ({
     if (tab) {
       setActiveTab(tab.id);
     }
-    if (search.has('game')) {
-      setActiveTab(1);
+    if (search.has('game') && gameTab?.id) {
+      setActiveTab(gameTab.id);
       setGameVisible(true);
     }
     setShowTabBar(_showTabBar);
@@ -78,10 +79,7 @@ export const TabBarWrapper = ({
   return (
     <div className="h-full overflow-hidden">
       <main
-        className={`h-full overflow-y-auto overflow-x-hidden`}
-        style={{
-          paddingBottom: showTabBar ? '5.375rem' : 0,
-        }}
+        className="h-full overflow-y-auto overflow-x-hidden"
       >
         {!gameVisible && children}
         <GameView />

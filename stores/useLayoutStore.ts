@@ -2,19 +2,22 @@ import { create } from "zustand";
 
 export type TabItem = {
   id: number;
+  name: string;
+  iconWidth: number;
   label: string;
   path: string;
   icon: string;
-  inactiveIcon: string;
   isLock?: boolean;
+  iconOffsetY?: number;
+  labelOffsetY?: number;
 };
 
 export const TABS: TabItem[] = [
-  { id: 1, label: 'Game', icon: '/images/tabbar/game.svg', inactiveIcon: '/images/tabbar/inactive-game.svg', path: '/game', isLock: false },
-  { id: 2, label: 'Shop', icon: '/images/tabbar/shop.svg', inactiveIcon: '/images/tabbar/inactive-shop.svg', path: '/shop', isLock: true },
-  { id: 3, label: 'Earn', icon: '/images/tabbar/earn.svg', inactiveIcon: '/images/tabbar/inactive-earn.svg', path: '/earn', isLock: true },
-  { id: 4, label: 'Frens', icon: '/images/tabbar/frens.svg', inactiveIcon: '/images/tabbar/inactive-frens.svg', path: '/home', isLock: false },
-  { id: 5, label: 'Spin', icon: '/images/tabbar/spin.svg', inactiveIcon: '/images/tabbar/inactive-spin.svg', path: '/spin', isLock: true },
+  { id: 1, name: 'Home', label: '/images/tabbar/home-text.svg', icon: '/images/tabbar/home.svg', iconWidth: 33, path: '/home', isLock: false },
+  { id: 2, name: 'Shop', label: '/images/tabbar/shop-text.svg', labelOffsetY: 4, icon: '/images/tabbar/shop.svg', iconWidth: 37, path: '/shop', isLock: false },
+  { id: 3, name: 'Game', label: '/images/tabbar/game-text.svg', icon: '/images/tabbar/game.svg', iconWidth: 37, path: '/game', isLock: false },
+  { id: 4, name: 'Earn', label: '/images/tabbar/earn-text.svg', icon: '/images/tabbar/earn.svg', iconWidth: 37, iconOffsetY: -3, path: '/earn', isLock: false },
+  { id: 5, name: 'Frenz', label: '/images/tabbar/frenz-text.svg', icon: '/images/tabbar/frenz.svg', iconWidth: 37, iconOffsetY: -2, path: '/frens', isLock: false },
 ];
 
 type LayoutState = {

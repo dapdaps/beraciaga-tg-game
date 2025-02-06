@@ -14,25 +14,30 @@ const TabBar: React.FC<any> = (props) => {
   };
 
   return (
-    <div className="fixed left-0 bottom-0 w-full bg-[#FFD335] grid grid-cols-5">
+    <div className="fixed left-0 bottom-0 w-full h-[4.25rem] bg-[#F3E3AA] rounded-t-[20px] grid grid-cols-5">
       {
         TABS.map((tab) => (
           <div
             key={tab.id}
-            className="flex py-[1.4375rem] flex-col items-center justify-center cursor-pointer relative"
+            className="flex pb-[1.625rem] flex-col items-center justify-center cursor-pointer relative"
             onClick={() => handleTabClick(tab)}
           >
             <div
-              className="w-full h-[3rem] bg-contain bg-center bg-no-repeat relative"
+              className={`w-full h-[3rem] bg-contain bg-center bg-no-repeat relative flex justify-center items-end transition-all duration-150 ease-linear`}
               style={{
-                backgroundImage: `url("${tab.isLock || activeTab !== tab.id ? tab.inactiveIcon : tab.icon}")`
+                backgroundImage: `url("${tab.icon}")`,
+                backgroundSize: `${activeTab === tab.id ? tab.iconWidth * 1.4 : tab.iconWidth}px auto`,
+                backgroundPosition: `bottom ${tab.iconOffsetY ? tab.iconOffsetY + 'px' : ''} center`,
               }}
             >
-              {
-                tab.isLock && (
-                  <img className="w-[1.3rem] h-[1.6rem] absolute right-[0.5rem] top-[-0.3rem]" src="/images/tabbar/icon-lock.svg" alt="" />
-                )
-              }
+              <img
+                src={tab.label}
+                alt={tab.name}
+                className="mb-[-0.4rem]"
+                style={{
+                  transform: `${tab.labelOffsetY ? 'translateY(' + tab.labelOffsetY + 'px)' : ''}`,
+                }}
+              />
             </div>
           </div>
         ))
