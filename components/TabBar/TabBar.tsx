@@ -19,7 +19,7 @@ const TabBar: React.FC<any> = (props) => {
         TABS.map((tab) => (
           <div
             key={tab.id}
-            className="flex pb-[1.625rem] flex-col items-center justify-center cursor-pointer relative"
+            className={`flex pb-[1.625rem] flex-col items-center justify-center cursor-pointer relative transition-all duration-150 ease-linear ${activeTab === tab.id ? 'bg-[linear-gradient(180deg,_rgba(255,_174,_0,_0.00)_0%,_#FFAE00_100%)]' : ''}`}
             onClick={() => handleTabClick(tab)}
           >
             <div
