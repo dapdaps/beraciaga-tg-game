@@ -46,7 +46,7 @@ export const TabBarWrapper = ({
     setGameVisible(false);
 
     if (tab.name === 'Home') {
-      const _tabs = TABS.filter((t) => ![4].includes(t.id));
+      const _tabs = TABS.filter((t) => !['Home'].includes(t.name));
       if (_tabs.some((t) => new RegExp(`^${t.path}`).test(pathname))) {
         router.push(tab.path);
         return;
