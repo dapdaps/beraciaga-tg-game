@@ -23,7 +23,6 @@ const Bear: React.FC<BearProps> = ({
       <svg 
         width="360" 
         height="340" 
-        viewBox="0 0 360 340" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
       >
