@@ -13,11 +13,11 @@ export type TabItem = {
 };
 
 export const TABS: TabItem[] = [
-  { id: 1, name: 'Home', label: '/images/tabbar/home-text.svg', icon: '/images/tabbar/home.svg', iconWidth: 33, path: '/home', isLock: false },
-  { id: 2, name: 'Shop', label: '/images/tabbar/shop-text.svg', labelOffsetY: 4, icon: '/images/tabbar/shop.svg', iconWidth: 37, path: '/shop', isLock: false },
-  { id: 3, name: 'Game', label: '/images/tabbar/game-text.svg', icon: '/images/tabbar/game.svg', iconWidth: 37, path: '/game', isLock: false },
-  { id: 4, name: 'Earn', label: '/images/tabbar/earn-text.svg', icon: '/images/tabbar/earn.svg', iconWidth: 37, iconOffsetY: -3, path: '/earn', isLock: false },
-  { id: 5, name: 'Frenz', label: '/images/tabbar/frenz-text.svg', icon: '/images/tabbar/frenz.svg', iconWidth: 37, iconOffsetY: -2, path: '/frens', isLock: false },
+  { id: 1, name: 'Home', label: '/images/tabbar/home-text.svg', icon: '/images/tabbar/home.svg', iconWidth: 33, iconOffsetY: 0, path: '/home', isLock: false },
+  { id: 2, name: 'Shop', label: '/images/tabbar/shop-text.svg', labelOffsetY: 4, icon: '/images/tabbar/shop.svg', iconWidth: 37, iconOffsetY: 2, path: '/shop', isLock: false },
+  { id: 3, name: 'Game', label: '/images/tabbar/game-text.svg', icon: '/images/tabbar/game.svg', iconWidth: 44, iconOffsetY: 2, path: '/game', isLock: false },
+  { id: 4, name: 'Earn', label: '/images/tabbar/earn-text.svg', icon: '/images/tabbar/earn.svg', iconWidth: 40, iconOffsetY: 2, path: '/earn', isLock: false },
+  { id: 5, name: 'Frenz', label: '/images/tabbar/frenz-text.svg', icon: '/images/tabbar/frenz.svg', iconWidth: 37, iconOffsetY: 0, path: '/frens', isLock: false },
 ];
 
 type LayoutState = {
@@ -36,7 +36,7 @@ type LayoutState = {
 export const useLayoutStore = create<LayoutState>((set) => ({
   showTabBar: true,
   setShowTabBar: (show) => set({ showTabBar: show }),
-  activeTab: TABS[3].id,
+  activeTab: TABS[0].id,
   setActiveTab: (tab) => set({ activeTab: tab }),
   inviteModalVisible: false,
   congratsModalVisible: false,

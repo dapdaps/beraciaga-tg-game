@@ -6,18 +6,27 @@ import 'swiper/css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import "react-toastify/dist/ReactToastify.css";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
-import { TabBarWrapper } from '@/components/Layout/TabBarWrapper';
 import TelegramProvider from '@/context/TelegramContext';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import OkxTonProvider from '@/context/OkxContext';
 import BitgetProvider from '@/context/BitgetContext';
 import { ToastContainer } from "react-toastify";
+import Congrats from '@/sections/home2/components/congrats';
+import Invite from '@/sections/home2/components/invite';
+import { useLayoutStore } from '@/stores/useLayoutStore';
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const {
+    inviteModalVisible,
+    congratsModalVisible,
+    setInviteModalVisible,
+    setCongratsModalVisible,
+  } = useLayoutStore();
+
   useEffect(() => {
     async function loadPlugin() {
       if (!process.env.NEXT_PUBLIC_APP_LINK?.includes?.('berachain_game_test_bot')) return;
@@ -48,9 +57,7 @@ export default function RootLayout({
               <OkxTonProvider isTelegram>
                 <BitgetProvider>
                   <Suspense fallback={<></>}>
-                    <TabBarWrapper>
-                      {children}
-                    </TabBarWrapper>
+                    {children}
                   </Suspense>
                 </BitgetProvider>
               </OkxTonProvider>
@@ -67,6 +74,18 @@ export default function RootLayout({
           rtl={false}
           pauseOnFocusLoss
           closeButton={false}
+        />
+        <Congrats
+          visible={congratsModalVisible}
+          onClose={() => {
+            setCongratsModalVisible(false);
+          }}
+        />
+        <Invite
+          visible={inviteModalVisible}
+          onClose={() => {
+            setInviteModalVisible(false);
+          }}
         />
       </body>
     </html>

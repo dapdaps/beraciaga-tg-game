@@ -1,10 +1,13 @@
 import EarnView from '@/sections/earn';
+import { TabBarWrapper } from '@components/Layout/TabBarWrapper';
 
 const Earn = (props: any) => {
   const {} = props;
 
   return (
-    <EarnView />
+    <TabBarWrapper>
+      <EarnView />
+    </TabBarWrapper>
   );
 };
 

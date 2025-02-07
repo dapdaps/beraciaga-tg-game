@@ -22,18 +22,21 @@ const TabBar: React.FC<any> = (props) => {
             className={`flex pb-[1.625rem] flex-col items-center justify-center cursor-pointer relative transition-all duration-150 ease-linear ${activeTab === tab.id ? 'bg-[linear-gradient(180deg,_rgba(255,_174,_0,_0.00)_0%,_#FFAE00_100%)]' : ''}`}
             onClick={() => handleTabClick(tab)}
           >
-            <div
-              className={`w-full h-[3rem] bg-contain bg-center bg-no-repeat relative flex justify-center items-end transition-all duration-150 ease-linear`}
-              style={{
-                backgroundImage: `url("${tab.icon}")`,
-                backgroundSize: `${activeTab === tab.id ? tab.iconWidth * 1.4 : tab.iconWidth}px auto`,
-                backgroundPosition: `bottom ${tab.iconOffsetY ? tab.iconOffsetY + 'px' : ''} center`,
-              }}
-            >
+            <div className="w-full h-[3rem] bg-contain bg-center bg-no-repeat relative flex flex-col items-center justify-end">
+              <img
+                src={tab.icon}
+                alt={tab.name}
+                className="will-change-transform origin-bottom transition-all duration-150 ease-linear"
+                style={{
+                  width: tab.iconWidth,
+                  marginBottom: tab.iconOffsetY ? `calc(-0.6rem - ${tab.iconOffsetY}px)` : '-0.6rem',
+                  transform: `${activeTab === tab.id ? 'scale(1.5)' : 'scale(1)'}`,
+                }}
+              />
               <img
                 src={tab.label}
                 alt={tab.name}
-                className="mb-[-0.4rem]"
+                className="mb-[-0.4rem] relative z-10"
                 style={{
                   transform: `${tab.labelOffsetY ? 'translateY(' + tab.labelOffsetY + 'px)' : ''}`,
                 }}

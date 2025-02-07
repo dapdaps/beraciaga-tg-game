@@ -3,32 +3,28 @@
 import { useEffect, type ReactNode } from 'react';
 import { TABS, useLayoutStore } from '@/stores/useLayoutStore';
 import TabBar from '../TabBar/TabBar';
-import Invite from '@/sections/home2/components/invite';
-import Congrats from '@/sections/home2/components/congrats';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import GameView from '@/sections/game';
 
 interface TabBarWrapperProps {
   children: ReactNode;
+  tabbar?: boolean;
 }
 
 export const TabBarWrapper = ({ 
-  children
+  children,
+  tabbar = true
 }: TabBarWrapperProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
   const {
-    activeTab,
     showTabBar,
-    inviteModalVisible,
-    congratsModalVisible,
+    setShowTabBar,
     gameVisible,
     setInviteModalVisible,
-    setCongratsModalVisible,
     setGameVisible,
     setActiveTab,
-    setShowTabBar,
   } = useLayoutStore();
 
   const handleTabClick = (tab: any) => {
@@ -62,18 +58,16 @@ export const TabBarWrapper = ({
   useEffect(() => {
     const tab = TABS.find(tab => tab.path === pathname);
     const gameTab = TABS.find(tab => tab.name === 'Game');
-    let _showTabBar = true;
-    if (['/', '/imported-equipments'].includes(pathname)) {
-      _showTabBar = false;
-    }
     if (tab) {
       setActiveTab(tab.id);
     }
     if (search.has('game') && gameTab?.id) {
       setActiveTab(gameTab.id);
       setGameVisible(true);
+      setShowTabBar(false);
+      return;
     }
-    setShowTabBar(_showTabBar);
+    setShowTabBar(true);
   }, [pathname, search]);
 
   return (
@@ -81,22 +75,12 @@ export const TabBarWrapper = ({
       <main
         className="h-full overflow-y-auto overflow-x-hidden"
       >
-        {!gameVisible && children}
+        <div className={gameVisible ? 'hidden' : ''}>
+          {children}
+        </div>
         <GameView />
       </main>
-      {showTabBar && <TabBar onTabClick={handleTabClick} />}
-      <Congrats
-        visible={congratsModalVisible}
-        onClose={() => {
-          setCongratsModalVisible(false);
-        }}
-      />
-      <Invite
-        visible={inviteModalVisible}
-        onClose={() => {
-          setInviteModalVisible(false);
-        }}
-      />
+      {(tabbar && showTabBar) && <TabBar onTabClick={handleTabClick} />}
     </div>
   );
 };

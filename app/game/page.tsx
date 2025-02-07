@@ -1,8 +1,11 @@
 import GameView from '@/sections/game';
+import { TabBarWrapper } from '@components/Layout/TabBarWrapper';
 
 const Game = () => {
   return (
-    <GameView />
+    <TabBarWrapper>
+      <GameView />
+    </TabBarWrapper>
   );
 };
 
