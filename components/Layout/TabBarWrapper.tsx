@@ -73,9 +73,9 @@ export const TabBarWrapper = ({
   return (
     <div className="h-full overflow-hidden">
       <main
-        className="h-full overflow-y-auto overflow-x-hidden"
+        className="h-full"
       >
-        <div className={gameVisible ? 'hidden' : ''}>
+        <div className={`h-full overflow-y-auto overflow-x-hidden ${gameVisible ? 'hidden' : ''}`}>
           {children}
         </div>
         <GameView />
