@@ -8,6 +8,7 @@ import { useTelegram } from '@/hooks/useTelegram';
 import DressUpGame from '../home/components/DressUpGame';
 import clsx from 'clsx';
 import { BaseButton, CapsuleButton } from '@/components/Button';
+import Modal from '@/components/modal';
 
 export const HomeContext = createContext<any>({});
 
@@ -122,6 +123,8 @@ const MainScene = () => {
         </BaseButton>
       </div>
     </LevelContainer>
+    <BeraContainer></BeraContainer>
+
   </div>
   )
 }
@@ -178,6 +181,34 @@ const ProgressBar = ({ value = 4, className = '' }) => {
           }`}
         />
       ))}
+    </div>
+  );
+};
+
+const BeraContainer = () => {
+  return (
+    <Modal open={false} onClose={() => {}} closeIcon={<img src='/images/home/close.png' alt='close' className='w-[34px] h-[34px]' />} closeIconClassName='top-[-17px] right-[-17px]'>
+      <div className='bg-[url(/images/home/modal-box.png)] bg-contain bg-no-repeat w-[370px] h-[552px] px-2 pt-2'>
+        <GradientBorderBox>
+          <p>内容区域</p>
+        </GradientBorderBox>
+      </div>
+    </Modal>
+  )
+}
+
+const GradientBorderBox = ({ children }) => {
+  return (
+    <div 
+      className="relative rounded-lg"
+      style={{
+        padding: '2px',
+        background: 'linear-gradient(to bottom, #E5C375 0%, #7F6C41 100%)'
+      }}
+    >
+      <div className="relative rounded-lg bg-[#FFF1C7] p-4">
+        {children}
+      </div>
     </div>
   );
 };
