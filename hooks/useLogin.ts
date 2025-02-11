@@ -26,7 +26,7 @@ const useLogin = (): UseLoginResult => {
   const [error, setError] = useState<string | null>(null);
   const setLoginData = useLoginStore(state => state.setLoginData);
 
-  const handleLogin = async (invite_source = '') => {
+  const handleLogin = async () => {
     try {
       if (!WebApp.initDataUnsafe?.user) {
         throw new Error('Telegram WebApp user data not available for Web site');
@@ -35,7 +35,7 @@ const useLogin = (): UseLoginResult => {
       const tgUser = WebApp.initDataUnsafe.user as UserData;
       
       const startParam = WebApp.initDataUnsafe.start_param || '';
-      const paramPairs = startParam.split('_');
+      const paramPairs = startParam.split('%');
       let inviterId = null;
       let parsedInviteSource = null;
 
