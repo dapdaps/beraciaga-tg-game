@@ -4,10 +4,12 @@ import { post } from '@/utils/http';
 import useLoginStore from '@/stores/useLoginStore';
 
 export interface UserData {
-  id: number;
+  id?: number;
   username?: string;
   is_premium?: boolean;
   photo_url?: string;
+  invite_source?: string;
+  inviter_tg_user_id?: string;
 }
 
 interface UseLoginResult {
@@ -31,15 +33,19 @@ const useLogin = (): UseLoginResult => {
       }
 
       const tgUser = WebApp.initDataUnsafe.user as UserData;
-      console.log(WebApp, 'handleLogin ===== WebApp')
-      const inviterId = WebApp.initDataUnsafe.start_param && WebApp.initDataUnsafe.start_param.split('inviterId=')?.[1];
+      
+      const params = new URLSearchParams(WebApp.initDataUnsafe.start_param || '');
+      const inviterId = params.get('inviterId');
+      const parsedInviteSource = params.get('inviterSource');
+
+      console.log(params, inviterId, parsedInviteSource, '<------params, inviterId, parsedInviteSource');
 
       const loginData = {
         tg_username: tgUser.username,
         tg_avatar: tgUser.photo_url,
         init_data: WebApp.initData,
-        invite_source: 'okx_invite', // only for okx invite
-        ...(inviterId && Number(inviterId) !== Number(tgUser.id)  &&  { inviter_tg_user_id: inviterId })
+        ...(parsedInviteSource && { invite_source: parsedInviteSource }),
+        ...(inviterId && Number(inviterId) !== Number(tgUser.id) && { inviter_tg_user_id: inviterId })
       };
       const response = await post('/api/login', loginData);
       if (response.code === 200) {

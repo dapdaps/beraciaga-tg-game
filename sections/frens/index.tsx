@@ -75,7 +75,7 @@ const FrensView = (props: any) => {
     if (!process.env.NEXT_PUBLIC_APP_LINK) return console.error('APP_LINK is not set');
     const appLink = new URL(process.env.NEXT_PUBLIC_APP_LINK);
     const shareLink = new URL('https://t.me/share/url');
-    appLink.searchParams.set('startapp', `inviterId=${userData?.id}`);
+    appLink.searchParams.set('startapp', `inviterId=${userData?.id}&inviterSource=okx_invite`);
     shareLink.searchParams.set('url', appLink.toString());
     shareLink.searchParams.set('text', 'Look at this, it is so amazing');
     WebApp?.openTelegramLink?.(shareLink.toString());
