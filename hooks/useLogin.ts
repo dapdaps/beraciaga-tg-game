@@ -38,6 +38,8 @@ const useLogin = (): UseLoginResult => {
       const inviterId = params.get('inviterId');
       const parsedInviteSource = params.get('inviterSource');
 
+      console.log(WebApp, '---WebApp---');
+
       console.log(params, inviterId, parsedInviteSource, '<------params, inviterId, parsedInviteSource');
 
       const loginData = {
