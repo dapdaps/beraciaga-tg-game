@@ -21,10 +21,10 @@ export function useInvite(defaultInviterSource = 'okx_invite') {
     const params = new URLSearchParams();
     params.append('inviterId', userInfo?.id || '');
     params.append('inviterSource', defaultInviterSource);
-
+    console.log(params.toString, '<---params---toString-------');
     const app_link = `${process.env.NEXT_PUBLIC_APP_LINK}?startapp=${encodeURIComponent(params.toString())}`;
     const tg_share_link = `https://t.me/share/url?url=${app_link}&text=DapDap %26 Beratown team is dropping sumting new 👀 %0A Idk what it is but just sign up to the TG mini app to stack up the BGOLD first`;
-    
+    console.log(app_link, '---shareLink---');
     return {
       app_link,
       tg_share_link,
