@@ -36,7 +36,7 @@ const useLogin = (): UseLoginResult => {
       
       const startParam = WebApp.initDataUnsafe.start_param || '';
       console.log(WebApp, '<------startParam');
-      const paramPairs = startParam.split('#');
+      const paramPairs = startParam.split('.');
       let inviterId = null;
       let parsedInviteSource = null;
 
