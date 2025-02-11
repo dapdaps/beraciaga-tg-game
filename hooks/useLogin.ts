@@ -34,11 +34,21 @@ const useLogin = (): UseLoginResult => {
 
       const tgUser = WebApp.initDataUnsafe.user as UserData;
       
-      const params = new URLSearchParams(WebApp.initDataUnsafe.start_param || '');
-      const inviterId = params.get('inviterId');
-      const parsedInviteSource = params.get('inviterSource');
+      const startParam = WebApp.initDataUnsafe.start_param || '';
+      const paramPairs = startParam.split('_');
+      let inviterId = null;
+      let parsedInviteSource = null;
 
-      console.log(params, inviterId, parsedInviteSource, '<------params, inviterId, parsedInviteSource');
+      for (let i = 0; i < paramPairs.length - 1; i++) {
+        if (paramPairs[i] === 'inviterId') {
+          inviterId = paramPairs[i + 1];
+        }
+        if (paramPairs[i] === 'inviterSource') {
+          parsedInviteSource = paramPairs[i + 1];
+        }
+      }
+
+      console.log(startParam, inviterId, parsedInviteSource, '<------startParam, inviterId, parsedInviteSource');
 
       const loginData = {
         tg_username: tgUser.username,
