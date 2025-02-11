@@ -84,6 +84,7 @@ const RaffleViews = () => {
           src="/images/raffle/back.png"
           className="w-[42px] object-contain"
           alt=""
+          onClick={() => router.back()}
         />
         <div
           onClick={() => router.push("/raffle-previous")}
