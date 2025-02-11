@@ -35,19 +35,13 @@ const useLogin = (): UseLoginResult => {
       const tgUser = WebApp.initDataUnsafe.user as UserData;
       
       const startParam = WebApp.initDataUnsafe.start_param || '';
-      console.log(WebApp, '<------startParam');
-      const paramPairs = startParam.split('@');
-      let inviterId = null;
-      let parsedInviteSource = null;
 
-      for (let i = 0; i < paramPairs.length - 1; i++) {
-        if (paramPairs[i] === 'inviterId') {
-          inviterId = paramPairs[i + 1];
-        }
-        if (paramPairs[i] === 'inviterSource') {
-          parsedInviteSource = paramPairs[i + 1];
-        }
-      }
+      console.log(startParam, '<--==startParam')
+      const inviterIdMatch = startParam.match(/inviterId_([\w]+)/);
+      const inviterSourceMatch = startParam.match(/inviterSource_([\w-]+)/);
+      
+      const inviterId = inviterIdMatch?.[1] || null;
+      const parsedInviteSource = inviterSourceMatch?.[1] || null;
 
       console.log(startParam, inviterId, parsedInviteSource, '<------startParam, inviterId, parsedInviteSource');
 
