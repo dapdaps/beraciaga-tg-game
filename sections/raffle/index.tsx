@@ -56,25 +56,7 @@ const RaffleViews = () => {
     onEnd: () => setUpdater(prev => prev + 1)
   });
 
-  const handleJoinFunc = async () => {
-    if (!amount || joinLoading || !userInfo?.can_participate) return;
-    try {
-      const result = await joinRaffle(amount);
- 
-      result ? toast.success({
-        title: "Join Success"
-      }) : toast.fail({
-        title: "Join Failed"
-      })
 
-      if (result) {
-        fetchResult();
-        setUpdater((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.log(error, "handleJoinFunc - error");
-    } 
-  };
   
   const fetchResult = async () => {
     try {
@@ -96,6 +78,26 @@ const RaffleViews = () => {
   const isDisabled = !userInfo?.available_ticket || !(userInfo?.can_participate && Number(userInfo?.spend_ticket) === 0) || isEnded || latestData?.status === 'ended';
   const isMinDisabled = isDisabled || amount <= 0;
   const isPlusDisabled = isDisabled || amount >= (userInfo?.available_ticket || 0);
+
+  const handleJoinFunc = async () => {
+    if (!amount || joinLoading || isDisabled) return;
+    try {
+      const result = await joinRaffle(amount);
+ 
+      result ? toast.success({
+        title: "Join Success"
+      }) : toast.fail({
+        title: "Join Failed"
+      })
+
+      if (result) {
+        fetchResult();
+        setUpdater((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.log(error, "handleJoinFunc - error");
+    } 
+  };
 
   return (
     <div className="bg-[url('/images/raffle/raffle-bg.png')] bg-cover bg-center h-screen flex flex-col items-center">
