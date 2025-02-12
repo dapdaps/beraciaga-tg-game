@@ -36,9 +36,8 @@ const useLogin = (): UseLoginResult => {
       
       const startParam = WebApp.initDataUnsafe.start_param || '';
 
-      console.log(startParam, '<--==startParam')
-      const inviterIdMatch = startParam.match(/inviterId_([\w]+)/);
-      const inviterSourceMatch = startParam.match(/inviterSource_([\w-]+)/);
+      const inviterIdMatch = startParam.match(/inviterId_(\d+?)(?:_|$)/);
+      const inviterSourceMatch = startParam.match(/inviterSource_([\w-]+?)(?:_|$)/);
       
       const inviterId = inviterIdMatch?.[1] || null;
       const parsedInviteSource = inviterSourceMatch?.[1] || null;
