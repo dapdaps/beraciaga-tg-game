@@ -8,6 +8,7 @@ import useToast from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useInvite } from "../home2/hooks/use-invite";
 import Loading from "@/components/Loading";
+import { set } from "lodash-es";
 
 const RaffleViews = () => {
 
@@ -67,6 +68,10 @@ const RaffleViews = () => {
           ? "You have successfully joined the raffle"
           : "You have failed to join the raffle",
       });
+      if (result) {
+        fetchResult();
+        setUpdater((prev) => prev + 1);
+      }
     } catch (error) {
       console.log(error, "handleJoinFunc - error");
     } 
@@ -76,6 +81,9 @@ const RaffleViews = () => {
     try {
       const data = await getRaffleResult();
       setResult(data.coins || 0);
+      if (data.coins > 0) {
+        setShowResultModal(true);
+      }
     } catch (error) {
       console.log(error, 'fetchResult - error');
     }
