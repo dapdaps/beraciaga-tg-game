@@ -17,6 +17,8 @@ export const useCountDown = ({
   padZero = false, 
   onEnd 
 }: CountDownProps) => {
+  const [isEnded, setIsEnded] = useState(false);
+
   const calculateCountdown = useCallback(() => {
 
     if (!targetTimestamp) return '0'
@@ -26,7 +28,10 @@ export const useCountDown = ({
     const diff = target.diff(now);
 
     if (diff <= 0) {
-      onEnd?.();
+      if (!isEnded) {
+        setIsEnded(true);
+        onEnd?.();
+      }
       return '0';
     }
 
@@ -41,7 +46,7 @@ export const useCountDown = ({
       .replace('HH', formatNumber(Math.floor(timeLeft.asHours() % 24), 2))
       .replace('mm', formatNumber(Math.floor(timeLeft.asMinutes() % 60), 2))
       .replace('ss', formatNumber(Math.floor(timeLeft.asSeconds() % 60), 2));
-  }, [targetTimestamp, format, padZero, onEnd]);
+  }, [targetTimestamp, format, padZero, onEnd, isEnded]);
 
   const [countdown, setCountdown] = useState('');
 
@@ -54,5 +59,8 @@ export const useCountDown = ({
     return () => clearInterval(timer);
   }, [calculateCountdown]);
 
-  return countdown;
+  return {
+    countdown,
+    isEnded
+  };
 };

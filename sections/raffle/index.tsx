@@ -8,7 +8,6 @@ import useToast from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useInvite } from "../home2/hooks/use-invite";
 import Loading from "@/components/Loading";
-import { set } from "lodash-es";
 
 const RaffleViews = () => {
 
@@ -49,13 +48,9 @@ const RaffleViews = () => {
     }
   };
 
-  const isDisabled = !userInfo?.available_ticket || !userInfo?.can_participate;
-  const isMinDisabled = amount <= 0;
-  const isPlusDisabled = amount >= (userInfo?.available_ticket || 0);
-
-  const countTime = useCountDown({
+  const { countdown, isEnded } = useCountDown({
     targetTimestamp: (latestData?.end_time ?? 0) * 1000,
-    onEnd: () => setUpdater((prev) => prev + 1),
+    onEnd: () => setUpdater(prev => prev + 1)
   });
 
   const handleJoinFunc = async () => {
@@ -93,6 +88,11 @@ const RaffleViews = () => {
     fetchResult()
   }, []);
 
+  const isDisabled = !userInfo?.available_ticket || !userInfo?.can_participate || isEnded || latestData?.status === 'ended';
+  const isMinDisabled = isDisabled || amount <= 0;
+  const isPlusDisabled = isDisabled || amount >= (userInfo?.available_ticket || 0);
+
+
   return (
     <div className="bg-[url('/images/raffle/raffle-bg.png')] bg-cover bg-center h-screen flex flex-col items-center">
       <div className="mt-4 w-full px-3 flex items-center justify-between relative z-30">
@@ -120,7 +120,7 @@ const RaffleViews = () => {
       <div className="flex items-center gap-2 mx-auto mt-[-60px]">
         <img src="/images/raffle/timer.png" className="w-[32px]" alt="" />
         <div className="text-[#FDD35E] font-cherryBomb text-stroke1-shadow text-[18px]">
-          {countTime}
+          {isEnded || latestData?.status === 'ended' ? 'Finished' : countdown}
         </div>
       </div>
       <div className="bg-[url(/images/raffle/section-bg.png)] bg-cover bg-center h-[349px] w-[369px] mt-[46px] mx-auto relative flex flex-col items-center">
