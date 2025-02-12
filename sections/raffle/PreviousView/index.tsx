@@ -91,7 +91,7 @@ const RafflePreviousView = () => {
               }}
               className="text-stroke-3 font-cherryBomb text-[20px]"
             >
-              Round{latestData?.round || "1"}
+              Round{Number(latestData?.round) - 1 || "1"}
             </div>
             <div className="w-full mt-[14px]">
               {rewardList.length === 0 ? (
