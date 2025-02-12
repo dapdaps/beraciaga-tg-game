@@ -56,15 +56,16 @@ const RaffleViews = () => {
   });
 
   const handleJoinFunc = async () => {
-    if (!amount || joinLoading) return;
+    if (!amount || joinLoading || !userInfo?.can_participate) return;
     try {
       const result = await joinRaffle(amount);
-      toast.success({
-        title: result ? "Join Success" : "Join Failed",
-        description: result
-          ? "You have successfully joined the raffle"
-          : "You have failed to join the raffle",
-      });
+ 
+      result ? toast.success({
+        title: "Join Success"
+      }) : toast.fail({
+        title: "Join Failed"
+      })
+
       if (result) {
         fetchResult();
         setUpdater((prev) => prev + 1);
@@ -127,7 +128,7 @@ const RaffleViews = () => {
       <div className="flex items-center gap-2 mx-auto mt-[-60px]">
         <img src="/images/raffle/timer.png" className="w-[32px]" alt="" />
         <div className="text-[#FDD35E] font-cherryBomb text-stroke1-shadow text-[18px]">
-          {isEnded || latestData?.status === 'ended' ? 'Finished' : countdown}
+          {isEnded || latestData?.status === 'ended' ? 'FINISHED' : countdown}
         </div>
       </div>
       <div className="bg-[url(/images/raffle/section-bg.png)] bg-cover bg-center h-[349px] w-[369px] mt-[46px] mx-auto relative flex flex-col items-center">
