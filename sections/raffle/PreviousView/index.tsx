@@ -91,7 +91,7 @@ const RafflePreviousView = () => {
                         <div className="font-cherryBomb leading-4 text-[#F7F9EA] text-stroke1-shadow">
                           @{item.username}
                         </div>
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-1">
                           <img
                             src="/images/raffle/coin.png"
                             className="w-6 h-6"
@@ -158,7 +158,7 @@ const RafflePreviousView = () => {
                 className="w-[33px] h-[33px]"
                 alt=""
               />
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 mt-[-10px]">
                 <div className="text-[#FDD35E] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
                   {addThousandSeparator(latestData?.coins) || "-"}
                 </div>

@@ -8,6 +8,7 @@ import useToast from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useInvite } from "../home2/hooks/use-invite";
 import Loading from "@/components/Loading";
+import { useShowModalStore } from "./hooks/useShowModalStore";
 
 const RaffleViews = () => {
 
@@ -19,6 +20,7 @@ const RaffleViews = () => {
   const { handleShare, handleCopy } = useInvite("raffles");
   const [result, setResult] = useState<number>();
   const [showResultModal, setShowResultModal] = useState(false);
+  const { addShownResult, hasShownResult } = useShowModalStore();
 
   useEffect(() => {
     setAmount(userInfo?.available_ticket || 0);
@@ -76,8 +78,9 @@ const RaffleViews = () => {
     try {
       const data = await getRaffleResult();
       setResult(data.coins || 0);
-      if (data.coins > 0) {
+      if (data.coins > 0 && latestData?.round && !hasShownResult(Number(latestData.round))) {
         setShowResultModal(true);
+        addShownResult(Number(latestData.round));
       }
     } catch (error) {
       console.log(error, 'fetchResult - error');
@@ -110,10 +113,14 @@ const RaffleViews = () => {
         </div>
       </div>
       <div className="w-full mt-[-50px] bg-[url(/images/raffle/header-frame.png)] bg-cover bg-center h-[277px] flex flex-col items-center justify-center">
-        <div className="text-[#FFDF77] font-cherryBomb text-stroke-3 text-[26px] leading-[26px] -mt-5">
+        <div className="text-[#FFDF77] font-cherryBomb text-stroke-3 text-[26px] leading-[26px] -mt-5" style={{
+          textShadow: '0px 4px 0px #4B371F'
+        }}>
           RAFFLES
         </div>
-        <div className="text-[#F6AD0F] font-cherryBomb text-stroke-3 text-[26px] leading-[26px]">
+        <div style={{
+          textShadow: '0px 4px 0px #4B371F'
+        }} className="text-[#F6AD0F] font-cherryBomb text-stroke-3 text-[26px] leading-[26px]">
           Round {latestData?.round || "-"}
         </div>
       </div>
