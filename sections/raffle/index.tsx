@@ -92,10 +92,9 @@ const RaffleViews = () => {
     fetchResult()
   }, [latestData, updater]);
 
-  const isDisabled = !userInfo?.available_ticket || !userInfo?.can_participate || isEnded || latestData?.status === 'ended';
+  const isDisabled = !userInfo?.available_ticket || !(userInfo?.can_participate && Number(userInfo?.spend_ticket) === 0) || isEnded || latestData?.status === 'ended';
   const isMinDisabled = isDisabled || amount <= 0;
   const isPlusDisabled = isDisabled || amount >= (userInfo?.available_ticket || 0);
-
 
   return (
     <div className="bg-[url('/images/raffle/raffle-bg.png')] bg-cover bg-center h-screen flex flex-col items-center">
@@ -106,12 +105,16 @@ const RaffleViews = () => {
           alt=""
           onClick={() => router.back()}
         />
-        <div
-          onClick={() => router.push("/raffle-previous")}
-          className="font-cherryBomb text-stroke1-shadow text-white bg-[#FFB050] rounded-xl border-[2px] border-[#4B371F] w-[92px] h-[36px] flex items-center justify-center"
-        >
-          Previous
-        </div>
+        {
+          Number(latestData?.round) > 1 && (
+            <div
+              onClick={() => router.push("/raffle-previous")}
+              className="font-cherryBomb text-stroke1-shadow text-white bg-[#FFB050] rounded-xl border-[2px] border-[#4B371F] w-[92px] h-[36px] flex items-center justify-center"
+            >
+              Previous
+            </div>
+          )
+        }
       </div>
       <div className="w-full mt-[-50px] bg-[url(/images/raffle/header-frame.png)] bg-cover bg-center h-[277px] flex flex-col items-center justify-center">
         <div className="text-[#FFDF77] font-cherryBomb text-stroke-3 text-[26px] leading-[26px] -mt-5" style={{

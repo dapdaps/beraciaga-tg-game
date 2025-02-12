@@ -22,13 +22,16 @@ const RafflePreviousView = () => {
   const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
   const { latestData, updater, setUpdater } = useRaffle();
   const [rewardList, setRewardList] = useState<IRewardList[]>([]);
+
+  const [previousData, setPreviousData] = useState<any>();
   const router = useRouter();
 
   const getRewardList = async () => {
     if (!latestData) return;
+    if (Number(latestData.round) > 1) return
     try {
       const res = await get(
-        `/api/raffle/reward/list?round=${latestData.round}`
+        `/api/raffle/reward/list?round=${Number(latestData.round) - 1}`
       );
       if (res.code === 200) {
         setRewardList((res.data as IRewardList[]) || []);
@@ -38,8 +41,22 @@ const RafflePreviousView = () => {
     }
   };
 
+
+  const getPreviousData = async () => {
+    if (!latestData) return;
+    try {
+        const res = await get(`/api/raffle?round=${Number(latestData.round) - 1}`);
+        if (res.code === 200) {
+          setPreviousData(res.data);
+        }
+      } catch (error) {
+        console.log("error", error);
+    }
+  };
+
   useEffect(() => {
     getRewardList();
+    getPreviousData();
   }, [latestData, updater]);
 
   const selectorUser =
@@ -160,10 +177,10 @@ const RafflePreviousView = () => {
               />
               <div className="flex flex-col gap-1 mt-[-10px]">
                 <div className="text-[#FDD35E] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
-                  {addThousandSeparator(latestData?.coins) || "-"}
+                  {addThousandSeparator(previousData?.coins) || "-"}
                 </div>
                 <div className="text-[#FFF4C2] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
-                  {latestData?.player || "-"} Players
+                  {previousData?.player || "-"} Players
                 </div>
               </div>
             </div>
