@@ -52,6 +52,7 @@ const RaffleViews = () => {
 
   const { countdown, isEnded } = useCountDown({
     targetTimestamp: (latestData?.end_time ?? 0) * 1000,
+    padZero: true,
     onEnd: () => setUpdater(prev => prev + 1)
   });
 
