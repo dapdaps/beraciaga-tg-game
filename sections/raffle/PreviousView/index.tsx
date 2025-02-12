@@ -20,7 +20,7 @@ interface IRewardList {
 const RafflePreviousView = () => {
   const { WebApp } = useTelegram();
   const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
-  const { latestData, userInfo, setUpdater } = useRaffle();
+  const { latestData, updater, setUpdater } = useRaffle();
   const [rewardList, setRewardList] = useState<IRewardList[]>([]);
   const router = useRouter();
 
@@ -40,7 +40,7 @@ const RafflePreviousView = () => {
 
   useEffect(() => {
     getRewardList();
-  }, []);
+  }, [latestData, updater]);
 
   const selectorUser =
     rewardList.length > 0

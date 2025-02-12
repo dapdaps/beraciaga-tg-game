@@ -11,7 +11,7 @@ import Loading from "@/components/Loading";
 
 const RaffleViews = () => {
 
-  const { latestData, userInfo, setUpdater, joinRaffle,joinLoading, getRaffleResult } = useRaffle();
+  const { latestData, userInfo, updater, setUpdater, joinRaffle,joinLoading, getRaffleResult } = useRaffle();
   const [showInfo, setShowInfo] = useState(false);
   const [amount, setAmount] = useState(0);
   const toast = useToast();
@@ -86,7 +86,7 @@ const RaffleViews = () => {
 
   useEffect(() => {
     fetchResult()
-  }, []);
+  }, [latestData, updater]);
 
   const isDisabled = !userInfo?.available_ticket || !userInfo?.can_participate || isEnded || latestData?.status === 'ended';
   const isMinDisabled = isDisabled || amount <= 0;
