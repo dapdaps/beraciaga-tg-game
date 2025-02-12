@@ -74,7 +74,7 @@ export const useRaffle = () => {
       setJoinLoading(true);
       const res = await post("/api/raffle/join", {
         round: latestData.round,
-        tg_user_id: userData.id,
+        tg_user_id: `${userData.id}`,
         ticket,
       });
       if (res.code === 200) {

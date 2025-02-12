@@ -9,12 +9,6 @@ import { useTelegram } from "@/hooks/useTelegram";
 import { UserData } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
 
-// "avatar": "string",
-// "coins": 0,
-// "spend_ticket": 0,
-// "tg_user_id": "string",
-// "username": "string"
-
 interface IRewardList {
   avatar: string;
   coins: number;
@@ -87,14 +81,14 @@ const RafflePreviousView = () => {
                 <Empty mt={"50px"} desc="No more data" />
               ) : (
                 rewardList.map((item, index) => (
-                  <div className="rounded-2xl border-[2px] border-[#D7C69D] bg-[#FFFAEA] p-2.5 flex items-center justify-between">
+                  <div key={index} className="rounded-2xl border-[2px] border-[#D7C69D] bg-[#FFFAEA] p-2.5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <img
                         className="rounded-[10px] w-[50px] h-[50px] border-[2px] border-[#8A8A8A]"
                         src={item.avatar}
                       />
                       <div className="flex flex-col gap-[6px]">
-                        <div className="font-cherryBomb leading-4 text-[#F7F9EA] text-stroke-2">
+                        <div className="font-cherryBomb leading-4 text-[#F7F9EA] text-stroke1-shadow">
                           @{item.username}
                         </div>
                         <div className="flex items-center">
@@ -103,7 +97,7 @@ const RafflePreviousView = () => {
                             className="w-6 h-6"
                             alt=""
                           />
-                          <div className="text-stroke-2 text-[#FFF549] font-cherryBomb leading-4">
+                          <div className="text-stroke1-shadow text-[#FFF549] font-cherryBomb leading-4">
                             {addThousandSeparator(item.coins) || "-"}
                           </div>
                         </div>
@@ -129,7 +123,7 @@ const RafflePreviousView = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-[6px]">
-                  <div className="font-cherryBomb leading-4 text-[#F7F9EA] text-stroke-2">
+                  <div className="font-cherryBomb leading-4 text-[#F7F9EA] text-stroke1-shadow">
                     @{selectorUser?.username}
                   </div>
                   <div className="flex items-center">
@@ -138,7 +132,7 @@ const RafflePreviousView = () => {
                       className="w-6 h-6"
                       alt=""
                     />
-                    <div className="text-stroke-2 text-[#FFF549] font-cherryBomb leading-4">
+                    <div className="text-stroke1-shadow text-[#FFF549] font-cherryBomb leading-4">
                       {addThousandSeparator(selectorUser?.coins) || "-"}
                     </div>
                   </div>
@@ -150,7 +144,7 @@ const RafflePreviousView = () => {
                   className="w-[43px] absolute left-[-20px]"
                   alt=""
                 />
-                <span className="font-cherryBomb text-[16px] text-stroke-2 ml-2">
+                <span className="font-cherryBomb text-[16px] text-stroke1-shadow ml-2">
                   -{selectorUser?.spend_ticket}
                 </span>
               </div>
@@ -165,10 +159,10 @@ const RafflePreviousView = () => {
                 alt=""
               />
               <div className="flex flex-col gap-1">
-                <div className="text-[#FDD35E] text-stroke-2 font-cherryBomb text-[16px] leading-[16px]">
+                <div className="text-[#FDD35E] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
                   {addThousandSeparator(latestData?.coins) || "-"}
                 </div>
-                <div className="text-[#FFF4C2] text-stroke-2 font-cherryBomb text-[16px] leading-[16px]">
+                <div className="text-[#FFF4C2] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
                   {latestData?.player || "-"} Players
                 </div>
               </div>

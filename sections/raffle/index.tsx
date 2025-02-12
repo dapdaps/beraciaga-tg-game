@@ -7,9 +7,11 @@ import { useState, useEffect, use } from "react";
 import useToast from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useInvite } from "../home2/hooks/use-invite";
+import Loading from "@/components/Loading";
 
 const RaffleViews = () => {
-  const { latestData, userInfo, setUpdater, joinRaffle, getRaffleResult } = useRaffle();
+
+  const { latestData, userInfo, setUpdater, joinRaffle,joinLoading, getRaffleResult } = useRaffle();
   const [showInfo, setShowInfo] = useState(false);
   const [amount, setAmount] = useState(0);
   const toast = useToast();
@@ -46,7 +48,9 @@ const RaffleViews = () => {
     }
   };
 
-  const isDisabled = !userInfo?.available_ticket;
+  const isDisabled = !userInfo?.available_ticket || !userInfo?.can_participate;
+  const isMinDisabled = amount <= 0;
+  const isPlusDisabled = amount >= (userInfo?.available_ticket || 0);
 
   const countTime = useCountDown({
     targetTimestamp: (latestData?.end_time ?? 0) * 1000,
@@ -54,20 +58,24 @@ const RaffleViews = () => {
   });
 
   const handleJoinFunc = async () => {
-    if (!amount) return;
-    const result = await joinRaffle(amount);
-    toast.success({
-      title: result ? "Join Success" : "Join Failed",
-      description: result
-        ? "You have successfully joined the raffle"
-        : "You have failed to join the raffle",
-    });
+    if (!amount || joinLoading) return;
+    try {
+      const result = await joinRaffle(amount);
+      toast.success({
+        title: result ? "Join Success" : "Join Failed",
+        description: result
+          ? "You have successfully joined the raffle"
+          : "You have failed to join the raffle",
+      });
+    } catch (error) {
+      console.log(error, "handleJoinFunc - error");
+    } 
   };
   
   const fetchResult = async () => {
     try {
       const data = await getRaffleResult();
-      setResult(data.coins);
+      setResult(data.coins || 0);
     } catch (error) {
       console.log(error, 'fetchResult - error');
     }
@@ -88,7 +96,7 @@ const RaffleViews = () => {
         />
         <div
           onClick={() => router.push("/raffle-previous")}
-          className="font-cherryBomb text-stroke-2 text-white bg-[#FFB050] rounded-xl border-[2px] border-[#4B371F] w-[92px] h-[36px] flex items-center justify-center"
+          className="font-cherryBomb text-stroke1-shadow text-white bg-[#FFB050] rounded-xl border-[2px] border-[#4B371F] w-[92px] h-[36px] flex items-center justify-center"
         >
           Previous
         </div>
@@ -103,7 +111,7 @@ const RaffleViews = () => {
       </div>
       <div className="flex items-center gap-2 mx-auto mt-[-60px]">
         <img src="/images/raffle/timer.png" className="w-[32px]" alt="" />
-        <div className="text-[#FDD35E] font-cherryBomb text-stroke-2 text-[18px]">
+        <div className="text-[#FDD35E] font-cherryBomb text-stroke1-shadow text-[18px]">
           {countTime}
         </div>
       </div>
@@ -116,20 +124,20 @@ const RaffleViews = () => {
               alt=""
             />
             <div className="flex flex-col gap-2">
-              <div className="text-[#FDD35E] text-stroke-2 font-cherryBomb text-[20px] leading-[20px]">
+              <div className="text-[#FDD35E] text-stroke1-shadow font-cherryBomb text-[20px] leading-[20px]">
                 {addThousandSeparator(latestData?.coins) || "-"}
               </div>
-              <div className="text-[#FFF4C2] text-stroke-2 font-cherryBomb text-[16px] leading-[16px]">
+              <div className="text-[#FFF4C2] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
                 {latestData?.player || "-"} Players
               </div>
             </div>
           </div>
         </div>
         <div className="mt-[60px] w-[205px] h-[58px] border-[2px] border-[#4B371F] bg-[#FFB050] flex flex-col items-center justify-center relative rounded-2xl">
-          <div className="font-cherryBomb text-base leading-[16px] text-[#F7F9EA] text-stroke-2 ml-[-4px]">
+          <div className="font-cherryBomb text-base leading-[16px] text-[#F7F9EA] text-stroke1-shadow ml-[-4px]">
             Your have
           </div>
-          <div className="font-cherryBomb text-[20px] leading-[20px] text-[#F7F9EA] text-stroke-2">
+          <div className="font-cherryBomb text-[20px] leading-[20px] text-[#F7F9EA] text-stroke1-shadow">
             {userInfo?.available_ticket || 0} Tickets
           </div>
           <img
@@ -144,15 +152,15 @@ const RaffleViews = () => {
             alt=""
           />
         </div>
-        <div className="font-cherryBomb text-stroke-2 text-[#F7F9EA] w-full text-center my-[14px]">
+        <div className="font-cherryBomb text-stroke1-shadow text-[#F7F9EA] w-full text-center my-[14px]">
           Your will spend
         </div>
         <div className="flex mx-auto items-center gap-[22px] mb-[14px]">
           <img
-            onClick={handleMins}
+            onClick={() => !isMinDisabled && handleMins()}
             src="/images/raffle/mins.png"
             className={`w-[44px] h-[44px] ${
-              isDisabled
+              isMinDisabled
                 ? "filter grayscale cursor-not-allowed"
                 : "cursor-pointer"
             }`}
@@ -161,17 +169,14 @@ const RaffleViews = () => {
           <input
             value={amount}
             onChange={handleInputChange}
-            disabled={isDisabled}
             type="text"
-            className={`text-[26px] font-cherryBomb text-black text-center w-[116px] h-[45px] bg-[#FFFAEA] border-[2px] rounded-2xl border-[#D7C69D] outline-none ${
-              isDisabled ? "bg-gray-200 cursor-not-allowed" : ""
-            }`}
+            className="text-[26px] font-cherryBomb text-black text-center w-[116px] h-[45px] bg-[#FFFAEA] border-[2px] rounded-2xl border-[#D7C69D] outline-none"
           />
           <img
-            onClick={handlePlus}
+            onClick={() => !isPlusDisabled && handlePlus()}
             src="/images/raffle/plus.png"
             className={`w-[44px] h-[44px] ${
-              isDisabled
+              isPlusDisabled
                 ? "filter grayscale cursor-not-allowed"
                 : "cursor-pointer"
             }`}
@@ -179,7 +184,12 @@ const RaffleViews = () => {
           />
         </div>
         <BaseButton isDisabled={isDisabled} onClick={handleJoinFunc}>
-          Join This Round
+           <div className="flex items-center justify-center w-full gap-2">
+           {
+            joinLoading && <Loading circleColor="#4B371F" />
+           }
+            <span>Join This Round</span>
+           </div>
         </BaseButton>
         <div className="mt-[10px] font-montserrat text-[14px] leading-[17px] text-center w-[294px] text-[#FFF4C2]">
           Don’t worry! The tickets will be refund if you didn’t win in this
@@ -218,7 +228,7 @@ const BaseButton = ({
       >
         <div
           onClick={onClick}
-          className="border-2 border-[#AF7026] bg-[#FFCF23] flex items-center justify-center relative w-full h-full rounded-[30px] text-stroke-2 text-[#FFF4C2] text-[18px] font-cherryBomb"
+          className="border-2 border-[#AF7026] bg-[#FFCF23] flex items-center justify-center relative w-full h-full rounded-[30px] text-stroke1-shadow text-[#FFF4C2] text-[18px] font-cherryBomb"
         >
           <div className="absolute top-[4px] left-[4px]">
             <svg
@@ -362,7 +372,7 @@ const ModalResult = ({
           onClick={() => router.push("/raffle-previous")}
           className={`rounded-[30px] border-2 border-[#4B371F] bg-[#FFB050] p-[4px] inline-block w-[182px] h-[50px]`}
         >
-          <div className="border-2 border-[#AF7026] bg-[#FFCF23] flex items-center justify-center relative w-full h-full rounded-[30px] text-stroke-2 text-[#FFF4C2] text-[18px] font-cherryBomb">
+          <div className="border-2 border-[#AF7026] bg-[#FFCF23] flex items-center justify-center relative w-full h-full rounded-[30px] text-stroke1-shadow text-[#FFF4C2] text-[18px] font-cherryBomb">
             <div className="absolute top-[4px] left-[4px]">
               <svg
                 width="65"

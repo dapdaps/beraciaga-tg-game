@@ -43,6 +43,12 @@ body {
   .text-stroke-1-E1FF0A {
     -webkit-text-stroke: 1px #E1FF0A;
   }
+
+  .text-stroke1-shadow {
+    -webkit-text-stroke: 1px #4b371f;
+    text-shadow: 0px 2px 0px #4B371F;
+  }
+
 }
 
 @font-face {
