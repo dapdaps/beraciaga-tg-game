@@ -112,15 +112,24 @@ const RaffleViews = () => {
           Number(latestData?.round) > 1 && (
             <div
               onClick={() => router.push("/raffle-previous")}
-              className="font-cherryBomb text-stroke1-shadow text-white bg-[#FFB050] rounded-xl border-[2px] border-[#4B371F] w-[92px] h-[36px] flex items-center justify-center"
+              className="font-cherryBomb text-[#4B371F] bg-[#FFB050] rounded-xl border-[2px] border-[#4B371F] w-[92px] h-[36px] flex items-center justify-center"
             >
               Previous
             </div>
           )
         }
       </div>
-      <div className="w-full mt-[-50px] bg-[url(/images/raffle/header-frame.png)] bg-cover bg-center h-[277px] flex flex-col items-center justify-center">
-        <div className="text-[#FFDF77] font-cherryBomb text-stroke-3 text-[26px] leading-[26px] -mt-5" style={{
+      <div className="relative w-full mt-[-50px] bg-[url(/images/raffle/header-frame.png)] bg-cover bg-center h-[277px] flex flex-col items-center justify-center">
+        <div className="relative mt-[-10px]">
+          <img src="/images/raffle/raffles-round.png" className="w-[127px]" alt="" />
+          <div style={{
+            textShadow: '0px 4px 0px #4B371F',
+            transform: 'rotate(12.462deg)'
+          }} className="text-[#FFF549] font-cherryBomb text-stroke-2 text-[42px] leading-[42px] absolute right-[-2px] bottom-[-2px]">
+            {latestData?.round || "-"}
+          </div>
+        </div>
+        {/* <div className="text-[#FFDF77] font-cherryBomb text-stroke-3 text-[26px] leading-[26px] -mt-5" style={{
           textShadow: '0px 4px 0px #4B371F'
         }}>
           RAFFLES
@@ -129,7 +138,7 @@ const RaffleViews = () => {
           textShadow: '0px 4px 0px #4B371F'
         }} className="text-[#F6AD0F] font-cherryBomb text-stroke-3 text-[26px] leading-[26px]">
           Round {latestData?.round || "-"}
-        </div>
+        </div> */}
       </div>
       <div className="flex items-center gap-2 mx-auto mt-[-60px]">
         <img src="/images/raffle/timer.png" className="w-[32px]" alt="" />
@@ -156,7 +165,7 @@ const RaffleViews = () => {
           </div>
         </div>
         <div className="mt-[60px] w-[205px] h-[58px] border-[2px] border-[#4B371F] bg-[#FFB050] flex flex-col items-center justify-center relative rounded-2xl">
-          <div className="font-cherryBomb text-base leading-[16px] text-[#F7F9EA] text-stroke1-shadow ml-[-4px]">
+          <div className="font-cherryBomb text-base leading-[16px] text-[#4B371F] ml-[-4px]">
             Your have
           </div>
           <div className="font-cherryBomb text-[20px] leading-[20px] text-[#F7F9EA] text-stroke1-shadow">
@@ -174,7 +183,7 @@ const RaffleViews = () => {
             alt=""
           />
         </div>
-        <div className="font-cherryBomb text-stroke1-shadow text-[#F7F9EA] w-full text-center my-[14px]">
+        <div className="font-cherryBomb text-[#F7F9EA] w-full text-center my-[14px]">
           Your will spend
         </div>
         <div className="flex mx-auto items-center gap-[22px] mb-[14px]">
