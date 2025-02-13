@@ -146,7 +146,7 @@ const RaffleViews = () => {
               alt=""
             />
             <div className="flex flex-col gap-2">
-              <div className="text-[#FDD35E] text-stroke1-shadow font-cherryBomb text-[20px] leading-[20px]">
+              <div className="text-[#FFF549] text-stroke1-shadow font-cherryBomb text-[20px] leading-[20px]">
                 {addThousandSeparator(latestData?.coins) || "-"}
               </div>
               <div className="text-[#FFF4C2] text-stroke1-shadow font-cherryBomb text-[16px] leading-[16px]">
