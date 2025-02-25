@@ -4,12 +4,14 @@ const Button = (props: Props) => {
   return (
     <button
       type="button"
-      className={`bg-[#FFF5A9] h-[2.250000rem] rounded-[1.125000rem] px-[1.312500rem] flex justify-center items-center gap-[0.250000rem] border-[0.125000rem] border-[#4B371F] text-[#4B371F] text-[1.000000rem] font-[700] disabled:opacity-30 ${className}`}
+      className={`bg-[#FFB050] h-[40px] rounded-[16px] p-[2px] border-[2px] border-[#4B371F] text-[#F7F9EA] uppercase font-cherryBomb text-stroke-2 text-[16px] font-[400] disabled:opacity-30 ${className}`}
       style={style}
       onClick={onClick}
       disabled={disabled}
     >
-      {children}
+      <div className="w-full h-full border-[2px] px-[12px] border-[#AF7026] rounded-[12px] bg-[#FFCF23] flex justify-center items-center bg-[url('/images/shop/product-light.svg')] bg-no-repeat bg-[position:-3px_2px] bg-[length:52px_8.5px]">
+        {children}
+      </div>
     </button>
   );
 };

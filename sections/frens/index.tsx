@@ -13,6 +13,7 @@ import Skeleton from 'react-loading-skeleton';
 import ResourceItem from '@components/ResourceItem/ResourceItem';
 import { isAndroid } from 'react-device-detect';
 
+// FIXME
 const testData = {
   allows_write_to_pm: true,
   first_name: 'gu',

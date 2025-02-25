@@ -1,16 +1,11 @@
 'use client';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Card from './components/card';
-import Button from './components/button';
-import LazyImage from '@/components/img';
-import Reward from './components/reward';
-import Task from './components/task';
 import { useQuest } from '@/hooks/useQuest';
 import Skeleton from 'react-loading-skeleton';
-import ResourceItem from '@components/ResourceItem/ResourceItem';
 import AppHeader from '@components/header';
 import PaperclipCard from '@components/paperclip-card';
+import Item from '@/sections/earn/components/item';
+import React from 'react';
 
 const EarnView = () => {
   const {
@@ -30,132 +25,76 @@ const EarnView = () => {
         <div className="p-[96px_10px_94px] w-full h-full overflow-y-auto">
           <PaperclipCard
             title="Daily"
+            innerClassName="pr-[50px] pl-[15px]"
+            titleClassName="!left-[18px] !translate-x-[unset]"
+            contentClassName="grid-cols-1"
           >
-            123
+            {
+              loading ? (
+                <Skeleton width="100%" height="68px" borderRadius="16px" />
+              ) : dailyList?.map?.((quest, index) => (
+                <Item
+                  quest={quest}
+                  key={index}
+                  pending={pending}
+                  disabled={quest.finished}
+                  onClick={handleClick}
+                  onVerify={handleVerify}
+                />
+              ))
+            }
           </PaperclipCard>
-        </div>
-      </div>
-      <div className="relative w-full h-full overflow-y-auto bg-[#96D6FF]">
-        <div className="absolute z-[0] right-[2.5rem] top-[3.75rem] w-[7.38rem] h-[3.625rem] bg-[url('/images/icon-cloud.svg')] bg-no-repeat bg-cover bg-center" />
-        <div className="w-full pt-[0.8rem] pb-[1rem]">
-          <ResourceItem title="Frens" level={2} coins={13400} total={23450} />
-        </div>
-        <section className="relative z-[1]">
-          <div className="text-[1.125rem] text-[#4B371F] font-[700] pl-[1rem]">
-            Daily
-          </div>
-          <div className="mt-[0.625rem] pl-[0.75rem]">
-            {
-              loading ? (
-                <Skeleton width="9rem" height="11.31rem" borderRadius="1rem" />
-              ) : (
-                <Swiper
-                  spaceBetween={8}
-                  slidesPerView={2}
-                  onSlideChange={() => console.log('slide change')}
-                  onSwiper={(swiper) => console.log(swiper)}
-                  style={{
-                    paddingRight: '4.5rem',
-                  }}
-                >
-                  {
-                    dailyList.map((item) => (
-                      <SwiperSlide key={item.id}>
-                        <Card className="w-full shrink-0 flex flex-col items-center">
-                          <LazyImage
-                            src=""
-                            width="3.625rem"
-                            height="3.625rem"
-                          />
-                          <div className="w-full mt-[0.5rem] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
-                            {item.name}
-                          </div>
-                          <Reward className="mt-[0.5625rem] justify-center">
-                            +{item.coins}
-                          </Reward>
-                          <Button
-                            className="mt-[0.625rem] mx-auto whitespace-nowrap"
-                            disabled={pending[item.id] || item.finished}
-                            onClick={() => handleClick(item)}
-                          >
-                            {item.finished ? 'Checked' : 'Start'}
-                          </Button>
-                        </Card>
-                      </SwiperSlide>
-                    ))
-                  }
-                </Swiper>
-              )
-            }
-          </div>
-          <div className="mt-[0.75rem] px-[0.75rem]">
-            {
-              loading ? (
-                <Skeleton width="100%" height="5.13rem" borderRadius="1rem" />
-              ) : (
-                <Swiper
-                  spaceBetween={8}
-                  slidesPerView={1}
-                  onSlideChange={() => console.log('slide change')}
-                  onSwiper={(swiper) => console.log(swiper)}
-                >
-                  {
-                    viewList.map((item) => (
-                      <SwiperSlide key={item.id}>
-                        <Card className="w-full">
-                          <div className="flex items-center gap-[0.687500rem]">
-                            <LazyImage
-                              src=""
-                              width="3.625rem"
-                              height="3.625rem"
-                              containerClassName="shrink-0"
-                            />
-                            <div className="flex flex-col flex-1 w-0">
-                              <div className="">{item.name}</div>
-                              <Reward className="mt-[0.562500rem]">
-                                +{item.coins}
-                              </Reward>
-                            </div>
-                            <Button
-                              className="mt-[0.625000rem] ml-auto shrink-0 whitespace-nowrap"
-                              disabled={pending[item.id]}
-                              onClick={() => handleClick(item)}
-                            >
-                              Start
-                            </Button>
-                          </div>
-                        </Card>
-                      </SwiperSlide>
-                    ))
-                  }
-                </Swiper>
-              )
-            }
-          </div>
-        </section>
-        <section className="mt-[1.25rem] pb-[2rem]">
-          <div className="text-[1.125000rem] text-[#4B371F] font-[700] pl-[1rem]">
-            Social
-          </div>
-          <div className="flex flex-col gap-[0.625000rem] mt-[0.625000rem] px-[0.750000rem]">
+          <PaperclipCard
+            title="Social"
+            className="mt-[35px]"
+            innerClassName="pr-[50px] pl-[15px]"
+            titleClassName="!left-[18px] !translate-x-[unset]"
+            contentClassName="grid-cols-1"
+          >
             {
               loading ? (
                 <>
-                  <Skeleton width="100%" height="4.88rem" borderRadius="1rem" />
-                  <Skeleton width="100%" height="4.88rem" borderRadius="1rem" />
-                  <Skeleton width="100%" height="4.88rem" borderRadius="1rem" />
+                  <Skeleton width="100%" height="68px" borderRadius="16px" />
+                  <Skeleton width="100%" height="68px" borderRadius="16px" />
+                  <Skeleton width="100%" height="68px" borderRadius="16px" />
                 </>
-              ) : (socialList.map((item) => (
-                <Task
-                  key={item.id}
-                  {...item}
-                  disabled={pending[item.id]}
-                  onClick={() => handleClick(item)}
+              ) : socialList?.map?.((quest, index) => (
+                <Item
+                  quest={quest}
+                  key={index}
+                  pending={pending}
+                  onClick={handleClick}
+                  onVerify={handleVerify}
                 />
-              )))
+              ))
             }
-          </div>
-        </section>
+          </PaperclipCard>
+          <PaperclipCard
+            title="View"
+            className="mt-[35px]"
+            innerClassName="pr-[50px] pl-[15px]"
+            titleClassName="!left-[18px] !translate-x-[unset]"
+            contentClassName="grid-cols-1"
+          >
+            {
+              loading ? (
+                <>
+                  <Skeleton width="100%" height="68px" borderRadius="16px" />
+                  <Skeleton width="100%" height="68px" borderRadius="16px" />
+                  <Skeleton width="100%" height="68px" borderRadius="16px" />
+                </>
+              ) : viewList?.map?.((quest, index) => (
+                <Item
+                  quest={quest}
+                  key={index}
+                  pending={pending}
+                  onClick={handleClick}
+                  onVerify={handleVerify}
+                />
+              ))
+            }
+          </PaperclipCard>
+        </div>
       </div>
     </>
   );
