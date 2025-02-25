@@ -14,7 +14,7 @@ const TabBar: React.FC<any> = (props) => {
   };
 
   return (
-    <div className="fixed left-0 bottom-0 w-full h-[4.25rem] bg-[#F3E3AA] rounded-t-[20px] grid grid-cols-5">
+    <div className="fixed z-20 left-0 bottom-0 w-full h-[4.25rem] bg-[#F3E3AA] rounded-t-[20px] grid grid-cols-5">
       {
         TABS.map((tab) => (
           <div

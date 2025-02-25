@@ -1,10 +1,12 @@
 import DressUpGame from '@/sections/home/components/DressUpGame';
 import { CapsuleButton } from '@components/Button';
+import clsx from 'clsx';
 
-const AppHeader = () => {
+const AppHeader = (props: any) => {
+  const { className } = props;
 
   return (
-    <div className='flex items-center justify-between px-2 pt-2'>
+    <div className={clsx("flex items-center justify-between px-2 pt-2", className)}>
       <div className='bg-[url(/images/home/avtar-area.png)] bg-contain bg-no-repeat w-[50px] h-[50px] flex items-center justify-center relative'>
         <div className='w-full h-full'
              style={{

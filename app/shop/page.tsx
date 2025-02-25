@@ -3,7 +3,7 @@ import { TabBarWrapper } from '@components/Layout/TabBarWrapper';
 
 const Shop = () => {
   return (
-    <TabBarWrapper tabbar={false}>
+    <TabBarWrapper>
       <ShopView />
     </TabBarWrapper>
   );
