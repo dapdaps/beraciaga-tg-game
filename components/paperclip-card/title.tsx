@@ -20,15 +20,19 @@ const ProductCardTitle: React.FC<ProductCardTitleProps> = ({ icon, className, ch
         </div>
       </div>
       <div className="w-[14px] translate-x-[-2px] h-full shrink-0 bg-[url('/images/shop/card-title-bg-right.svg')] bg-no-repeat bg-left bg-contain" />
-      <img
-        src={icon}
-        alt=""
-        className="absolute"
-        style={{
-          right: iconX,
-          bottom: iconY,
-        }}
-      />
+      {
+        !!icon && (
+          <img
+            src={icon}
+            alt=""
+            className="absolute"
+            style={{
+              right: iconX,
+              bottom: iconY,
+            }}
+          />
+        )
+      }
     </div>
   );
 };

@@ -2,7 +2,7 @@
 
 import AppHeader from '@components/header';
 import Product from '@/sections/shop/components/product';
-import ProductCard from '@/sections/shop/components/card';
+import ProductCard from '@/components/paperclip-card';
 import { ProductType, ProductTypes } from '@/sections/shop/config';
 
 const ShopView = () => {
@@ -12,7 +12,10 @@ const ShopView = () => {
       <AppHeader className="absolute z-20 w-full left-0 top-0" />
       <div className="p-[96px_10px_94px] w-full h-full overflow-y-auto">
         <ProductCard
-          type={ProductTypes.spins}
+          title={ProductTypes.spins.label}
+          icon={ProductTypes.spins.icon}
+          iconX={ProductTypes.spins.iconX}
+          iconY={ProductTypes.spins.iconY}
           innerClassName="pr-[50px] pl-[20px]"
         >
           {
@@ -22,7 +25,10 @@ const ShopView = () => {
           }
         </ProductCard>
         <ProductCard
-          type={ProductTypes.treasureBox}
+          title={ProductTypes.treasureBox.label}
+          icon={ProductTypes.treasureBox.icon}
+          iconX={ProductTypes.treasureBox.iconX}
+          iconY={ProductTypes.treasureBox.iconY}
           className="mt-[35px]"
           innerClassName="pr-[10px] whitespace-nowrap"
         >
@@ -33,7 +39,10 @@ const ShopView = () => {
           }
         </ProductCard>
         <ProductCard
-          type={ProductTypes.points}
+          title={ProductTypes.points.label}
+          icon={ProductTypes.points.icon}
+          iconX={ProductTypes.points.iconX}
+          iconY={ProductTypes.points.iconY}
           className="mt-[35px]"
           innerClassName="pr-[50px] pl-[20px]"
         >
@@ -44,7 +53,10 @@ const ShopView = () => {
           }
         </ProductCard>
         <ProductCard
-          type={ProductTypes.outfit}
+          title={ProductTypes.outfit.label}
+          icon={ProductTypes.outfit.icon}
+          iconX={ProductTypes.outfit.iconX}
+          iconY={ProductTypes.outfit.iconY}
           className="mt-[35px]"
           innerClassName="pr-[50px] pl-[20px]"
         >
