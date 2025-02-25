@@ -7,8 +7,11 @@ import Jacket from "@/sections/home/components/DressUpGame/Jacket";
 
 import Transportation from "@/sections/home/components/DressUpGame/Transportation";
 import Airflow from './Airflows'
+import clsx from 'clsx';
 
-const DressUpGame: React.FC = () => {
+const DressUpGame: React.FC<any> = (props) => {
+  const { className, style } = props;
+
   const { userItems, bearState, randomizeBearAppearance } = useGameState();
 
   const currentVehicle = userItems.find(
@@ -30,7 +33,10 @@ const DressUpGame: React.FC = () => {
     })
   }, [controls, level])
   return (
-    <div className="relative">
+    <div
+      className={clsx("relative", className)}
+      style={style}
+    >
       <svg
         viewBox="0 0 360 340"
         style={{ width: "22.5rem", height: "21.25rem" }}

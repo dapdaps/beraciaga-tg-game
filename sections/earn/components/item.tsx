@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Button from '@/sections/earn/components/button';
 import { numberFormatter } from '@/utils/number-formatter';
+import LightingButton from '@components/Button/lighting-button';
 
 const Item: React.FC<any> = (props) => {
   const { className, quest, pending, onClick, onVerify, disabled } = props;
@@ -30,12 +31,12 @@ const Item: React.FC<any> = (props) => {
           quest?.finished ? (
             <img src="/images/icon-done.svg" alt="" className="w-[28px] h-[28px] rounded-full" />
           ) : (
-            <Button
+            <LightingButton
               disabled={pending[quest.id] || disabled}
               onClick={() => onClick(quest)}
             >
               {quest?.visited ? 'Verify' : 'Check'}
-            </Button>
+            </LightingButton>
           )
         }
       </div>

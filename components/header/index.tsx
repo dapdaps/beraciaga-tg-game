@@ -1,22 +1,14 @@
 import DressUpGame from '@/sections/home/components/DressUpGame';
 import { CapsuleButton } from '@components/Button';
 import clsx from 'clsx';
+import HeaderAvatar from '@components/header/avatar';
 
 const AppHeader = (props: any) => {
   const { className } = props;
 
   return (
     <div className={clsx("flex items-center justify-between px-2 pt-2", className)}>
-      <div className='bg-[url(/images/home/avtar-area.png)] bg-contain bg-no-repeat w-[50px] h-[50px] flex items-center justify-center relative'>
-        <div className='w-full h-full'
-             style={{
-               transform: 'scale(0.16) translate(-220%, -286%)',
-             }}
-        >
-          <DressUpGame />
-        </div>
-        <div className='bg-[url(/images/home/medal.png)] bg-contain bg-no-repeat w-[30px] h-[30px] absolute right-[-15px] top-[-4px] flex items-center justify-center font-cherryBomb text-[14px] text-stroke-1 text-white pb-1'>1</div>
-      </div>
+      <HeaderAvatar size={54} bgColor="#FFF5A8" />
       <CapsuleButton>
         <div className='flex items-center justify-between px-[1px]'>
           <img src='/images/home/coin.png' alt='coin' className='w-6 h-6' />

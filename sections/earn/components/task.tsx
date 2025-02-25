@@ -3,6 +3,7 @@ import Card from './card';
 import Reward from './reward';
 import Button from './button';
 import { Quest } from '@/hooks/useQuest';
+import LightingButton from '@components/Button/lighting-button';
 
 const Task = (props: Props) => {
   const {
@@ -36,9 +37,9 @@ const Task = (props: Props) => {
             finished ? (
               <LazyImage src="/images/icon-done.svg" width="1.500000rem" height="1.500000rem" />
             ) : (
-              <Button className="whitespace-nowrap" disabled={disabled} onClick={onClick}>
+              <LightingButton className="whitespace-nowrap" disabled={disabled} onClick={onClick}>
                 {visited ? 'Verify' : 'Start'}
-              </Button>
+              </LightingButton>
             )
           }
         </div>
