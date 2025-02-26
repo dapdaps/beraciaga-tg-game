@@ -1,6 +1,7 @@
 import Modal from "@/components/modal"
 import { useState } from "react";
-
+import PlayerEquipmentList from "./PlayerEquipmentList";
+import IconSaveButton from "@public/svg/save-button.svg"
 const PlayerEquipmentChoiceModal = () => {
     const [activeTab, setActiveTab] = useState('Clothes');
 
@@ -41,9 +42,14 @@ const PlayerEquipmentChoiceModal = () => {
             </div>
 
             {/* 内容区域 */}
-            <div className="bg-[#FFF1C7] p-6 rounded-b-[10px] border-x-[2px] border-b-[2px] border-[#E5C375] h-[425px]">
-                <p className="text-lg text-black">{activeTab} 内容</p>
+            <div className="bg-[#FFF1C7] rounded-b-[10px] border-x-[2px] border-b-[2px] border-[#E5C375] h-[425px] overflow-x-hidden overflow-y-scroll">
+                <div className="px-[18px] pt-5">
+                  <PlayerEquipmentList category={activeTab} />
+                </div>
             </div>
+        </div>
+        <div className="w-full flex justify-center mt-2">
+          <IconSaveButton />
         </div>
       </div>
     </Modal>
