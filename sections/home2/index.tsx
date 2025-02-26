@@ -10,6 +10,11 @@ import { BaseButton, CapsuleButton } from '@/components/Button';
 import Modal from '@/components/modal';
 import AppHeader from '@components/header';
 
+import BearControlModal from './components/BearControlModal';
+import PlayerEquipmentChoiceModal from './components/PlayerEquipmentChoiceModal';
+
+
+
 export const HomeContext = createContext<any>({});
 
 export default memo(function Home() {
@@ -97,8 +102,8 @@ const MainScene = () => {
         </BaseButton>
       </div>
     </LevelContainer>
-    <BeraContainer></BeraContainer>
-
+    {/* <BearControlModal /> */}
+    <PlayerEquipmentChoiceModal />
   </div>
   )
 }

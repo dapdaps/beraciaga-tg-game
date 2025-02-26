@@ -17,13 +17,23 @@ const GameView = () => {
 
   const gameSource = useMemo(() => {
     if (!WebApp) return null;
-    const url = new URL(process.env.NEXT_PUBLIC_GAME_URL || '');
-    url.searchParams.set('initData', btoa(WebApp.initData));
-    url.searchParams.set('api', btoa(process.env.NEXT_PUBLIC_API || ''));
-
-    url.hash = `#activated=${gameVisible ? '1' : '0'}`;
-
-    return url.toString();
+    
+    const gameUrl = process.env.NEXT_PUBLIC_GAME_URL;
+    if (!gameUrl) {
+      console.error('Game URL is not configured in environment variables (NEXT_PUBLIC_GAME_URL)');
+      return null;
+    }
+    
+    try {
+      const url = new URL(gameUrl);
+      url.searchParams.set('initData', btoa(WebApp.initData));
+      url.searchParams.set('api', btoa(process.env.NEXT_PUBLIC_API || ''));
+      url.hash = `#activated=${gameVisible ? '1' : '0'}`;
+      return url.toString();
+    } catch (error) {
+      console.error('Invalid game URL:', gameUrl, error);
+      return null;
+    }
   }, [WebApp, gameVisible]);
 
   useEffect(() => {

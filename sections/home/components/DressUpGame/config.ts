@@ -103,10 +103,11 @@ export const JACKETS_MAPPING = {
   }
   
   export interface BearProps {
-    colors: BearColors;
-    level: number;
+    colors?: BearColors;
+    level?: number;
     face?: number;
-    className?: string;
+	showBody?: boolean;
+	className?: string;
   }
   
   export const DEFAULT_COLORS = {

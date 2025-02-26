@@ -40,6 +40,15 @@ body {
   .text-stroke-1-E1FF0A {
     -webkit-text-stroke: 1px #E1FF0A;
   }
+
+  .text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
 }
 
 @font-face {

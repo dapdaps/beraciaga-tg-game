@@ -26,6 +26,10 @@ const config: Config = {
       },
       padding: {
         "tabbar": "4.25rem",
+      },
+      boxShadow: {
+        shadow1: "10px 10px 0 0 rgba(0, 0, 0, 0.25);",
+        shadow2: "6px 6px 0px 0px rgba(0, 0, 0, 0.25)"
       }
     },
   },

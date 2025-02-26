@@ -71,6 +71,9 @@ importers:
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
+      modern-screenshot:
+        specifier: ^4.6.0
+        version: 4.6.0
       near-api-js:
         specifier: ^0.44.2
         version: 0.44.2
@@ -3487,6 +3490,9 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
+
+  modern-screenshot@4.6.0:
+    resolution: {integrity: sha512-L7osQAWpJiWY1ST1elhLRSGD5i7og5uoICqiXs38whAjWtIayp3cBMJmyML4iyJcBhRfHOyciq1g1Ft5G0QvSg==}
 
   ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
@@ -9009,6 +9015,8 @@ snapshots:
       minimist: 1.2.8
 
   mkdirp@1.0.4: {}
+
+  modern-screenshot@4.6.0: {}
 
   ms@2.0.0: {}
 

@@ -30,6 +30,7 @@
     "ethers": "5.7.2",
     "framer-motion": "^11.11.11",
     "lodash-es": "^4.17.21",
+    "modern-screenshot": "^4.6.0",
     "near-api-js": "^0.44.2",
     "next": "14.2.5",
     "react": "^18",

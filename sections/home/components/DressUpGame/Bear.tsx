@@ -10,6 +10,8 @@ const Bear: React.FC<BearProps> = ({
   colors = DEFAULT_COLORS, 
   level = 0,
   face = 1,
+  showBody = true,
+  className = '',
 }) => {
 
   const safeface = face in BEAR_FACES ? face : 1;
@@ -19,25 +21,27 @@ const Bear: React.FC<BearProps> = ({
   const bearColor = bearColors[level] || DEFAULT_COLORS;
 
   return (
-    <g id="bear" fill="none">
+    <g id="bear" fill="none" className={className}>
       <svg 
         width="360" 
         height="340" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
       >
-        {level <= 1 ? (
-          <IconStand 
-            style={{ 
-              color: bearColor.primary,
-            }}
-          />
-        ) : (
-            <IconSit 
+        {showBody && (
+          level <= 1 ? (
+            <IconStand 
               style={{ 
                 color: bearColor.primary,
               }}
             />
+          ) : (
+              <IconSit 
+                style={{ 
+                  color: bearColor.primary,
+                }}
+              />
+          )
         )}
         <IconHead 
           style={{ 
