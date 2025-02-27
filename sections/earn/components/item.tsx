@@ -13,7 +13,7 @@ const Item: React.FC<any> = (props) => {
           <div className="w-[52px] h-[52px] bg-[url('/images/earn/icon-daily-checkin.svg')] bg-no-repeat bg-center bg-[length:40px_auto] bg-[#FFCCED] border border-[rgba(75,_55,_31,_0.20)] backdrop-blur-[5px] rounded-[16px]">
           </div>
         </div>
-        <div className="flex-1 w-0 flex flex-col gap-[8px] text-[16px] font-normal text-shadow-[0px_2px_0px_#4B371F] text-stroke-2 font-cherryBomb">
+        <div className="flex-1 w-0 flex flex-col gap-[8px] text-[16px] font-normal text-shadow-[0px_2px_0px_#4B371F] text-[#F7F9EA] text-stroke-2 font-cherryBomb">
           <div className="w-full whitespace-nowrap overflow-hidden overflow-ellipsis">
             {quest?.name}
           </div>

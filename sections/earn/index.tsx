@@ -27,7 +27,7 @@ const EarnView = () => {
             title="Daily"
             innerClassName="pr-[50px] pl-[15px]"
             titleClassName="!left-[18px] !translate-x-[unset]"
-            contentClassName="grid-cols-1"
+            contentClassName="!grid-cols-1"
           >
             {
               loading ? (
@@ -49,7 +49,7 @@ const EarnView = () => {
             className="mt-[35px]"
             innerClassName="pr-[50px] pl-[15px]"
             titleClassName="!left-[18px] !translate-x-[unset]"
-            contentClassName="grid-cols-1"
+            contentClassName="!grid-cols-1"
           >
             {
               loading ? (
@@ -74,7 +74,7 @@ const EarnView = () => {
             className="mt-[35px]"
             innerClassName="pr-[50px] pl-[15px]"
             titleClassName="!left-[18px] !translate-x-[unset]"
-            contentClassName="grid-cols-1"
+            contentClassName="!grid-cols-1"
           >
             {
               loading ? (

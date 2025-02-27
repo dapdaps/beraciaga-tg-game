@@ -102,7 +102,7 @@ const FrensView = (props: any) => {
         <div className="p-[120px_10px_94px] w-full h-full overflow-y-auto">
           <PaperclipCard
             className="relative"
-            contentClassName="grid-cols-1 gap-y-0 gap-x-0 !p-[15px_10px_7px]"
+            contentClassName="!grid-cols-1 !gap-y-0 !gap-x-0 !p-[15px_10px_7px]"
           >
             <img src="/images/frenz/bears.svg" alt="" className="w-[366px] h-[68px] absolute top-[-58px] left-1/2 -translate-x-1/2" />
             <div className="flex items-center gap-[14px] w-full">
