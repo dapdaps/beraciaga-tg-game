@@ -6,7 +6,7 @@ import clsx from "clsx";
 import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import { domToPng } from "modern-screenshot";
-import Skin from "./svgHoc/skin";
+import Skin from "./svgHoc/Skin";
 
 const CharacterCustomization = () => {
   return (

@@ -1,7 +1,6 @@
 import LazyImage from '@/components/img';
 import Card from './card';
 import Reward from './reward';
-import Button from './button';
 import { Quest } from '@/hooks/useQuest';
 import LightingButton from '@components/Button/lighting-button';
 

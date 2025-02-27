@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import Button from '@/sections/earn/components/button';
 import { numberFormatter } from '@/utils/number-formatter';
 import LightingButton from '@components/Button/lighting-button';
 
