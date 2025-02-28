@@ -75,24 +75,27 @@ const PlayerEquipmentList = ({
             <div className="relative">
               {item.owned ? (
                 // Owned item container
-                <div className="w-[86px] h-[86px] rounded-xl border-2 border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center">
-                  <img 
-                    src={item.image} 
-                    alt={item.title}
-                    className="w-full h-full object-contain"
-                  />
+                <div className="overflow-hidden w-[86px] h-[86px] rounded-xl border-2 border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center">
+                    {
+                      item.category === 'Background' ? (<div className='bg-[#f99] w-full h-full'></div>) : (<img 
+                        src={item.image} 
+                        alt={item.title}
+                        className="w-full h-full object-contain"
+                      />)
+                    }
                 </div>
               ) : (
                 // Unowned item container (grayed out)
-                <div className="w-[86px] h-[86px] rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center">
-                  <img 
-                    src={item.image} 
-                    alt={item.title}
-                    className="w-full h-full object-contain opacity-50"
-                  />
+                <div className="overflow-hidden w-[86px] h-[86px] rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center">
+                  {
+                    item.category === 'Background' ? (<div className='bg-[#f99] w-full h-full opacity-50'></div>) : (<img 
+                      src={item.image} 
+                      alt={item.title}
+                      className="w-full h-full object-contain opacity-50"
+                    />)
+                  }
                 </div>
               )}
-
               {/* Checkbox for owned items */}
               {item.owned && (
                 <button 
@@ -113,7 +116,6 @@ const PlayerEquipmentList = ({
                   )}
                 </button>
               )}
-
               {/* Level indicator */}
               <div className="absolute bottom-[5px] left-1/2 transform -translate-x-1/2 -translate-y-0 text-[#FFF1DC] font-cherryBomb text-stroke-2-DCB988 leading-4 text-[16px]">
                 Lv.{item.level}

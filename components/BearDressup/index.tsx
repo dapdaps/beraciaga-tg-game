@@ -1,11 +1,11 @@
 import { motion, useAnimation } from 'framer-motion'
 import { useEffect } from "react";
 import { useGameState } from "./useGameState";
-import Bear from "@/sections/home/components/DressUpGame/Bear";
-import Hat from "@/sections/home/components/DressUpGame/Hat";
-import Jacket from "@/sections/home/components/DressUpGame/Jacket";
+import Bear from "@/components/BearDressup/Bear";
+import Hat from "@/components/BearDressup/Hat";
+import Jacket from "@/components/BearDressup/Jacket";
 
-import Transportation from "@/sections/home/components/DressUpGame/Transportation";
+import Transportation from "@/components/BearDressup/Transportation";
 import Airflow from './Airflows'
 import clsx from 'clsx';
 
@@ -17,7 +17,7 @@ const DressUpGame: React.FC<any> = (props) => {
   const currentVehicle = userItems.find(
     (item) => item.category === "cars" && item.isBuyStatus
   );
-  const level = currentVehicle?.level || 0;
+  const level = 0;
   const controls = useAnimation()
 
   useEffect(() => {

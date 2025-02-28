@@ -1,6 +1,6 @@
 import Modal from "@/components/modal";
-import DressUpGame from "@/sections/home/components/DressUpGame";
-import Bear from "@/sections/home/components/DressUpGame/Bear";
+import BearDressup from "@/components/BearDressup";
+import Bear from "@/components/BearDressup/Bear";
 import clsx from "clsx";
 
 import IconChangeLook from "@public/svg/home/changeLook.svg";
@@ -145,7 +145,7 @@ const BearControlModal = () => {
                 className="bg-[#FFF5A8] w-full h-full flex justify-center items-center"
               >
                 <div className="w-full h-full scale-[0.6] translate-x-[-30px] translate-y-[-40px]">
-                  <DressUpGame />
+                  <BearDressup />
                 </div>
               </div>
             </div>

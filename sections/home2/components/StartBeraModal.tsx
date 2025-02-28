@@ -1,19 +1,19 @@
 import Modal from "@/components/modal";
-import { useGameState } from "@/sections/home/components/DressUpGame/useGameState";
-import Bear from "@/sections/home/components/DressUpGame/Bear";
+import { useGameState } from "@/components/BearDressup/useGameState";
+import Bear from "@/components/BearDressup/Bear";
 
 interface IProps {
     show: boolean;
     onClose: () => void;
 }
 
-const StartBera = ({
+const StartBeraModal = ({
     show,
     onClose,
 }:  IProps) => {
   const { bearState } = useGameState();
   return (
-    <Modal open={show} onClose={onClose}>
+    <Modal open={show} onClose={onClose} isShowCloseIcon={false}>
       <div className="relative w-[425px] h-[466px] mx-auto">
         <img
           src="/images/home/start-box.png"
@@ -38,4 +38,4 @@ const StartBera = ({
   );
 };
 
-export default StartBera;
+export default StartBeraModal;

@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import DressUpGame from '@/sections/home/components/DressUpGame';
+import BearDressup from '@/components/BearDressup';
 
 const HeaderAvatar: React.FC<any> = (props) => {
   const { className, isLevel = true, size = 54, bgColor = '#ECC4BA' } = props;
@@ -22,7 +22,7 @@ const HeaderAvatar: React.FC<any> = (props) => {
             backgroundColor: bgColor,
           }}
         >
-          <DressUpGame
+          <BearDressup
             className=""
             style={{
               transform: `scale(${0.72 * size / 340}) translateX(${(0.074 * size) / (0.72 * size / 340)}px)`,

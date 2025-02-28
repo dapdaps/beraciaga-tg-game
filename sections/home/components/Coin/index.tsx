@@ -57,8 +57,8 @@ const Coin = memo(({id, initialX, onCollected, amount, duration = 3 }: {id: any;
       </motion.div>
       <motion.div
         style={{
-          width: "53px",
-          height: "53px",
+          width: "40px",
+          height: "40px",
           background: "url('/svg/coin.svg') no-repeat center",
           backgroundSize: "contain",
           opacity,

@@ -2,7 +2,7 @@
 
 import HomeBg from '@/sections/home/components/bg';
 import { useRef, useState } from 'react';
-import DressUpGame from './components/DressUpGame';
+import BearDressup from '../../components/BearDressup';
 import Coin from '@/sections/home/components/Coin';
 import ProgressBar from './components/ProgressBar';
 import { SceneList } from '@/sections/home/components/types';
@@ -36,7 +36,7 @@ const Home = () => {
         />
       ))}
       <div className='absolute bottom-[8rem] left-1/2 translate-x-[-50%]'>
-        <DressUpGame />
+        <BearDressup />
       </div>
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2">

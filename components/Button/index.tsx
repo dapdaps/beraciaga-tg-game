@@ -13,7 +13,7 @@ export const CapsuleButton = ({
   }) => {
     return (
       <div className={clsx("relative w-44 h-10", containerClass)}>
-        <div className={clsx("absolute bottom-0 w-full h-9 bg-[#4B371F] rounded-[25px]", secondClass)} />
+        <div className={clsx("absolute bottom-1 w-full h-9 bg-[#4B371F] rounded-[25px]", secondClass)} />
         <div 
           className={clsx("absolute top-0 w-full h-8 rounded-[25px] border-2 border-[#855B5B]/30 bg-[#F7F9EA]", firstClass)}
         >

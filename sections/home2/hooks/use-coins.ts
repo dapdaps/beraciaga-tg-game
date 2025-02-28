@@ -11,6 +11,15 @@ const coins_duration = 2;
 // 限制最大同时显示的金币数量
 const MAX_COINS = 5;
 
+// 添加本地调试用的模拟数据
+const mockUserData = {
+  creat_timestamp: Date.now() - 3600000, // 1小时前创建
+  level: 1,
+  coins_per_hour: 100,
+  mock: true
+};
+
+
 const createNewCoin = (latestAmount: Big.Big, coinsPerSecond: Big.Big) => {
   return {
     id: Math.random(),
@@ -18,6 +27,19 @@ const createNewCoin = (latestAmount: Big.Big, coinsPerSecond: Big.Big) => {
     amount: Big(coinsPerSecond).times(coins_duration),
     x: getRandomNumber(15, 295),
     y: 0,
+  };
+};
+
+const mockCalcLatestCoins = () => {
+  const coinsPerHour = mockUserData.coins_per_hour;
+  const timeElapsed = (Date.now() - mockUserData.creat_timestamp) / 1000; // 秒
+  const totalCoins = Big(coinsPerHour).div(3600).times(timeElapsed);
+  
+  const coinsPerSecond = Big(coinsPerHour).div(3600);
+  
+  return {
+    value: totalCoins,
+    coinsPerSecond
   };
 };
 
@@ -80,7 +102,8 @@ const calcLatestCoins = (props: { coins_per_hour: number; creat_timestamp: numbe
   };
 };
 
-export function useCoins() {
+export function useCoins(options?: { debug?: boolean }) {
+  const debug = options?.debug || false;
   const coinTimer = useRef<any>();
   const {
     addSpeed,
@@ -122,6 +145,61 @@ export function useCoins() {
   };
 
   useEffect(() => {
+    if (!debug) return;
+    
+    console.log('Running in debug mode with mock data');
+    
+    const { value: _latestCoins } = mockCalcLatestCoins();
+    setLatestCoins(_latestCoins);
+    setCurrentCoins(_latestCoins);
+
+    const createInterval = () => {
+      if (coins.length >= MAX_COINS) return;
+
+      const { value: _latestCoins, coinsPerSecond } = mockCalcLatestCoins();
+      
+      setLatestCoins(_latestCoins);
+      setCoins((prevCoins: any) => {
+        if (prevCoins.length >= MAX_COINS) {
+          return prevCoins;
+        }
+        return [...prevCoins, createNewCoin(_latestCoins, coinsPerSecond)];
+      });
+    };
+
+    if (coinTimer.current) {
+      clearInterval(coinTimer.current);
+    }
+
+    coinTimer.current = setInterval(createInterval, coins_duration * 1000);
+
+    createInterval();
+
+    const visibilityEvent = () => {
+      const isHidden = document.hidden || document.visibilityState === 'hidden';
+      if (coinTimer.current) {
+        clearInterval(coinTimer.current);
+      }
+      
+      if (!isHidden) {
+        coinTimer.current = setInterval(createInterval, coins_duration * 1000);
+        createInterval();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', visibilityEvent);
+
+    return () => {
+      if (coinTimer.current) {
+        clearInterval(coinTimer.current);
+      }
+      document.removeEventListener('visibilitychange', visibilityEvent);
+    };
+  }, [debug, coins.length]);
+
+  useEffect(() => {
+    if (debug) return; 
+    
     if (!userInfo || !userInfo.creat_timestamp || !userInfo.level || userEquipmentListLoading || userInfoLoading || levelsLoading) return;
 
     const creatTimestamp = userInfo?.creat_timestamp;
@@ -181,7 +259,7 @@ export function useCoins() {
       }
       document.removeEventListener('visibilitychange', visibilityEvent);
     };
-  }, [userInfo, userEquipmentListLoading, userInfoLoading, levelsLoading, userEquipmentCategoryList, coins.length]);
+  }, [userInfo, userEquipmentListLoading, userInfoLoading, levelsLoading, userEquipmentCategoryList, coins.length, debug]);
 
   return {
     coins,

@@ -1,7 +1,8 @@
-import DressUpGame from '@/sections/home/components/DressUpGame';
+import BearDressup from '@/components/BearDressup';
 import { CapsuleButton } from '@components/Button';
 import clsx from 'clsx';
 import HeaderAvatar from '@components/header/avatar';
+import Connect from './connect';
 
 const AppHeader = (props: any) => {
   const { className } = props;
@@ -24,6 +25,7 @@ const AppHeader = (props: any) => {
           <span className='text-white text-stroke-2 font-cherryBomb font-[400]'>500</span>
         </div>
       </CapsuleButton>
+      <Connect />
     </div>
   );
 };
