@@ -1,4 +1,4 @@
-import { createContext, memo, useEffect, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
 import Header from '@/sections/home2/components/header';
 import Content from '@/sections/home2/components/content';
 import { useCoins } from '@/sections/home2/hooks/use-coins';
@@ -12,6 +12,7 @@ import PlayerEquipmentChoiceModal from './components/PlayerEquipmentChoiceModal'
 import BeraLevelContainer from './components/BeraLevelContainer';
 import Coin from '../home/components/Coin';
 import BearDressup from '../../components/BearDressup';
+import { getUserLookList, UserLookItem } from '@/apis/look';
 
 // 是否开启调试模式
 const DEBUG_MODE = process.env.NODE_ENV === 'development';
@@ -19,12 +20,12 @@ const DEBUG_MODE = process.env.NODE_ENV === 'development';
 export const HomeContext = createContext<any>({});
 
 export default memo(function Home() {
-  // 根据环境启用调试模式
   const { coins, handleCollected } = useCoins({ debug: DEBUG_MODE });
   const [isInitialized, setIsInitialized] = useState(false);
   const { handleLogin } = useLogin();
   const user = useUser();
   const { WebApp } = useTelegram();
+  const [userLooksItem, setUserLooksItem] = useState<UserLookItem[]>([]);
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
@@ -40,10 +41,40 @@ export default memo(function Home() {
     getLevels();
     getUserEquipmentList();
     getUserInfo();
+    fetchUserProfile()
   };
 
+  const mockUserLooksItem = () => {
+      // mock mockUserLooksItem
+      // {
+      //   category: string;
+      //   level: number;
+      //   look_id: string;
+      //   use: Boolean
+      // }
+      return new Array(10).fill(0).map((_, index) => ({
+        category: 'category',
+        level: index,
+        look_id: `look_id_${index}`,
+        use: index === 0,
+      }))
+  }
+
+  const fetchUserProfile = async () => {
+    const data = await getUserLookList({
+        tg_user_id: tgUserId,
+        use: true,
+    })
+    if (data.code === 200) {
+      // setUserLooksItem(data.data); 
+      console.log(mockUserLooksItem(), '---mock')
+      setUserLooksItem(mockUserLooksItem());
+    }
+    return data;
+  }
+
   useEffect(() => {
-    if (!isInitialized) {
+    if (!isInitialized && !DEBUG_MODE) {
       handleLogin();
       setIsInitialized(true);
       return;
@@ -56,7 +87,7 @@ export default memo(function Home() {
   }, [tgUserId]);
 
   return (
-    <HomeContext.Provider value={{ ...coins, ...user }}>
+    <HomeContext.Provider value={{ ...coins, ...user, userLooksItem }}>
       <MainScene />
       {/* <InitScene /> */}
     </HomeContext.Provider>
