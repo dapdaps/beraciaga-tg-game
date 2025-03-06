@@ -74,7 +74,7 @@ const post = async (url: string, data?: object) => {
     body: data ? JSON.stringify(data) : undefined
   });
   const result = (await res.json()) as any;
-  handleUpgrade(result);
+  console.log(result, '<--=---result')
   return result;
 };
 

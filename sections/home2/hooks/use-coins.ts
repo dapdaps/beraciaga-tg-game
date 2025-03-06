@@ -153,7 +153,7 @@ export function useCoins(options?: { debug?: boolean }) {
     const { value: _latestCoins } = mockCalcLatestCoins();
     setLatestCoins(_latestCoins);
     setCurrentCoins(_latestCoins);
-    console.log(coins,'coinscoinscoinscoinscoinscoinscoinscoins')
+
     const createInterval = () => {
       if (coins.length >= MAX_COINS) return;
 

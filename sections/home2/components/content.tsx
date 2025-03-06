@@ -3,8 +3,12 @@ import Reward from '@/sections/home2/components/reward';
 import Speed from '@/sections/home2/components/speed';
 import ComingSoon from '@components/ComingSoon';
 import RingButton from '@components/Ring';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
+import IconButtonGetBera from '@public/svg/button-get-bera.svg'
+import { startLook } from '@/apis/look';
+import { HomeContext } from '..';
+import StartBeraModal from './StartBeraModal';
 
 
 const calcScale = (viewportHeight: number) => {
@@ -19,6 +23,10 @@ const calcScale = (viewportHeight: number) => {
 const Content = () => {
   const { WebApp } = useTelegram();
 
+  const { setVisibleStartBera } = useContext(HomeContext);
+
+  const tgUserId = WebApp?.initDataUnsafe?.user?.id;
+
   const [scale, setScale] = useState(calcScale(WebApp?.viewportHeight));
 
   useEffect(() => {
@@ -27,6 +35,18 @@ const Content = () => {
     }
     setScale(calcScale(WebApp.viewportHeight));
   }, [WebApp]);
+
+  const handleGetBera = async () => {
+    try {
+      const data = await startLook(tgUserId);
+      console.log(data, '---data------data------data---');
+      if (data.code === 200) { 
+        setVisibleStartBera(true)
+      }
+    } catch (error) {
+      console.error('handleGetBera ========>', error);
+    }
+  }
 
   return (
     <div className="overflow-y-auto h-0 flex-1">
@@ -39,7 +59,7 @@ const Content = () => {
       >
         <RingButton className="absolute right-[15px] top-[15px] z-[2]" />
         <DropCoins />
-        <ComingSoon className="absolute z-[2] left-1/2 -translate-x-1/2 top-[20rem]" />
+        <IconButtonGetBera onClick={handleGetBera} className="absolute z-[2] left-1/2 -translate-x-1/2 top-[20rem]" />
         <div className="relative z-[1]">
           <div className="pt-[42px] text-center text-white font-montserrat text-[48px] font-bold tracking-[2.4px]">BERACIAGA</div>
           <div className="relative mt-[72px] mx-auto w-[245px] h-[245px] justify-center">
@@ -52,6 +72,7 @@ const Content = () => {
           </div>
           <Speed />
           <Reward />
+          <StartBeraModal  />
         </div>
       </div>
     </div>

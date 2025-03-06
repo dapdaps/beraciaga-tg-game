@@ -29,34 +29,36 @@ export interface UseLookResponse {
   data: UseLookResponseItem[];
 }
 
-export const getLookList = (params: any) =>
-  get("/api/look/list", {
+export const getLookList = async (params: any) =>
+  await get("/api/look/list", {
     category: params,
   });
 
-export const startLook = (params: any) =>
-  post(`/api/look/start?category=${params}`);
+export const startLook = async (params: any) =>
+  await post(`/api/look/start?tg_user_id=${params}`, {
+    tg_user_id: `${params}`,
+  });
 
-export const useLook = ({
+export const useLook = async ({
   look_ids,
   tg_user_id,
 }: {
   look_ids: string[];
   tg_user_id: string;
 }): Promise<UseLookResponse> =>
-  post(`/api/look/use`, {
+  await post(`/api/look/use`, {
     look_ids,
     tg_user_id,
   });
 
-export const getUserLookList = ({
+export const getUserLookList = async ({
   tg_user_id,
   use,
 }: {
   tg_user_id: string;
   use?: boolean;
 }): Promise<UserLookResponse> =>
-  get("/api/look/user", {
+  await get("/api/look/user", {
     tg_user_id,
     use,
   });

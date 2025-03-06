@@ -5,19 +5,14 @@ import { useCoins } from '@/sections/home2/hooks/use-coins';
 import useLogin from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
 import { useTelegram } from '@/hooks/useTelegram';
-import AppHeader from '@components/header';
 
-import BearControlModal from './components/BearControlModal';
-import PlayerEquipmentChoiceModal from './components/PlayerEquipmentChoiceModal';
-import BeraLevelContainer from './components/BeraLevelContainer';
-import Coin from '../home/components/Coin';
-import BearDressup from '../../components/BearDressup';
 import { getUserLookList, UserLookItem } from '@/apis/look';
 
 // 是否开启调试模式
 const DEBUG_MODE = process.env.NODE_ENV === 'development';
 import { useRouter } from 'next/navigation';
-import DropCoins from './components/drop-coins';
+
+import MainScene from './components/MainScene';
 
 export const HomeContext = createContext<any>({});
 
@@ -28,8 +23,10 @@ export default memo(function Home() {
   const user = useUser();
   const { WebApp } = useTelegram();
   const [userLooksItem, setUserLooksItem] = useState<UserLookItem[]>([]);
-  console.log(coins, currentCoins,'<---coins')
   const router = useRouter()
+  const [updater, setUpdater] = useState(0);
+  const [visibleStartBera, setVisibleStartBera] = useState(false);
+  const [startJourney, setStartJourney] = useState(false);
 
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
@@ -84,12 +81,25 @@ export default memo(function Home() {
     init();
   }, [tgUserId]);
 
-  const isInitTGUser = userLooksItem.length !== 0;
+  const isInitTGUser = userLooksItem.length === 0;
 
   return (
-    <HomeContext.Provider value={{ coins, user, userLooksItem, addSpeed, handleCollected, currentCoins }}>
+    <HomeContext.Provider value={{ 
+      coins, 
+      user, 
+      userLooksItem, 
+      addSpeed, 
+      handleCollected, 
+      currentCoins, 
+      updater, 
+      setUpdater,
+      visibleStartBera,
+      setVisibleStartBera,
+      startJourney,
+      setStartJourney,
+    }}>
       {
-        isInitTGUser ? <InitScene /> : <MainScene />
+        (isInitTGUser || !startJourney) ? <InitScene /> : <MainScene />
       }
     </HomeContext.Provider>
   )
@@ -104,26 +114,6 @@ const InitScene = () => {
   )
 }
 
-const MainScene = () => {
-  return (
-    <div className='w-[100vw] relative h-[100dvh] bg-[url(/images/role/TG-phone.png)] bg-no-repeat bg-cover bg-center'>
-      <AppHeader />
-      <div className='flex mt-3 justify-between'>
-        <img src="/images/home/lottery.png" className='w-[90px] h-[90px]' alt="" />
-        <img src="/images/home/rank.png" className='w-[30px] h-[30px] mr-3' alt="" />
-      </div>
-      <DropCoins />
-      <div className='absolute left-[15%] bottom-[20%]'>
-          <BearDressup />
-      </div>
-      <div className='w-full mx-auto absolute bottom-[90px]'>
-        <BeraLevelContainer />
-      </div>
-      {/* <BearControlModal /> */}
-      {/* <PlayerEquipmentChoiceModal /> */}
-  </div>
-  )
-}
 
 
 
