@@ -4,7 +4,7 @@ import { get } from '@/utils/http';
 import useToast from '@/hooks/use-toast';
 import { isAndroid } from 'react-device-detect';
 
-export function useInvite(defaultInviterSource = 'okx_invite') {
+export function useInvite(defaultInviterSource = 'beraciaga') {
   const toast = useToast();
   const { WebApp } = useTelegram();
   const userInfo = WebApp?.initDataUnsafe?.user;
