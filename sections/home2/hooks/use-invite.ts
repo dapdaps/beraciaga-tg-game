@@ -4,7 +4,7 @@ import { get } from '@/utils/http';
 import useToast from '@/hooks/use-toast';
 import { isAndroid } from 'react-device-detect';
 
-export function useInvite() {
+export function useInvite(defaultInviterSource = 'beraciaga') {
   const toast = useToast();
   const { WebApp } = useTelegram();
   const userInfo = WebApp?.initDataUnsafe?.user;
@@ -18,13 +18,16 @@ export function useInvite() {
       return {};
     }
 
-    const app_link = `${process.env.NEXT_PUBLIC_APP_LINK}?startapp=${encodeURIComponent('inviterId=' + (userInfo?.id || ''))}`;
+    const startappValue = `inviterId_${userInfo?.id || ''}_inviterSource_${defaultInviterSource}`;
+    const app_link = `${process.env.NEXT_PUBLIC_APP_LINK}?startapp=${encodeURIComponent(startappValue)}`;
     const tg_share_link = `https://t.me/share/url?url=${app_link}&text=DapDap %26 Beratown team is dropping sumting new 👀 %0A Idk what it is but just sign up to the TG mini app to stack up the BGOLD first`;
+    
+    console.log(app_link, '---shareLink---');
     return {
       app_link,
       tg_share_link,
     };
-  }, []);
+  }, [userInfo?.id, defaultInviterSource]);
 
   const getTotal = async () => {
     setLoading(true);

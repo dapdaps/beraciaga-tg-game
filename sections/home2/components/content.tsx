@@ -6,6 +6,7 @@ import RingButton from '@components/Ring';
 import { useEffect, useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
 
+
 const calcScale = (viewportHeight: number) => {
   if (!viewportHeight) return 1;
   const realHeight = viewportHeight - 58 - 94 - 21 - 10;

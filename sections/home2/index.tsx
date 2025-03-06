@@ -16,17 +16,22 @@ import { getUserLookList, UserLookItem } from '@/apis/look';
 
 // 是否开启调试模式
 const DEBUG_MODE = process.env.NODE_ENV === 'development';
+import { useRouter } from 'next/navigation';
+import DropCoins from './components/drop-coins';
 
 export const HomeContext = createContext<any>({});
 
 export default memo(function Home() {
-  const { coins, handleCollected } = useCoins({ debug: DEBUG_MODE });
+  const { coins,currentCoins, handleCollected, addSpeed } = useCoins({ debug: DEBUG_MODE });
   const [isInitialized, setIsInitialized] = useState(false);
   const { handleLogin } = useLogin();
   const user = useUser();
   const { WebApp } = useTelegram();
   const [userLooksItem, setUserLooksItem] = useState<UserLookItem[]>([]);
-  console.log(coins, '<---coins')
+  console.log(coins, currentCoins,'<---coins')
+  const router = useRouter()
+
+
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
   const {
@@ -82,7 +87,7 @@ export default memo(function Home() {
   const isInitTGUser = userLooksItem.length !== 0;
 
   return (
-    <HomeContext.Provider value={{ ...coins, ...user, userLooksItem }}>
+    <HomeContext.Provider value={{ coins, user, userLooksItem, addSpeed, handleCollected, currentCoins }}>
       {
         isInitTGUser ? <InitScene /> : <MainScene />
       }
@@ -107,7 +112,7 @@ const MainScene = () => {
         <img src="/images/home/lottery.png" className='w-[90px] h-[90px]' alt="" />
         <img src="/images/home/rank.png" className='w-[30px] h-[30px] mr-3' alt="" />
       </div>
-      <DropCoinsContainer />
+      <DropCoins />
       <div className='absolute left-[15%] bottom-[20%]'>
           <BearDressup />
       </div>
@@ -117,22 +122,6 @@ const MainScene = () => {
       {/* <BearControlModal /> */}
       {/* <PlayerEquipmentChoiceModal /> */}
   </div>
-  )
-}
-
-const DropCoinsContainer = () => {
-  const { coins, handleCollected } = useCoins({ debug: DEBUG_MODE });
-  return (
-    <div className='absolute w-screen h-screen top-0 left-0'>
-    {coins.map((coin) => (
-      <Coin
-        key={coin.id}
-        id={coin.id}
-        initialX={coin.x}
-        onCollected={handleCollected}
-      />
-    ))}
-    </div>
   )
 }
 

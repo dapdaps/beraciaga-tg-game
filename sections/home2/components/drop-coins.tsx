@@ -9,6 +9,8 @@ const DropCoins = () => {
     handleCollected,
   } = useContext(HomeContext);
 
+  if (!coins || !coins.length) return null;
+
   return (
     <div className="w-full h-full absolute left-0 top-0 z-[0] overflow-hidden">
       {coins.map((coin: any) => (
