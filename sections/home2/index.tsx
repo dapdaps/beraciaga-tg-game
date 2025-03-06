@@ -26,7 +26,7 @@ export default memo(function Home() {
   const user = useUser();
   const { WebApp } = useTelegram();
   const [userLooksItem, setUserLooksItem] = useState<UserLookItem[]>([]);
-
+  console.log(coins, '<---coins')
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
   const {
@@ -45,13 +45,6 @@ export default memo(function Home() {
   };
 
   const mockUserLooksItem = () => {
-      // mock mockUserLooksItem
-      // {
-      //   category: string;
-      //   level: number;
-      //   look_id: string;
-      //   use: Boolean
-      // }
       return new Array(10).fill(0).map((_, index) => ({
         category: 'category',
         level: index,
@@ -86,10 +79,13 @@ export default memo(function Home() {
     init();
   }, [tgUserId]);
 
+  const isInitTGUser = userLooksItem.length !== 0;
+
   return (
     <HomeContext.Provider value={{ ...coins, ...user, userLooksItem }}>
-      <MainScene />
-      {/* <InitScene /> */}
+      {
+        isInitTGUser ? <InitScene /> : <MainScene />
+      }
     </HomeContext.Provider>
   )
 });

@@ -145,6 +145,7 @@ export function useCoins(options?: { debug?: boolean }) {
   };
 
   useEffect(() => {
+    console.log(debug, 'debugdebugdebugdebugdebug')
     if (!debug) return;
     
     console.log('Running in debug mode with mock data');
@@ -152,7 +153,7 @@ export function useCoins(options?: { debug?: boolean }) {
     const { value: _latestCoins } = mockCalcLatestCoins();
     setLatestCoins(_latestCoins);
     setCurrentCoins(_latestCoins);
-
+    console.log(coins,'coinscoinscoinscoinscoinscoinscoinscoins')
     const createInterval = () => {
       if (coins.length >= MAX_COINS) return;
 
