@@ -1,7 +1,9 @@
 import Big from 'big.js';
 
-export const addThousandSeparator = (numberString: string) => {
-  const parts = numberString.split('.');
+export const addThousandSeparator = (numberString?: string | number) => {
+  if (!numberString) return '';
+  const str = typeof numberString === 'string' ? numberString : numberString.toString();
+  const parts = str.split('.');
   const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const decimalPart = parts[1] ? `.${parts[1]}` : '';
   return integerPart + decimalPart;
