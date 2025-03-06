@@ -19,6 +19,10 @@ const ImportEquipments = () => {
 
   const [visible, setVisible] = useState(false);
 
+  if (!userInfo?.address) {
+    return null;
+  }
+
   return (
     <>
       <button
@@ -29,7 +33,7 @@ const ImportEquipments = () => {
             router.push('/imported-equipments?from=home');
             return;
           }
-          setVisible(true);
+          // setVisible(true);
         }}
       >
         <div className="flex items-center justify-center gap-[8px] relative -top-[5px] w-full h-full rounded-[10px] border border-[#709D27] bg-[#C7FF6E] backdrop-blur-[5px]">

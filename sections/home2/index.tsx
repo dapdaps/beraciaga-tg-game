@@ -52,7 +52,7 @@ export default memo(function Home() {
       <div className="relative h-full flex flex-col items-stretch bg-[#FFD335] rounded-[10px] rounded-b-[0]">
         <Header />
         <Content />
-        <img src="/images/raffle/entry-raffle.png" onClick={() => router.push('/raffle')} className='w-[90px] h-[90px] absolute bottom-0 right-0' alt="" />
+        {/* <img src="/images/raffle/entry-raffle.png" onClick={() => router.push('/raffle')} className='w-[90px] h-[90px] absolute bottom-0 right-0' alt="" /> */}
       </div>
     </HomeContext.Provider>
   )
