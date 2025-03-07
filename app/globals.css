@@ -44,6 +44,10 @@ body {
     -webkit-text-stroke: 1px #E1FF0A;
   }
 
+  .text-stroke-1-FFF4C2 {
+    -webkit-text-stroke: 1px #FFF4C2;
+  }
+
   .text-ellipsis {
     white-space: nowrap;
     overflow: hidden;
