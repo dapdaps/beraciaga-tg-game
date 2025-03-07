@@ -1,3 +1,4 @@
+import { UserLookItem } from "@/apis/look";
 import { create } from "zustand";
 
 type UserState = {
@@ -27,6 +28,9 @@ type UserState = {
 
   addSpeed: number;
   setAddSpeed: (speed: number) => void;
+
+  userLooksItem: UserLookItem[];
+  setUserLooksItem: (list: UserLookItem[]) => void;
 };
 
 export const useUserStore = create<UserState>((set) => ({
@@ -60,6 +64,9 @@ export const useUserStore = create<UserState>((set) => ({
 
   addSpeed: 0,
   setAddSpeed: (addSpeed) => set({ addSpeed }),
+
+  userLooksItem: [],
+  setUserLooksItem: (list) => set({ userLooksItem: list }),
 }));
 
 export interface UserInfo {

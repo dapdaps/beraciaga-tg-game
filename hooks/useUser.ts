@@ -4,6 +4,7 @@ import { Equipment, Level, useUserStore } from '@/stores/useUserStore';
 import Big from 'big.js';
 import { useEffect } from 'react';
 import { orderBy } from 'lodash-es';
+import { getUserLookList } from '@/apis/look';
 
 export function useUser() {
   const { WebApp } = useTelegram();
@@ -30,6 +31,8 @@ export function useUser() {
     setUserInfoLoading,
     addSpeed,
     setAddSpeed,
+    userLooksItem,
+    setUserLooksItem,
   } = useUserStore();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
@@ -122,6 +125,22 @@ export function useUser() {
     setUserInfoLoading(false);
   };
 
+
+  const fetchLookUserProfile = async () => {
+    try {
+      const data = await getUserLookList({
+        tg_user_id: tgUserId,
+        use: true,
+      })
+      if (data.code === 200) {
+        setUserLooksItem(data.data); 
+      }
+      return data;
+    } catch (error) {
+      console.log(error, '<===')
+    }
+  }
+
   useEffect(() => {
     const add = userEquipmentSingleList?.map?.((it: Equipment) => it.bonus_percentage / 100)?.reduce?.((a: number, b: number) => a + b, 0) ?? 0;
     setAddSpeed(add);
@@ -143,5 +162,7 @@ export function useUser() {
     userInfoLoading,
     getUserInfo,
     addSpeed,
+    userLooksItem,
+    setUserLooksItem,
   };
 }

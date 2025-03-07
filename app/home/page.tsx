@@ -1,6 +1,6 @@
 'use client'
 
-import Home from '@/sections/home2/index';
+import Home from '@/sections/home/index';
 import { TabBarWrapper } from '@components/Layout/TabBarWrapper';
 
 export default function Index() {

@@ -57,12 +57,12 @@ const DressUpGame: React.FC<any> = (props) => {
         </motion.g>
         {level > 0 && <Airflow />}
       </svg>
-      {/* <button
+      <button
           onClick={randomizeBearAppearance}
           className="mt-4 px-4 py-2 bg-[#E49F63] text-white rounded fixed top-[-10dvh] right-0"
           >
           Random Bear
-          </button> */}
+          </button>
     </div>
   );
 };

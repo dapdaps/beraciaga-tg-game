@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useState, Suspense } from 'react';
 import Header from '@/sections/home2/components/header';
 import Content from '@/sections/home2/components/content';
 import { useCoins } from '@/sections/home2/hooks/use-coins';
@@ -13,6 +13,7 @@ const DEBUG_MODE = process.env.NODE_ENV === 'development';
 import { useRouter } from 'next/navigation';
 
 import MainScene from './components/MainScene';
+import Loading from '@/components/Loading';
 
 export const HomeContext = createContext<any>({});
 
@@ -27,7 +28,7 @@ export default memo(function Home() {
   const [updater, setUpdater] = useState(0);
   const [visibleStartBera, setVisibleStartBera] = useState(false);
   const [startJourney, setStartJourney] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true); // 添加加载状态
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
@@ -38,34 +39,30 @@ export default memo(function Home() {
     getUserInfo,
   } = user;
 
-  const init = () => {
-    getEquipmentList();
-    getLevels();
-    getUserEquipmentList();
-    getUserInfo();
-    fetchUserProfile()
+  const init = async () => {
+     try {
+        setIsLoading(true);
+        await fetchUserProfile();
+     } catch (error) {
+        console.log(error, '<===')
+     } finally {
+        setIsLoading(false);
+     }
   };
 
-  const mockUserLooksItem = () => {
-      return new Array(10).fill(0).map((_, index) => ({
-        category: 'category',
-        level: index,
-        look_id: `look_id_${index}`,
-        use: index === 0,
-      }))
-  }
-
   const fetchUserProfile = async () => {
-    const data = await getUserLookList({
+    try {
+      const data = await getUserLookList({
         tg_user_id: tgUserId,
         use: true,
-    })
-    if (data.code === 200) {
-      // setUserLooksItem(data.data); 
-      console.log(mockUserLooksItem(), '---mock')
-      setUserLooksItem(mockUserLooksItem());
+      })
+      if (data.code === 200) {
+        setUserLooksItem(data.data); 
+      }
+      return data;
+    } catch (error) {
+      console.log(error, '<===')
     }
-    return data;
   }
 
   useEffect(() => {
@@ -98,9 +95,13 @@ export default memo(function Home() {
       startJourney,
       setStartJourney,
     }}>
-      {
-        (isInitTGUser || !startJourney) ? <InitScene /> : <MainScene />
-      }
+      <Suspense fallback={<LoadingScene />}>
+        {isLoading ? (
+          <LoadingScene />
+        ) : (
+          (isInitTGUser && !startJourney) ? <InitScene /> : <MainScene />
+        )}
+      </Suspense>
     </HomeContext.Provider>
   )
 });
@@ -110,6 +111,14 @@ const InitScene = () => {
     <div className="relative h-full flex flex-col items-stretch bg-[#FFD335] rounded-[10px] rounded-b-[0]">
       <Header />
       <Content />
+    </div>
+  )
+}
+
+const LoadingScene = () => {
+  return (
+    <div className="relative h-full flex flex-col items-center justify-center bg-[#FFD335] rounded-[10px] rounded-b-[0] text-white  ">
+      <Loading size={48} />
     </div>
   )
 }
