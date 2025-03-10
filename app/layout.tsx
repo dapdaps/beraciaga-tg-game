@@ -27,16 +27,16 @@ export default function RootLayout({
     setCongratsModalVisible,
   } = useLayoutStore();
 
-  useEffect(() => {
-    async function loadPlugin() {
-      if (!process.env.NEXT_PUBLIC_APP_LINK?.includes?.('berachain_game_test_bot')) return;
-      if (typeof window !== 'undefined') {
-        const VConsole = await import('vconsole');
-        new VConsole.default();
-      }
-    }
-    loadPlugin();
-  }, []);
+  // useEffect(() => {
+  //   async function loadPlugin() {
+  //     if (!process.env.NEXT_PUBLIC_APP_LINK?.includes?.('berachain_game_test_bot')) return;
+  //     if (typeof window !== 'undefined') {
+  //       const VConsole = await import('vconsole');
+  //       new VConsole.default();
+  //     }
+  //   }
+  //   loadPlugin();
+  // }, []);
 
   return (
     <html lang="en">
