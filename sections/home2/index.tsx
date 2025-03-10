@@ -18,7 +18,7 @@ import Loading from '@/components/Loading';
 export const HomeContext = createContext<any>({});
 
 export default memo(function Home() {
-  const { coins,currentCoins, handleCollected, addSpeed } = useCoins({ debug: DEBUG_MODE });
+  const { coins,currentCoins, handleCollected } = useCoins({ debug: DEBUG_MODE });
   const [isInitialized, setIsInitialized] = useState(false);
   const { handleLogin } = useLogin();
   const user = useUser();
@@ -85,7 +85,6 @@ export default memo(function Home() {
       coins, 
       user, 
       userLooksItem, 
-      addSpeed, 
       handleCollected, 
       currentCoins, 
       updater, 
