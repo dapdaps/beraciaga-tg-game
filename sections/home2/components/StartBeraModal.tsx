@@ -8,7 +8,7 @@ import { HomeContext } from "..";
 const StartBeraModal = () => {
   const { bearState } = useGameState();
   const { setStartJourney, visibleStartBera, setVisibleStartBera } = useContext(HomeContext);
-  console.log(visibleStartBera, '<====visibleStartBera')
+
   return (
     <Modal open={visibleStartBera} onClose={() => setVisibleStartBera(false)} isShowCloseIcon={false}>
       <div className="relative w-[426px] h-[467px] mx-auto">

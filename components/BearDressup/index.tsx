@@ -10,7 +10,7 @@ import Airflow from './Airflows'
 import clsx from 'clsx';
 
 const DressUpGame: React.FC<any> = (props) => {
-  const { className, style } = props;
+  const { className, style, userLooksItem } = props;
 
   const { userItems, bearState, randomizeBearAppearance } = useGameState();
 
