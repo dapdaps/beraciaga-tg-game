@@ -35,7 +35,6 @@ const Coin = memo(({id, initialX, onCollected, amount, duration = 3 }: {id: any;
         // }
       }}
       onAnimationComplete={() => {
-        console.log('Coin animation completed!');
         onCollected(id);
       }}
       className="flex flex-col items-center justify-center"

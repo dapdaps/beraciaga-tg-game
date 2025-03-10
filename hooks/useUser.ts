@@ -164,5 +164,6 @@ export function useUser() {
     addSpeed,
     userLooksItem,
     setUserLooksItem,
+    fetchLookUserProfile
   };
 }

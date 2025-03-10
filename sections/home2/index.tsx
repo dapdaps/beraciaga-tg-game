@@ -8,7 +8,6 @@ import { useTelegram } from '@/hooks/useTelegram';
 
 import { getUserLookList, UserLookItem } from '@/apis/look';
 
-// 是否开启调试模式
 const DEBUG_MODE = process.env.NODE_ENV === 'development';
 import { useRouter } from 'next/navigation';
 
@@ -23,47 +22,31 @@ export default memo(function Home() {
   const { handleLogin } = useLogin();
   const user = useUser();
   const { WebApp } = useTelegram();
-  const [userLooksItem, setUserLooksItem] = useState<UserLookItem[]>([]);
   const router = useRouter()
   const [updater, setUpdater] = useState(0);
   const [visibleStartBera, setVisibleStartBera] = useState(false);
   const [startJourney, setStartJourney] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // 添加加载状态
+  const [isLoading, setIsLoading] = useState(true); 
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
   const {
-    getEquipmentList,
-    getLevels,
-    getUserEquipmentList,
+    fetchLookUserProfile,
     getUserInfo,
+    userLooksItem
   } = user;
 
   const init = async () => {
      try {
         setIsLoading(true);
-        await fetchUserProfile();
+        await fetchLookUserProfile();
+        await getUserInfo();
      } catch (error) {
         console.log(error, '<===')
      } finally {
         setIsLoading(false);
      }
   };
-
-  const fetchUserProfile = async () => {
-    try {
-      const data = await getUserLookList({
-        tg_user_id: tgUserId,
-        use: true,
-      })
-      if (data.code === 200) {
-        setUserLooksItem(data.data); 
-      }
-      return data;
-    } catch (error) {
-      console.log(error, '<===')
-    }
-  }
 
   useEffect(() => {
     if (!isInitialized && !DEBUG_MODE) {
@@ -84,7 +67,6 @@ export default memo(function Home() {
     <HomeContext.Provider value={{ 
       coins, 
       user, 
-      userLooksItem, 
       handleCollected, 
       currentCoins, 
       updater, 
