@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 
 import MainScene from './components/MainScene';
 import Loading from '@/components/Loading';
+import { Category } from '@/components/BearDressup/mappings';
 
 export const HomeContext = createContext<any>({});
 
@@ -33,7 +34,8 @@ export default memo(function Home() {
   const {
     fetchLookUserProfile,
     getUserInfo,
-    userLooksItem
+    userLooksItem,
+    userInfo,
   } = user;
 
   const init = async () => {
@@ -63,6 +65,11 @@ export default memo(function Home() {
 
   const isInitTGUser = userLooksItem.length === 0;
 
+  const userLooksFlattened = userLooksItem.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
+    acc[item.category] = item
+    return acc
+  }, {} as Record<Category, UserLookItem>)
+
   return (
     <HomeContext.Provider value={{ 
       coins, 
@@ -75,6 +82,9 @@ export default memo(function Home() {
       setVisibleStartBera,
       startJourney,
       setStartJourney,
+      userLooksItem,
+      userInfo,
+      userLooksFlattened
     }}>
       <Suspense fallback={<LoadingScene />}>
         {isLoading ? (

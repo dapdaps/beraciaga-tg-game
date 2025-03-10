@@ -1,7 +1,8 @@
+import { Category } from "@/components/BearDressup/mappings";
 import { get, post } from "@/utils/http";
 
 export interface LookItem {
-  category: string;
+  category: Category;
   level: number;
   look_id: string;
 }
