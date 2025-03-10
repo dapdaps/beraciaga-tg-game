@@ -13,7 +13,7 @@ export type TabItem = {
 };
 
 export const TABS: TabItem[] = [
-  { id: 1, name: 'Home', label: '/images/tabbar/home-text.svg', icon: '/images/tabbar/home.svg', iconWidth: 33, iconOffsetY: 0, path: '/home', isLock: false },
+  { id: 1, name: 'Home', label: '/images/tabbar/home-text.svg', icon: '/images/tabbar/home.svg', iconWidth: 33, iconOffsetY: 0, path: '/', isLock: false },
   { id: 2, name: 'Shop', label: '/images/tabbar/shop-text.svg', labelOffsetY: 4, icon: '/images/tabbar/shop.svg', iconWidth: 37, iconOffsetY: 2, path: '/shop', isLock: false },
   { id: 3, name: 'Game', label: '/images/tabbar/game-text.svg', icon: '/images/tabbar/game.svg', iconWidth: 44, iconOffsetY: 2, path: '/game', isLock: false },
   { id: 4, name: 'Earn', label: '/images/tabbar/earn-text.svg', icon: '/images/tabbar/earn.svg', iconWidth: 40, iconOffsetY: 2, path: '/earn', isLock: false },

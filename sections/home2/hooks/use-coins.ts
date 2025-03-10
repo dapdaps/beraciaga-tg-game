@@ -145,10 +145,7 @@ export function useCoins(options?: { debug?: boolean }) {
   };
 
   useEffect(() => {
-    console.log(debug, 'debugdebugdebugdebugdebug')
     if (!debug) return;
-    
-    console.log('Running in debug mode with mock data');
     
     const { value: _latestCoins } = mockCalcLatestCoins();
     setLatestCoins(_latestCoins);
