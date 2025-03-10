@@ -1,27 +1,27 @@
 import { motion, useAnimation } from 'framer-motion'
-import { useEffect } from "react";
-import { useGameState } from "./useGameState";
+import { useContext, useEffect } from "react";
 import Bear from "@/components/BearDressup/Bear";
 import Hat from "@/components/BearDressup/Hat";
-import Jacket from "@/components/BearDressup/Jacket";
+import Clothes from "@/components/BearDressup/Clothes";
+
+import { Category } from "@/components/BearDressup/mappings";
 
 import Transportation from "@/components/BearDressup/Transportation";
 import Airflow from './Airflows'
 import clsx from 'clsx';
+import { HomeContext } from '@/sections/home2';
 
 const DressUpGame: React.FC<any> = (props) => {
-  const { className, style, userLooksItem } = props;
+  const { className, style } = props;
 
-  const { userItems, bearState, randomizeBearAppearance } = useGameState();
+  const { userInfo, userLooksFlattened } = useContext(HomeContext);
 
-  const currentVehicle = userItems.find(
-    (item) => item.category === "cars" && item.isBuyStatus
-  );
-  const level = 0;
+  const { level: userLevel } = userInfo
+
   const controls = useAnimation()
 
   useEffect(() => {
-    if (level < 1) return
+    if (!userLooksFlattened.vehicle || userLooksFlattened?.vehicle?.level < 4) return 
     controls.start({
       scaleY: [1, 0.98, 1], 
       transition: {
@@ -31,7 +31,11 @@ const DressUpGame: React.FC<any> = (props) => {
         ease: "easeInOut",
       },
     })
-  }, [controls, level])
+  }, [controls, userLevel])
+
+
+  if (!userLooksFlattened || !userLooksFlattened?.face) return null
+  
   return (
     <div
       className={clsx("relative", className)}
@@ -46,23 +50,38 @@ const DressUpGame: React.FC<any> = (props) => {
           animate={controls}
           style={{ transformOrigin: "center bottom" }}
         >
-          <Bear
-            colors={bearState.colors}
-            level={level}
-            face={bearState.currentFace}
-          />
-          <Hat level={level} />
-          <Jacket userItems={userItems} />
-          {level > 0 && <Transportation level={level} />}
+          <Bear userLooks={userLooksFlattened} />
+          {
+            userLooksFlattened?.hat && (
+              <Hat 
+                level={userLooksFlattened.hat.level}
+              />
+            )
+          }
+          {
+            userLooksFlattened?.clothes && (
+              <Clothes 
+                clothesItem={userLooksFlattened.clothes}
+                vehicleItem={userLooksFlattened?.vehicle}
+              />
+            )
+          }
+          {
+            userLooksFlattened?.vehicle && (
+              <Transportation 
+                level={userLooksFlattened.vehicle.level}
+              />
+            )
+          }
         </motion.g>
-        {level > 0 && <Airflow />}
+        {
+          userLooksFlattened?.vehicle && userLooksFlattened.vehicle.level >= 4 && (
+            <g id="Airflow">
+              <Airflow />
+            </g>
+          )
+        }
       </svg>
-      <button
-          onClick={randomizeBearAppearance}
-          className="mt-4 px-4 py-2 bg-[#E49F63] text-white rounded fixed top-[-10dvh] right-0"
-          >
-          Random Bear
-          </button>
     </div>
   );
 };

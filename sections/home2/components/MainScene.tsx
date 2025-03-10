@@ -6,13 +6,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 
 const MainScene = () => {
-
   const router = useRouter();
-
-  const {
-    userLooksItem
-  } = useUser();
-
     return (
       <div className='w-[100vw] relative h-[100dvh] bg-[url(/images/role/TG-phone.png)] bg-no-repeat bg-cover bg-center'>
         <AppHeader />
@@ -22,7 +16,7 @@ const MainScene = () => {
         </div>
         <DropCoins />
         <div className='absolute left-[15%] bottom-[20%]'>
-            <BearDressup userLooksItem={userLooksItem} />
+            <BearDressup />
         </div>
         <div className='w-full mx-auto absolute bottom-[90px]'>
           <BeraLevelContainer />

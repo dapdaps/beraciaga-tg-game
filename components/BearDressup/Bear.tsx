@@ -2,23 +2,28 @@ import React from 'react';
 import IconSit from '@public/svg/dressup/bears/sit.svg';
 import IconStand from '@public/svg/dressup/bears/stand.svg';
 import IconHead from '@public/svg/dressup/bears/head.svg';
-import { BearProps, BEAR_FACES, DEFAULT_COLORS, bearColors } from './config';
+import { Category, FACES_MAPPING, LimitMinCarLevel, SKINS_MAPPING } from './mappings';
+import { UserLookItem } from '@/apis/look';
 
-
+interface BearProps {
+  userLooks: Record<Category, UserLookItem>;
+  className?: string;
+  showBody?: boolean;
+}
 
 const Bear: React.FC<BearProps> = ({ 
-  colors = DEFAULT_COLORS, 
-  level = 0,
-  face = 1,
+  userLooks,
+  className,
   showBody = true,
-  className = '',
 }) => {
 
-  const safeface = face in BEAR_FACES ? face : 1;
-  const FaceComponent = BEAR_FACES[safeface as keyof typeof BEAR_FACES];
+  const FaceComponent = FACES_MAPPING[userLooks.face.look_id as keyof typeof FACES_MAPPING] || FACES_MAPPING.F_001;
 
+  const bearColor = SKINS_MAPPING[userLooks?.skin.look_id as keyof typeof SKINS_MAPPING] || SKINS_MAPPING.S_001;
 
-  const bearColor = bearColors[level] || DEFAULT_COLORS;
+    const level = userLooks.vehicle?.level || 0;
+
+    const hasPassedLimitMinCarLevel = level >= LimitMinCarLevel;
 
   return (
     <g id="bear" fill="none" className={className}>
@@ -29,32 +34,32 @@ const Bear: React.FC<BearProps> = ({
         xmlns="http://www.w3.org/2000/svg"
       >
         {showBody && (
-          level <= 1 ? (
+          !hasPassedLimitMinCarLevel ? (
             <IconStand 
               style={{ 
-                color: bearColor.primary,
+                color: bearColor,
               }}
             />
           ) : (
               <IconSit 
                 style={{ 
-                  color: bearColor.primary,
+                  color: bearColor,
                 }}
               />
           )
         )}
-        <IconHead 
+        <IconHead
           style={{ 
-            color: bearColor.primary,
-            '--ear-color': bearColor.tertiary,
+            color: bearColor,
+            // '--ear-color': bearColor,
           } as React.CSSProperties}
         />
 
         <g transform="translate(82,70)">
           <FaceComponent 
             style={{ 
-              color: bearColor.secondary,
-              '--eyebrow-color': bearColor.eyebrow,
+              color: bearColor,
+              // '--eyebrow-color': bearColor.eyebrow,
             }}
           />
         </g>

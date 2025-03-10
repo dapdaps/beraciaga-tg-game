@@ -6,8 +6,7 @@ import { useContext } from "react";
 import { HomeContext } from "..";
 
 const StartBeraModal = () => {
-  const { bearState } = useGameState();
-  const { setStartJourney, visibleStartBera, setVisibleStartBera } = useContext(HomeContext);
+  const { setStartJourney, visibleStartBera, setVisibleStartBera, userLooksFlattened } = useContext(HomeContext);
 
   return (
     <Modal open={visibleStartBera} onClose={() => setVisibleStartBera(false)} isShowCloseIcon={false}>
@@ -19,13 +18,8 @@ const StartBeraModal = () => {
         />
         <img src="/svg/modal-line.svg" className="w-[2px] h-[280px] absolute top-[106px] left-[180px] z-[5]" alt="" />
         <div className="absolute top-[86px] left-[60px] z-0 scale-[0.895]">
-          <Bear
-            colors={bearState.colors}
-            level={1}
-            face={bearState.currentFace}
-          />
+          <Bear userLooks={userLooksFlattened} />
         </div>
-        <div></div>
       </div>
       <img
         src="/images/home/start-button.png"
