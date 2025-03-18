@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import { HomeContext } from '@/sections/home2';
 
 const DressUpGame: React.FC<any> = (props) => {
-  const { className, style } = props;
+  const { className, style, onClick } = props;
 
   const { userInfo, userLooksFlattened } = useContext(HomeContext);
 
@@ -21,7 +21,7 @@ const DressUpGame: React.FC<any> = (props) => {
   const controls = useAnimation()
 
   useEffect(() => {
-    if (!userLooksFlattened?.vehicle || userLooksFlattened?.vehicle?.level < 4) return
+    if (!userLevel || !userLooksFlattened.vehicle || userLooksFlattened?.vehicle?.level < 4) return 
     controls.start({
       scaleY: [1, 0.98, 1], 
       transition: {
@@ -48,6 +48,7 @@ const DressUpGame: React.FC<any> = (props) => {
         <motion.g 
           id="main" 
           animate={controls}
+          onClick={onClick}
           style={{ transformOrigin: "center bottom" }}
         >
           <Bear userLooks={userLooksFlattened} />

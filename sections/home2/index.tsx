@@ -18,7 +18,7 @@ import { Category } from '@/components/BearDressup/mappings';
 export const HomeContext = createContext<any>({});
 
 export default memo(function Home() {
-  const { coins,currentCoins, handleCollected } = useCoins({ debug: DEBUG_MODE });
+  const { coins,currentCoins, handleCollected, addSpeed } = useCoins({ debug: DEBUG_MODE });
   const [isInitialized, setIsInitialized] = useState(false);
   const { handleLogin } = useLogin();
   const user = useUser();
@@ -33,6 +33,8 @@ export default memo(function Home() {
 
   const {
     fetchLookUserProfile,
+    levels,
+    getLevels,
     getUserInfo,
     userLooksItem,
     userInfo,
@@ -43,6 +45,7 @@ export default memo(function Home() {
         setIsLoading(true);
         await fetchLookUserProfile();
         await getUserInfo();
+        await getLevels();
      } catch (error) {
         console.log(error, '<===')
      } finally {
@@ -73,8 +76,10 @@ export default memo(function Home() {
   return (
     <HomeContext.Provider value={{ 
       coins, 
+      addSpeed,
       currentCoins, 
       handleCollected, 
+      levels,
       user, 
       updater, 
       setUpdater,

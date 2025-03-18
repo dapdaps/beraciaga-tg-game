@@ -1,5 +1,10 @@
 import { BaseButton } from "@/components/Button";
 import clsx from "clsx";
+import { useContext } from "react";
+import { HomeContext } from "..";
+import { Level } from "@/stores/useUserStore";
+import { numberFormatter } from "@/utils/number-formatter";
+import Big from "big.js";
 
 const LevelContainer = ({
   children,
@@ -36,8 +41,21 @@ const LevelContainer = ({
   );
 };
 
-const ProgressBar = ({ value = 4, className = "" }) => {
-  const segments = Array(7).fill(0);
+const ProgressBar = ({ current, total, className = "" }: { current: number; total: number; className?: string }) => {
+  const totalSegments = 7;
+  
+  const isMax = Big(current || 0).gte(total || 1);
+
+  const ratio = Big(current || 0).div(total || 1);
+
+
+  const progress = isMax 
+    ? totalSegments 
+    : (ratio.gt(0) && ratio.lt(Big(1).div(totalSegments))
+      ? 1 
+      : Math.min(ratio.times(totalSegments).toNumber(), totalSegments));
+
+  const segments = Array(totalSegments).fill(0);
 
   return (
     <div
@@ -50,7 +68,7 @@ const ProgressBar = ({ value = 4, className = "" }) => {
         <div
           key={index}
           className={`w-[30px] h-[14px] rounded-md flex-shrink-0 ${
-            index < value
+            index <= progress
               ? "border-2 border-[#F8C200] bg-[#FFE380] shadow-[inset_0px_4px_0px_0px_rgba(255,255,255,0.50)]"
               : "bg-[#B28A53]"
           }`}
@@ -61,24 +79,39 @@ const ProgressBar = ({ value = 4, className = "" }) => {
 };
 
 const BeraLevelContainer = () => {
+  const {
+    levels,
+    userInfo,
+    currentCoins
+  } = useContext(HomeContext);
+
+  if (!userInfo) return null;
+
+  const updateLevelData = levels.find((level: any) => level.level === userInfo.level) as Level;
+
+  const canUpgrade = Big(currentCoins || 0).gte(updateLevelData.upgrade_coins || 0);
+
   return (
     <LevelContainer className="mx-auto pt-[0.5px]">
       <div className="flex items-center justify-between px-3 w-[260px] pl-4">
         <span className="font-cherryBomb text-[26px] leading-[26px] text-stroke-2 text-white">
-          Lv.1
+          Lv.{userInfo?.level || 1}
         </span>
-        {/* <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end">
-          72,000 / 100,000
-        </span> */}
+        <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end">
+          {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData.upgrade_coins, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
+        </span>
       </div>
       <div className="px-3 w-[260px] pl-4 mt-1">
-        <ProgressBar />
+        <ProgressBar 
+          current={currentCoins} 
+          total={updateLevelData.upgrade_coins}
+        />
       </div>
       <div className="absolute right-0 top-0">
-        <BaseButton>
+        <BaseButton onClick={() => console.log(canUpgrade, '<====canUpgrade')}>
           <div className="flex flex-col items-center">
             <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
-              12,100
+            {numberFormatter(updateLevelData.upgrade_coins, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
             </div>
             <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
               update
