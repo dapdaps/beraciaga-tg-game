@@ -41,6 +41,9 @@ const Buy = (props: any) => {
   });
 
   const payPrice = useMemo(() => {
+    if (!buyProduct) {
+      return 0;
+    }
     if (!coupon) {
       return buyProduct.discount_price;
     }
