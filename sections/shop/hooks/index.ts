@@ -4,14 +4,18 @@ import { useMemo, useState } from 'react';
 import { CouponItem, ProductType, ProductTypes } from '@/sections/shop/config';
 import useToast from '@/hooks/use-toast';
 import { useRequestByToken } from '@/hooks/use-request-by-token';
+import { useTelegram } from '@/hooks/useTelegram';
+import { useUser } from '@/hooks/useUser';
 
 export function useShop() {
   const toast = useToast();
+  const { WebApp } = useTelegram();
+  const { getUserInfo } = useUser();
 
   const [buyModalVisible, setBuyModalVisible] = useState(false);
   const [buyProduct, setBuyProduct] = useState<ShopItem>();
 
-  const { data: list, loading } = useRequest<ShopItem[], any>(async () => {
+  const { data: list, loading, run: getList } = useRequest<ShopItem[], any>(async () => {
     const res = await get("/api/product/list");
     if (res.code !== 200) return [];
     const _list: ShopItem[] = res.data || [];
@@ -51,6 +55,20 @@ export function useShop() {
     if (res.code !== 200) {
       toast.fail({ title: res.message || "Failed to purchase" });
       return { complete: false };
+    }
+    if (WebApp && res.data.link) {
+      WebApp.openInvoice(
+        res.data.link,
+        (status: string) => {
+          if (status === 'paid') {
+            toast.success({ title: 'Invoice paid successfully' });
+            getList();
+            getUserInfo();
+          } else {
+            toast.fail({ title: 'Invoice was not paid' });
+          }
+        }
+      );
     }
     return res.data;
   }, {
