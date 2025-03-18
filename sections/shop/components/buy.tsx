@@ -2,7 +2,7 @@ import LightingButton from '@components/Button/lighting-button';
 import FlagModal from '@components/flag-modal';
 import { numberFormatter } from '@/utils/number-formatter';
 import Drawer from '@components/Drawer';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRequest } from 'ahooks';
 import { get } from '@/utils/http';
 import { useTelegram } from '@/hooks/useTelegram';
@@ -10,6 +10,8 @@ import type { UserData } from '@/hooks/useLogin';
 import { testData } from '@/data/test';
 import Skeleton from 'react-loading-skeleton';
 import { CouponItem } from '@/sections/shop/config';
+import Loading from '@components/Loading';
+import Big from 'big.js';
 
 const Buy = (props: any) => {
   const {
@@ -37,6 +39,17 @@ const Buy = (props: any) => {
   }, {
     manual: true,
   });
+
+  const payPrice = useMemo(() => {
+    if (!coupon) {
+      return buyProduct.discount_price;
+    }
+    let _price = Big(buyProduct.discount_price).minus(coupon?.discount_value ?? 0);
+    if (Big(_price).lt(0)) {
+      return 0;
+    }
+    return _price;
+  }, [buyProduct, coupon])
 
   return (
     <FlagModal
@@ -84,10 +97,15 @@ const Buy = (props: any) => {
           disabled={buying}
           outerClassName="!w-full shrink-0"
           onClick={() => {
-            handleProductPay(buyProduct);
+            handleProductPay(buyProduct, coupon);
           }}
         >
-          {numberFormatter(buyProduct?.discount_price, 2, true, { prefix: '$' })}
+          {
+            buying && (
+              <Loading size={14} />
+            )
+          }
+          {numberFormatter(payPrice, 2, true, { prefix: '$' })}
         </LightingButton>
       </div>
       <Drawer

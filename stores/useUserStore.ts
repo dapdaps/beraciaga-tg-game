@@ -1,5 +1,6 @@
 import { UserLookItem } from "@/apis/look";
 import { create } from "zustand";
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 type UserState = {
   equipmentList: Equipment[];
@@ -31,43 +32,58 @@ type UserState = {
 
   userLooksItem: UserLookItem[];
   setUserLooksItem: (list: UserLookItem[]) => void;
+
+  initData: string;
+  setInitData: (data: string) => void;
 };
 
-export const useUserStore = create<UserState>((set) => ({
-  equipmentList: [],
-  equipmentListLoading: false,
-  setEquipmentList: (list) => set({ equipmentList: list }),
-  setEquipmentListLoading: (loading) => set({ equipmentListLoading: loading }),
+export const useUserStore = create(
+  persist<UserState>((set) => ({
+    equipmentList: [],
+    equipmentListLoading: false,
+    setEquipmentList: (list) => set({ equipmentList: list }),
+    setEquipmentListLoading: (loading) => set({ equipmentListLoading: loading }),
 
-  userEquipmentList: [],
-  userEquipmentSingleList: [],
-  userEquipmentListLoading: false,
-  userEquipmentCategoryList: {},
-  setUserEquipmentList: (list) => set({ userEquipmentList: list }),
-  setUserEquipmentSingleList: (list) => set({ userEquipmentSingleList: list }),
-  setUserEquipmentListLoading: (loading) => set({ userEquipmentListLoading: loading }),
-  setUserEquipmentCategoryList: (list) => set({ userEquipmentCategoryList: list }),
+    userEquipmentList: [],
+    userEquipmentSingleList: [],
+    userEquipmentListLoading: false,
+    userEquipmentCategoryList: {},
+    setUserEquipmentList: (list) => set({ userEquipmentList: list }),
+    setUserEquipmentSingleList: (list) => set({ userEquipmentSingleList: list }),
+    setUserEquipmentListLoading: (loading) => set({ userEquipmentListLoading: loading }),
+    setUserEquipmentCategoryList: (list) => set({ userEquipmentCategoryList: list }),
 
-  levels: [],
-  levelsLoading: false,
-  setLevels: (list) => set({ levels: list }),
-  setLevelsLoading: (loading) => set({ levelsLoading: loading }),
+    levels: [],
+    levelsLoading: false,
+    setLevels: (list) => set({ levels: list }),
+    setLevelsLoading: (loading) => set({ levelsLoading: loading }),
 
-  userInfo: {
-    level: 1,
-    bind_okx_reward_coins: 100000000,
-    bind_okx_reward_coupons: 9.99,
-  },
-  userInfoLoading: false,
-  setUserInfo: (user) => set((state) => ({ userInfo: { ...state.userInfo, ...user } })),
-  setUserInfoLoading: (loading) => set({ userInfoLoading: loading }),
+    userInfo: {
+      level: 1,
+      bind_okx_reward_coins: 100000000,
+      bind_okx_reward_coupons: 9.99,
+    },
+    userInfoLoading: false,
+    setUserInfo: (user) => set((state) => ({ userInfo: { ...state.userInfo, ...user } })),
+    setUserInfoLoading: (loading) => set({ userInfoLoading: loading }),
 
-  addSpeed: 0,
-  setAddSpeed: (addSpeed) => set({ addSpeed }),
+    addSpeed: 0,
+    setAddSpeed: (addSpeed) => set({ addSpeed }),
 
-  userLooksItem: [],
-  setUserLooksItem: (list) => set({ userLooksItem: list }),
-}));
+    userLooksItem: [],
+    setUserLooksItem: (list) => set({ userLooksItem: list }),
+
+    initData: "",
+    setInitData: (data) => set({ initData: data }),
+  }), {
+    name: '_user_information',
+    version: 0.1,
+    storage: createJSONStorage(() => sessionStorage),
+    partialize: (state) => {
+      return ({ initData: state.initData } as any);
+    }
+  })
+);
 
 export interface UserInfo {
   creat_timestamp: number;

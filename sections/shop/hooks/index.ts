@@ -1,11 +1,14 @@
 import { useRequest } from 'ahooks';
-import { get } from '@/utils/http';
+import { get, post } from '@/utils/http';
 import { useMemo, useState } from 'react';
-import { ProductType, ProductTypes } from '@/sections/shop/config';
+import { CouponItem, ProductType, ProductTypes } from '@/sections/shop/config';
+import useToast from '@/hooks/use-toast';
+import { useRequestByToken } from '@/hooks/use-request-by-token';
 
 export function useShop() {
+  const toast = useToast();
+
   const [buyModalVisible, setBuyModalVisible] = useState(false);
-  const [buying, setBuying] = useState(false);
   const [buyProduct, setBuyProduct] = useState<ShopItem>();
 
   const { data: list, loading } = useRequest<ShopItem[], any>(async () => {
@@ -39,11 +42,20 @@ export function useShop() {
     setBuyModalVisible(!!item);
   };
 
-  const handleProductPay = async (item?: ShopItem) => {
+  const { run: handleProductPay, loading: buying } = useRequestByToken<{complete: boolean; link?: string;}, [item?: ShopItem, coupon?: CouponItem]>(async (item, coupon) => {
     const product = item || buyProduct;
-    if (!product || !buying) return;
-    setBuying(true);
-  };
+    const res = await post("/api/product/purchase", {
+      product_id: product?.id,
+      coupon_id: coupon?.id,
+    });
+    if (res.code !== 200) {
+      toast.fail({ title: res.message || "Failed to purchase" });
+      return { complete: false };
+    }
+    return res.data;
+  }, {
+    manual: true,
+  });
 
   return {
     list,

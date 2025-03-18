@@ -66,18 +66,25 @@ const get = async (url: string, query?: Record<string, any>) => {
 
 const post = async (url: string, data?: object) => {
   // const tokens = JSON.parse(window.sessionStorage.getItem(AUTH_TOKENS) || '{}');
+  const userInfo = window.sessionStorage.getItem('_user_information');
+  const userInfoJson = JSON.parse(userInfo || '{}');
+
+  const headers: any = {
+    'Content-Type': 'application/json'
+  };
+  if (userInfoJson?.state?.initData) {
+    headers.beraciagaTgToken = userInfoJson?.state?.initData;
+  }
+
   const res = await fetch(getUrl(url), {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: data ? JSON.stringify(data) : undefined
   });
   const result = (await res.json()) as any;
   console.log(result, '<--=---result')
   return result;
 };
-
 
 const asyncFetch = async (url: string, options?: object) => {
   const response = await fetch(url, options);
