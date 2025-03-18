@@ -1,13 +1,14 @@
 "use client";
 
 import { addThousandSeparator } from "@/utils/number-formatter";
-import { testData, useRaffle } from "../hooks/useRaffle";
+import { useRaffle } from "../hooks/useRaffle";
 import { get } from "@/utils/http";
 import { useEffect, useState } from "react";
 import Empty from "@/components/Empty";
 import { useTelegram } from "@/hooks/useTelegram";
 import { UserData } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
+import { testData } from '@/data/test';
 
 interface IRewardList {
   avatar: string;

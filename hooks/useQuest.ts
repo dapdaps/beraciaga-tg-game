@@ -5,17 +5,7 @@ import type { UserData } from '@/hooks/useLogin';
 import Big from 'big.js';
 import { useQuestStore } from '@/stores/useQuestStore';
 import { useDebounceFn } from 'ahooks';
-
-// FIXME
-const testData = {
-  allows_write_to_pm: true,
-  first_name: 'gu',
-  id: 7150006688,
-  language_code: 'zh-hans',
-  last_name: 'jimmy',
-  photo_url: 'https://t.me/i/userpic/320/i2-BRTWcSQoXawvpUSVv78kuH2IMkVBXItH61uWUjHYGATen0Zf2m-qRI1i7HXIr.svg',
-  username: 'jimmyguu',
-};
+import { testData } from '@/data/test';
 
 export function useQuest() {
   const { WebApp, isInitialized } = useTelegram();

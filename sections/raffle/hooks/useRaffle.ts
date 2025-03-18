@@ -2,17 +2,7 @@ import { UserData } from "@/hooks/useLogin";
 import { useTelegram } from "@/hooks/useTelegram";
 import { get, post } from "@/utils/http";
 import { useEffect, useState } from "react";
-
-export const testData = {
-  allows_write_to_pm: true,
-  first_name: "gu",
-  id: 6719564996,
-  language_code: "zh-hans",
-  last_name: "jimmy",
-  photo_url:
-    "https://t.me/i/userpic/320/i2-BRTWcSQoXawvpUSVv78kuH2IMkVBXItH61uWUjHYGATen0Zf2m-qRI1i7HXIr.svg",
-  username: "jimmyguu",
-};
+import { testData } from '@/data/test';
 
 interface RaffleLatest {
   round: string;

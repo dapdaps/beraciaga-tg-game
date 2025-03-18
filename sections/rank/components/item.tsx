@@ -1,19 +1,25 @@
 import Level from '@components/User/Level';
 import Name from '@components/User/Name';
 import Reward from '@components/User/Reward';
+import { numberFormatter } from '@/utils/number-formatter';
 
 const ItemCard = (props: any) => {
-  const { no } = props;
+  const { rank, avatar, level, username, gem } = props;
 
   return (
     <div className="border-[2px] border-[#D7C69D] bg-[#FFFAEA] rounded-[1rem] p-[0.625rem] flex justify-between items-center gap-[0.5rem]">
-      <div className="w-[3.125rem] h-[3.125rem] border-[2px] border-[#8A8A8A] bg-[#C2D2FF] rounded-[0.625rem] shrink-0" />
-      <Info
-        name="@AmendAAme"
-        level="10"
-        reward="123123121234"
+      <div
+        className="w-[3.125rem] h-[3.125rem] border-[2px] border-[#8A8A8A] bg-[#C2D2FF] rounded-[0.625rem] shrink-0 bg-no-repeat bg-center bg-contain"
+        style={{
+          backgroundImage: `url("${avatar}")`,
+        }}
       />
-      <RankNumber>{no}</RankNumber>
+      <Info
+        name={`@${username}`}
+        level={level}
+        reward={gem}
+      />
+      <RankNumber>{rank}</RankNumber>
     </div>
   );
 };
@@ -39,7 +45,7 @@ export const Info = (props: any) => {
         <Name>{name}</Name>
         <Level>{level}</Level>
       </div>
-      <Reward>{reward}</Reward>
+      <Reward>{numberFormatter(reward, 2, true)}</Reward>
     </div>
   );
 };

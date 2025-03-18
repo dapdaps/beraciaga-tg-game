@@ -1,9 +1,15 @@
+"use client";
+
 import Back from '@components/Back';
 import Card from '@components/Card';
 import ItemCard from '@/sections/rank/components/item';
 import RankFoot from '@/sections/rank/foot';
+import { useRank } from '@/sections/rank/hooks';
+import Skeleton from 'react-loading-skeleton';
+import React from 'react';
 
 const RankView = () => {
+  const { list, loading, userRank, userRankLoading } = useRank();
 
   return (
     <div className="bg-black h-full">
@@ -22,22 +28,23 @@ const RankView = () => {
               />
               <Card className="relative h-full overflow-x-hidden overflow-y-auto" innerClassName="pb-[2rem]">
                 <div className="flex flex-col gap-[0.625rem] items-stretch">
-                  <ItemCard no="1" />
-                  <ItemCard no="2" />
-                  <ItemCard no="3" />
-                  <ItemCard no="4" />
-                  <ItemCard no="5" />
-                  <ItemCard no="6" />
-                  <ItemCard no="7" />
-                  <ItemCard no="8" />
-                  <ItemCard no="9" />
-                  <ItemCard no="10" />
-                  <ItemCard no="11" />
-                  <ItemCard no="12" />
+                  {
+                    loading ? (
+                      <>
+                        <Skeleton width="100%" height="4.625rem" borderRadius="1rem" />
+                        <Skeleton width="100%" height="4.625rem" borderRadius="1rem" />
+                        <Skeleton width="100%" height="4.625rem" borderRadius="1rem" />
+                        <Skeleton width="100%" height="4.625rem" borderRadius="1rem" />
+                        <Skeleton width="100%" height="4.625rem" borderRadius="1rem" />
+                      </>
+                    ) : list?.map?.((item, index) => (
+                      <ItemCard key={index} {...item} />
+                    ))
+                  }
                 </div>
               </Card>
             </div>
-            <RankFoot />
+            <RankFoot data={userRank} loading={userRankLoading} />
           </div>
         </div>
       </div>

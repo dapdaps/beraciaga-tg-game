@@ -16,17 +16,7 @@ import AppHeader from '@components/header';
 import PaperclipCard from '@components/paperclip-card';
 import HeaderAvatar from '@components/header/avatar';
 import LightingButton, { LightingButtonType } from '@components/Button/lighting-button';
-
-// FIXME
-const testData = {
-  allows_write_to_pm: true,
-  first_name: 'gu',
-  id: 7150006688,
-  language_code: 'zh-hans',
-  last_name: 'jimmy',
-  photo_url: 'https://t.me/i/userpic/320/i2-BRTWcSQoXawvpUSVv78kuH2IMkVBXItH61uWUjHYGATen0Zf2m-qRI1i7HXIr.svg',
-  username: 'jimmyguu',
-};
+import { testData } from '@/data/test';
 
 const SingleEarn = 100;
 
