@@ -19,7 +19,7 @@ export {
 export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'necklace' | 'vehicle' | 'background';
 
 /* 
-*  Clothes level = y 有个隐藏条件 当且仅当 x < 4 时，衣服渲染为站立衣服，否则渲染为坐着衣服。
+*  Clothes level = y 有个隐藏条件 当且仅当 x < 8 时，衣服渲染为站立衣服，否则渲染为坐着衣服。
 * 
 *  Car w = x
 *  0 <= x < 4 赤脚

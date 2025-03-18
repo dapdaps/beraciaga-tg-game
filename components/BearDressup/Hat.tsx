@@ -1,13 +1,18 @@
-import { HAT_MAPPING } from './config'
+import { UserLookItem } from '@/apis/look';
+import { Category, HAT_MAPPING } from './mappings'
 
 const Hat = ({
-    level
+    userLooks
 }: {
-    level: number
+    userLooks: Record<Category, UserLookItem>;
 }) => {
-    const HatComponent = HAT_MAPPING[level as keyof typeof HAT_MAPPING]
+
+    if (!userLooks || !userLooks.hat) return null;
+
+    const HatComponent = HAT_MAPPING[userLooks?.hat?.look_id as keyof typeof HAT_MAPPING] || HAT_MAPPING.H_001;
 
     if (!HatComponent) return null
+    
     return (
         <g id="hat">
           <HatComponent />

@@ -1,13 +1,14 @@
-import {TRANSPORTATION_MAPPING} from './config';
+import { UserLookItem } from '@/apis/look';
+import { Category, VEHICLE_MAPPING } from './mappings';
 
 interface TransportationProps {
-  level: number;
+  userLooks: Record<Category, UserLookItem>;
   className?: string;
 }
 
-const Transportation: React.FC<TransportationProps> = ({ level, className }) => {
+const Transportation: React.FC<TransportationProps> = ({ userLooks, className }) => {
   
-  const VehicleComponent = TRANSPORTATION_MAPPING[level as keyof typeof TRANSPORTATION_MAPPING];
+  const VehicleComponent = VEHICLE_MAPPING[userLooks?.vehicle?.look_id as keyof typeof VEHICLE_MAPPING] || VEHICLE_MAPPING.V_001;
   
   if (!VehicleComponent) return null;
 
