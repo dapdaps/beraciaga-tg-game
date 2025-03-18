@@ -17,24 +17,13 @@ import PaperclipCard from '@components/paperclip-card';
 import HeaderAvatar from '@components/header/avatar';
 import LightingButton, { LightingButtonType } from '@components/Button/lighting-button';
 
-// FIXME
-const testData = {
-  allows_write_to_pm: true,
-  first_name: 'gu',
-  id: 7150006688,
-  language_code: 'zh-hans',
-  last_name: 'jimmy',
-  photo_url: 'https://t.me/i/userpic/320/i2-BRTWcSQoXawvpUSVv78kuH2IMkVBXItH61uWUjHYGATen0Zf2m-qRI1i7HXIr.svg',
-  username: 'jimmyguu',
-};
-
 const SingleEarn = 100;
 
 const FrensView = (props: any) => {
   const {} = props;
 
   const { WebApp, isInitialized } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
 
   const [list, setList] = useState<GameUser[]>([]);
   const [pageIndex, setPageIndex] = useState(1);

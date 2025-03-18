@@ -5,18 +5,18 @@ import { numberFormatter } from '@/utils/number-formatter';
 import { ProductType } from '@/sections/shop/config';
 
 const Product: React.FC<any> = (props) => {
-  const { className, product } = props;
+  const { className, product, onBuy, buying } = props;
 
   return (
     <div className="p-[5px] relative">
       <div
-        className={clsx('h-[160px] bg-[position:bottom_52px_center] bg-no-repeat rounded-[16px] border-2 border-[#D7C69D] bg-[#FFFAEA] relative flex flex-col items-center', className)}
+        className={clsx('h-[160px] bg-[position:bottom_55px_center] bg-no-repeat bg-[length:75%_auto] rounded-[16px] border-2 border-[#D7C69D] bg-[#FFFAEA] relative flex flex-col items-center', className)}
         style={{
-          backgroundImage: `url("${product?.image || '/images/shop/example-product.svg'}")`,
+          backgroundImage: `url("${product?.logo}")`,
         }}
       >
         {
-          product?.type === ProductType.Outfit ? (
+          product?.category === ProductType.Outfit ? (
             <div className="text-[#FFB254] text-center font-cherryBomb text-stroke-2 text-[15px] font-normal leading-none uppercase pt-[9px]">
               <div className="">
                 Clothing
@@ -33,7 +33,7 @@ const Product: React.FC<any> = (props) => {
                 textShadow: `0px 2px 0px ${product?.shadowColor || '#B42647'}`,
               }}
             >
-              {numberFormatter(product?.value, 2, true, { isShort: true, isShortUppercase: true })}
+              {product?.name}
               {
                 product?.addPercent && (
                   <div
@@ -53,24 +53,28 @@ const Product: React.FC<any> = (props) => {
         <button
           type="button"
           className="absolute left-0 bottom-0 rounded-[14px] border-2 border-[#4B371F] bg-[#FFB050] w-full h-[48px] flex-shrink-0 p-[2px]"
+          disabled={product?.isSoldOut || buying}
+          onClick={() => {
+            onBuy(product);
+          }}
         >
           <div className="flex justify-center items-center flex-col gap-[2px] bg-[url('/images/shop/product-light.svg')] bg-no-repeat bg-[position:-3px_2px] bg-[length:52px_8.5px] rounded-[14px] border-2 border-[#AF7026] bg-[#FFCF23] w-full h-full text-[#F7F9EA] text-center text-stroke-2 stroke-[#4B371F] font-cherryBomb text-[12px] font-normal leading-none tracking-[1px] uppercase">
             {
-              product?.type === ProductType.Outfit ? (
+              (product?.type === ProductType.Outfit && product?.total_sold > 0) ? (
                 <div className="text-[#F7F9EA] text-center font-cherryBomb text-stroke-2 text-[12px] font-normal leading-none">
-                  5 only
+                  {product?.total_sold} only
                 </div>
               ) : (
                 <div className="line-through decoration-2 decoration-[#DF4040]">
-                  {numberFormatter(product?.regularPrice, 2, true, { prefix: '$' })}
+                  {numberFormatter(product?.original_price, 2, true, { prefix: '$' })}
                 </div>
               )
             }
             <div className="text-[16px]">
-              {numberFormatter(product?.salePrice, 2, true, { prefix: '$' })}
+              {numberFormatter(product?.discount_price, 2, true, { prefix: '$' })}
             </div>
             {
-              (product?.isHot && !product?.isSoldOut) && (
+              (!!product?.recommend && !product?.isSoldOut) && (
                 <Tag className="!absolute top-[-19px] left-[-11px]" />
               )
             }

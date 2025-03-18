@@ -3,9 +3,7 @@ import clsx from 'clsx';
 import BearDressup from '@/components/BearDressup';
 
 const HeaderAvatar: React.FC<any> = (props) => {
-  const { className, isLevel = true, size = 54, bgColor = '#ECC4BA' } = props;
-
-  const level = 1;
+  const { className, isLevel = true, size = 54, bgColor = '#ECC4BA', level = 1 } = props;
 
   return (
     <div

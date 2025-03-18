@@ -24,12 +24,13 @@ export const CapsuleButton = ({
   };
 
 
-export const BaseButton = ({ children, interClassName }: {
+export const BaseButton = ({ children, interClassName, onClick }: {
     children: React.ReactNode;
     interClassName?: string;
+    onClick?: () => void;
   }) => {
     return (
-      <div className="inline-block">
+      <div className="inline-block" onClick={onClick}>
         <div className="rounded-[16px] border-2 border-[#4B371F] bg-[#FFB050] p-1 inline-block">
           <div className={clsx("rounded-[12px] border-2 border-[#AF7026] bg-[#FFCF23] flex items-center justify-center px-2 py-1 relative h-[52px] min-w-[90px]", interClassName)}>
             <div className='absolute top-[2px] left-[2px]'>

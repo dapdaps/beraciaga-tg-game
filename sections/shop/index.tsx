@@ -4,144 +4,64 @@ import AppHeader from '@components/header';
 import Product from '@/sections/shop/components/product';
 import ProductCard from '@/components/paperclip-card';
 import { ProductType, ProductTypes } from '@/sections/shop/config';
+import { useShop } from '@/sections/shop/hooks';
+import Skeleton from 'react-loading-skeleton';
+import clsx from 'clsx';
+import FlagModal from '@components/flag-modal';
+import LightingButton from '@components/Button/lighting-button';
+import Buy from '@/sections/shop/components/buy';
 
 const ShopView = () => {
+  const { buyModalVisible, buyProduct, handleProduct, buying, handleProductPay, listByCategory, loading } = useShop();
 
   return (
     <div className="relative rounded-t-[10px] h-full bg-[url('/images/shop/bg.svg')] bg-repeat-y bg-center bg-contain">
       <AppHeader className="absolute z-20 w-full left-0 top-0" />
       <div className="p-[96px_10px_94px] w-full h-full overflow-y-auto">
-        <ProductCard
-          title={ProductTypes.spins.label}
-          icon={ProductTypes.spins.icon}
-          iconX={ProductTypes.spins.iconX}
-          iconY={ProductTypes.spins.iconY}
-          innerClassName="pr-[50px] pl-[20px]"
-        >
-          {
-            productList1.map((product: any, index: number) => (
-              <Product key={index} product={product} />
-            ))
-          }
-        </ProductCard>
-        <ProductCard
-          title={ProductTypes.treasureBox.label}
-          icon={ProductTypes.treasureBox.icon}
-          iconX={ProductTypes.treasureBox.iconX}
-          iconY={ProductTypes.treasureBox.iconY}
-          className="mt-[35px]"
-          innerClassName="pr-[10px] whitespace-nowrap"
-        >
-          {
-            productList1.map((product: any, index: number) => (
-              <Product key={index} product={product} />
-            ))
-          }
-        </ProductCard>
-        <ProductCard
-          title={ProductTypes.points.label}
-          icon={ProductTypes.points.icon}
-          iconX={ProductTypes.points.iconX}
-          iconY={ProductTypes.points.iconY}
-          className="mt-[35px]"
-          innerClassName="pr-[50px] pl-[20px]"
-        >
-          {
-            productList1.map((product: any, index: number) => (
-              <Product key={index} product={product} />
-            ))
-          }
-        </ProductCard>
-        <ProductCard
-          title={ProductTypes.outfit.label}
-          icon={ProductTypes.outfit.icon}
-          iconX={ProductTypes.outfit.iconX}
-          iconY={ProductTypes.outfit.iconY}
-          className="mt-[35px]"
-          innerClassName="pr-[50px] pl-[20px]"
-        >
-          {
-            productList1
-              .map((product: any, index: number) => ({
-                ...product,
-                isHot: false,
-                rare: 10,
-                type: ProductType.Outfit,
-                name: 'Outfit' + index,
-                image: '/images/shop/example-product-5.svg',
-              }))
-              .map((product: any, index: number) => (
-                <Product key={index} product={product} />
-              ))
-          }
-        </ProductCard>
+        {
+          loading ? (
+            <>
+              <Skeleton width="100%" height="232px" borderRadius="10px" />
+              <Skeleton width="100%" height="232px" borderRadius="10px" className="mt-[35px]" />
+            </>
+          ) : Object.values(listByCategory).map((item, index) => {
+            const categories = Object.keys(listByCategory) as ProductType[];
+            return (
+              <ProductCard
+                key={index}
+                title={ProductTypes[categories[index]].label}
+                icon={ProductTypes[categories[index]].icon}
+                iconX={ProductTypes[categories[index]].iconX}
+                iconY={ProductTypes[categories[index]].iconY}
+                className={clsx(index !== 0 ? "mt-[35px]" : "")}
+                innerClassName="pr-[50px] pl-[20px]"
+              >
+                {
+                  item?.map?.((product, index) => (
+                    <Product
+                      key={index}
+                      product={product}
+                      buying={buying}
+                      onBuy={handleProduct}
+                    />
+                  ))
+                }
+              </ProductCard>
+            );
+          })
+        }
       </div>
+      <Buy
+        visible={buyModalVisible}
+        onClose={() => {
+          handleProduct();
+        }}
+        buyProduct={buyProduct}
+        buying={buying}
+        handleProductPay={handleProductPay}
+      />
     </div>
   );
 };
 
 export default ShopView;
-
-const productList1: any = [
-  {
-    value: 110000,
-    image: '/images/shop/example-product.svg',
-    color: '#FF7EC1',
-    shadowColor: '#B42647',
-    addPercent: '',
-    regularPrice: '10.99',
-    salePrice: '0.99',
-    isHot: true,
-  },
-  {
-    value: 220000,
-    image: '/images/shop/example-product.svg',
-    color: '#FF7EC1',
-    shadowColor: '#B42647',
-    addPercent: '10',
-    regularPrice: '10.99',
-    salePrice: '0.99',
-    isHot: false,
-    isSoldOut: true,
-  },
-  {
-    value: 330000,
-    image: '/images/shop/example-product.svg',
-    color: '#FF7EC1',
-    shadowColor: '#B42647',
-    addPercent: '20',
-    regularPrice: '10.99',
-    salePrice: '0.99',
-    isHot: false,
-  },
-  {
-    value: 110000,
-    image: '/images/shop/example-product-2.svg',
-    color: '#BB7AFF',
-    shadowColor: '#7940B4',
-    addPercent: '',
-    regularPrice: '10.99',
-    salePrice: '0.99',
-    isHot: true,
-  },
-  {
-    value: 220000,
-    image: '/images/shop/example-product-3.svg',
-    color: '#FFD026',
-    shadowColor: '#844800',
-    addPercent: '10',
-    regularPrice: '10.99',
-    salePrice: '0.99',
-    isHot: false,
-  },
-  {
-    value: 330000,
-    image: '/images/shop/example-product-4.svg',
-    color: '#EDFE72',
-    shadowColor: '#68721F',
-    addPercent: '20',
-    regularPrice: '10.99',
-    salePrice: '0.99',
-    isHot: false,
-  },
-];

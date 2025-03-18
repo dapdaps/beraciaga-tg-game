@@ -16,7 +16,7 @@ export {
     NECKLACES_MAPPING,
 }
 
-export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'necklace' | 'vehicle' | 'background';
+export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'necklace' | 'vehicle' | 'decoration' | 'glasses' | 'background';
 
 /* 
 *  Clothes level = y 有个隐藏条件 当且仅当 x < 8 时，衣服渲染为站立衣服，否则渲染为坐着衣服。

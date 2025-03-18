@@ -7,70 +7,109 @@ import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import { domToPng } from "modern-screenshot";
 import Skin from "./svgHoc/Skin";
+import { useContext } from "react";
+import { HomeContext } from "..";
+
+
+type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'necklace' | 'vehicle' | 'decoration' | 'glasses';
+
+const CATEGORY_NAMES: Record<Category, string> = {
+  face: 'Face',
+  skin: 'Skin',
+  clothes: 'Clothes',
+  hat: 'Hat',
+  necklace: 'Necklace',
+  vehicle: 'Vehicle',
+  decoration: 'Decoration',
+  glasses: 'Glasses'
+};
+
+const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'decoration', 'vehicle', 'glasses', 'necklace'];
+
+const EquipmentItem = ({ category, isUnlocked }: { category: Category; isUnlocked: boolean }) => {
+  if (!isUnlocked) {
+    return (
+      <div className="w-[96px] h-[106px] flex flex-col items-center justify-center">
+        <img 
+          src={`/images/role/${category}-lock.png`} 
+          alt={`${CATEGORY_NAMES[category]} Locked`} 
+          className="w-full h-full object-contain" 
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-[96px] h-[106px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center">
+      <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative">
+        {category === 'skin' && <Skin />}
+        {category === 'face' && (
+          <Bear
+            userLooks={{a:1,b:1,c:1,d:1,e:1,f:1,g:1,h:1}} 
+            className="scale-[0.45] translate-x-[5%] translate-y-[9%]"
+            showBody={false}
+          />
+        )}
+        <div className="font-cherryBomb text-white text-stroke-2 leading-4 absolute bottom-[-8px] left-0">
+          {CATEGORY_NAMES[category]}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const CharacterCustomization = () => {
+  const { userLooksFlattened } = useContext(HomeContext);
+
   return (
     <div className="w-full flex flex-col gap-3">
       <div className="flex justify-end">
-        {/* <div className="w-[96px] h-[120px] flex flex-col items-center justify-center">
-            <img src="/images/role/skin.png" alt="Skin Light Brown" className="w-full h-full object-contain" />
-          </div> */}
-        <div className="w-[96px] h-[120px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center justify-center">
-          <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative">
-            <Skin />
-            <div className="font-cherryBomb text-stroke-2 leading-4 absolute bottom-[-8px] left-0">
-              Skin
-            </div>
-          </div>
-          <div className="font-montserrat text-[12px] leading-3 mt-1.5 text-[#2C3108] text-ellipsis max-w-[78px]">
-            Light Brown111
-          </div>
-        </div>
+        {CATEGORIES.slice(0, 1).map((category) => (
+          <EquipmentItem 
+            key={category}
+            category={category}
+            isUnlocked={!!userLooksFlattened?.[category]?.use}
+          />
+        ))}
       </div>
-
       <div className="flex justify-end">
-        {/* <div className="w-[96px] h-[120px] rounded flex flex-col items-center justify-center">
-            <img src="/images/role/face.png" alt="Serious Face" className="w-full h-full object-contain" />
-          </div> */}
-        <div className="w-[96px] h-[120px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center justify-center">
-          <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative">
-            <Bear
-              className="scale-[0.45] translate-x-[5%] translate-y-[9%]"
-              showBody={false}
-            />
-            <div className="font-cherryBomb text-stroke-2 leading-4 absolute bottom-[-8px] left-0">
-              Face
+        {CATEGORIES.slice(1, 2).map((category) => (
+          <EquipmentItem 
+            key={category}
+            category={category}
+            isUnlocked={!!userLooksFlattened?.[category]?.use}
+          />
+        ))}
+      </div>
+
+      <div className="flex items-center justify-between">
+        {CATEGORIES.slice(2, 5).map((category) => (
+          <EquipmentItem 
+            key={category}
+            category={category}
+            isUnlocked={!!userLooksFlattened?.[category]?.use}
+          />
+        ))}
+      </div>
+
+      <div className="flex items-center gap-3">
+        {CATEGORIES.slice(5, 7).map((category) => (
+          <EquipmentItem 
+            key={category}
+            category={category}
+            isUnlocked={!!userLooksFlattened?.[category]?.use}
+          />
+        ))}
+        <div className="w-[96px] h-[106px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center">
+          <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative ">
+            <div className="w-full h-full bg-red-100  rounded-xl"></div>
+            <div className="text-white font-cherryBomb text-stroke-2 leading-4 absolute bottom-[-8px] left-0">
+              Background
             </div>
-          </div>
-          <div className="font-montserrat text-[12px] leading-3 mt-1.5 text-[#2C3108] text-ellipsis max-w-[78px]">
-            Serious Face
           </div>
         </div>
       </div>
 
-      <div className="flex justify-between">
-        <div className="w-[96px] h-[120px] rounded flex flex-col items-center justify-center">
-          <img
-            src="/images/role/clothes.png"
-            alt="Orange Swe..."
-            className="w-full h-full object-contain"
-          />
-        </div>
-        <div className="w-[96px] h-[120px] rounded flex flex-col items-center justify-center">
-          <img
-            src="/images/role/decoration.png"
-            alt="Orange Swe..."
-            className="w-full h-full object-contain"
-          />
-        </div>
-        <div className="w-[96px] h-[120px] rounded flex flex-col items-center justify-center">
-          <img
-            src="/images/role/vehicle.png"
-            alt="Orange Swe..."
-            className="w-full h-full object-contain"
-          />
-        </div>
-      </div>
     </div>
   );
 };
@@ -102,7 +141,20 @@ const GradientBorderBox = ({
   );
 };
 
-const BearControlModal = () => {
+const BearControlModal = ({
+  show,
+  onClose
+}: {
+  show: boolean;
+  onClose: () => void;
+}) => {
+
+  const {
+    levels,
+    userInfo,
+    userLooksFlattened
+  } = useContext(HomeContext);
+
   const handlePhoto = () => {
     const element = document.querySelector("#beraRole");
     if (element) {
@@ -117,8 +169,8 @@ const BearControlModal = () => {
 
   return (
     <Modal
-      open={true}
-      onClose={() => {}}
+      open={show}
+      onClose={onClose}
       closeIcon={
         <img
           src="/images/home/close.png"
@@ -128,8 +180,8 @@ const BearControlModal = () => {
       }
       closeIconClassName="top-[-17px] right-[-17px]"
     >
-      <div className="bg-[url(/images/home/modal-box.png)] relative bg-contain bg-no-repeat w-[370px] h-[532px] px-2 pt-2">
-        <GradientBorderBox containerClassNames="h-[426px] w-full">
+      <div className="bg-[url(/images/home/modal-box.png)] relative bg-contain bg-no-repeat w-[370px] h-[637px] px-2 pt-2">
+        <GradientBorderBox containerClassNames="min-h-[426px] w-full">
           <CharacterCustomization />
         </GradientBorderBox>
         <div className="w-[240px] h-[280px] bg-white border-[2px] border-[#4B371F] absolute top-0 left-0 rotate-[-2deg] rounded-xl p-[6px] shadow-shadow1">
@@ -149,10 +201,10 @@ const BearControlModal = () => {
                 </div>
               </div>
             </div>
-            <div className="absolute right-0 bottom-[28px] rotate-[-13.983deg] w-[66px] h-[53px] rounded-[50%] border border-[#4B371F] bg-[#C7FF6E] flex flex-col items-center justify-center gap-1 font-cherryBomb text-stroke-1 leading-4">
+            {/* <div className="absolute right-0 bottom-[28px] rotate-[-13.983deg] w-[66px] h-[53px] rounded-[50%] border border-[#4B371F] bg-[#C7FF6E] flex flex-col items-center justify-center gap-1 font-cherryBomb text-stroke-1 leading-4">
               <span>Rare</span>
               <span className="text-[#FF8DE3]">10%</span>
-            </div>
+            </div> */}
             <div className="text-white text-stroke-2 font-cherryBomb text-[18px] leading-[18px] mt-2">
               Beraciaga #51235
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { addThousandSeparator } from "@/utils/number-formatter";
-import { testData, useRaffle } from "../hooks/useRaffle";
+import { useRaffle } from "../hooks/useRaffle";
 import { get } from "@/utils/http";
 import { useEffect, useState } from "react";
 import Empty from "@/components/Empty";
@@ -19,7 +19,7 @@ interface IRewardList {
 
 const RafflePreviousView = () => {
   const { WebApp } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
   const { latestData, updater, setUpdater } = useRaffle();
   const [rewardList, setRewardList] = useState<IRewardList[]>([]);
 

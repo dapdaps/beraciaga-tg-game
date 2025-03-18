@@ -3,17 +3,6 @@ import { useTelegram } from "@/hooks/useTelegram";
 import { get, post } from "@/utils/http";
 import { useEffect, useState } from "react";
 
-export const testData = {
-  allows_write_to_pm: true,
-  first_name: "gu",
-  id: 6719564996,
-  language_code: "zh-hans",
-  last_name: "jimmy",
-  photo_url:
-    "https://t.me/i/userpic/320/i2-BRTWcSQoXawvpUSVv78kuH2IMkVBXItH61uWUjHYGATen0Zf2m-qRI1i7HXIr.svg",
-  username: "jimmyguu",
-};
-
 interface RaffleLatest {
   round: string;
   coins: string;
@@ -32,7 +21,7 @@ interface RaffleUserInfo {
 
 export const useRaffle = () => {
   const { WebApp, isInitialized } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
   const [latestLoading, setLatestLoading] = useState(false);
   const [latestData, setLatestData] = useState<RaffleLatest>();
   const [userInfo, setUserInfo] = useState<RaffleUserInfo>();
