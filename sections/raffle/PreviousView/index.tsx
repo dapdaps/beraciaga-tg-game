@@ -8,7 +8,6 @@ import Empty from "@/components/Empty";
 import { useTelegram } from "@/hooks/useTelegram";
 import { UserData } from "@/hooks/useLogin";
 import { useRouter } from "next/navigation";
-import { testData } from '@/data/test';
 
 interface IRewardList {
   avatar: string;
@@ -20,7 +19,7 @@ interface IRewardList {
 
 const RafflePreviousView = () => {
   const { WebApp } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
   const { latestData, updater, setUpdater } = useRaffle();
   const [rewardList, setRewardList] = useState<IRewardList[]>([]);
 

@@ -2,12 +2,11 @@ import { useRequest } from 'ahooks';
 import { get } from '@/utils/http';
 import { useTelegram } from '@/hooks/useTelegram';
 import { UserData } from '@/hooks/useLogin';
-import { testData } from '@/data/test';
 
 export function useRank() {
   const { WebApp } = useTelegram();
 
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
 
   const listRequest = useRequest<RankItem[], any>(async () => {
     const res = await get("/api/rank/tops");

@@ -5,11 +5,10 @@ import type { UserData } from '@/hooks/useLogin';
 import Big from 'big.js';
 import { useQuestStore } from '@/stores/useQuestStore';
 import { useDebounceFn } from 'ahooks';
-import { testData } from '@/data/test';
 
 export function useQuest() {
   const { WebApp, isInitialized } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
 
   const setQuestVisited = useQuestStore((store) => store.setVisited);
   const questVisited = useQuestStore((store) => store.visited);

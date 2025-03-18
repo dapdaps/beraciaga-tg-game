@@ -16,7 +16,6 @@ import AppHeader from '@components/header';
 import PaperclipCard from '@components/paperclip-card';
 import HeaderAvatar from '@components/header/avatar';
 import LightingButton, { LightingButtonType } from '@components/Button/lighting-button';
-import { testData } from '@/data/test';
 
 const SingleEarn = 100;
 
@@ -24,7 +23,7 @@ const FrensView = (props: any) => {
   const {} = props;
 
   const { WebApp, isInitialized } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
 
   const [list, setList] = useState<GameUser[]>([]);
   const [pageIndex, setPageIndex] = useState(1);

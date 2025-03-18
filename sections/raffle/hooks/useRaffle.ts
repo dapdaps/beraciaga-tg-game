@@ -2,7 +2,6 @@ import { UserData } from "@/hooks/useLogin";
 import { useTelegram } from "@/hooks/useTelegram";
 import { get, post } from "@/utils/http";
 import { useEffect, useState } from "react";
-import { testData } from '@/data/test';
 
 interface RaffleLatest {
   round: string;
@@ -22,7 +21,7 @@ interface RaffleUserInfo {
 
 export const useRaffle = () => {
   const { WebApp, isInitialized } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
   const [latestLoading, setLatestLoading] = useState(false);
   const [latestData, setLatestData] = useState<RaffleLatest>();
   const [userInfo, setUserInfo] = useState<RaffleUserInfo>();

@@ -7,7 +7,6 @@ import { useRequest } from 'ahooks';
 import { get } from '@/utils/http';
 import { useTelegram } from '@/hooks/useTelegram';
 import type { UserData } from '@/hooks/useLogin';
-import { testData } from '@/data/test';
 import Skeleton from 'react-loading-skeleton';
 import { CouponItem } from '@/sections/shop/config';
 import Loading from '@components/Loading';
@@ -23,7 +22,7 @@ const Buy = (props: any) => {
   } = props;
 
   const { WebApp } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user || testData;
+  const userData: UserData = WebApp?.initDataUnsafe?.user;
 
   const [coupon, setCoupon] = useState<CouponItem>();
   const [couponsVisible, setCouponsVisible] = useState(false);
