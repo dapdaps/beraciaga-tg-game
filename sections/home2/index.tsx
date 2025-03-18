@@ -73,9 +73,9 @@ export default memo(function Home() {
   return (
     <HomeContext.Provider value={{ 
       coins, 
-      user, 
-      handleCollected, 
       currentCoins, 
+      handleCollected, 
+      user, 
       updater, 
       setUpdater,
       visibleStartBera,

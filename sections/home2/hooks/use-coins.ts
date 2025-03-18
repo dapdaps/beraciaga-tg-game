@@ -15,7 +15,7 @@ const MAX_COINS = 5;
 const mockUserData = {
   creat_timestamp: Date.now() - 3600000, // 1小时前创建
   level: 1,
-  coins_per_hour: 100,
+  coins_per_hour: 10000,
   mock: true
 };
 
