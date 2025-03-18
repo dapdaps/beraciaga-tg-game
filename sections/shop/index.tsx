@@ -9,6 +9,7 @@ import Skeleton from 'react-loading-skeleton';
 import clsx from 'clsx';
 import FlagModal from '@components/flag-modal';
 import LightingButton from '@components/Button/lighting-button';
+import Buy from '@/sections/shop/components/buy';
 
 const ShopView = () => {
   const { buyModalVisible, buyProduct, handleProduct, buying, handleProductPay, listByCategory, loading } = useShop();
@@ -50,22 +51,15 @@ const ShopView = () => {
           })
         }
       </div>
-      <FlagModal
+      <Buy
         visible={buyModalVisible}
         onClose={() => {
           handleProduct();
         }}
-        footer={(
-          <LightingButton
-            className=""
-            onClick={() => {}}
-          >
-            More
-          </LightingButton>
-        )}
-      >
-        123
-      </FlagModal>
+        buyProduct={buyProduct}
+        buying={buying}
+        handleProductPay={handleProductPay}
+      />
     </div>
   );
 };

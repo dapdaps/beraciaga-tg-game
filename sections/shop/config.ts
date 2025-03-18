@@ -49,3 +49,14 @@ export const ProductTypes: Record<ProductType, IProductTypes> = {
     shadowColor: '#7940B4',
   },
 };
+
+export enum CouponStatus {
+  Active = 0,
+}
+
+export interface CouponItem {
+  id: number;
+  tg_user_id: string;
+  discount_value: string;
+  status: CouponStatus;
+}
