@@ -11,7 +11,6 @@ const EarnView = () => {
   const {
     loading,
     socialList,
-    viewList,
     dailyList,
     pending,
     handleVerify,
@@ -37,7 +36,7 @@ const EarnView = () => {
                   quest={quest}
                   key={index}
                   pending={pending}
-                  disabled={quest.finished}
+                  disabled={quest.completed}
                   onClick={handleClick}
                   onVerify={handleVerify}
                 />
@@ -59,31 +58,6 @@ const EarnView = () => {
                   <Skeleton width="100%" height="68px" borderRadius="16px" />
                 </>
               ) : socialList?.map?.((quest, index) => (
-                <Item
-                  quest={quest}
-                  key={index}
-                  pending={pending}
-                  onClick={handleClick}
-                  onVerify={handleVerify}
-                />
-              ))
-            }
-          </PaperclipCard>
-          <PaperclipCard
-            title="View"
-            className="mt-[35px]"
-            innerClassName="pr-[50px] pl-[15px]"
-            titleClassName="!left-[18px] !translate-x-[unset]"
-            contentClassName="!grid-cols-1"
-          >
-            {
-              loading ? (
-                <>
-                  <Skeleton width="100%" height="68px" borderRadius="16px" />
-                  <Skeleton width="100%" height="68px" borderRadius="16px" />
-                  <Skeleton width="100%" height="68px" borderRadius="16px" />
-                </>
-              ) : viewList?.map?.((quest, index) => (
                 <Item
                   quest={quest}
                   key={index}

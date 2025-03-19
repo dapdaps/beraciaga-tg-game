@@ -1,13 +1,12 @@
 import Coin from '@/sections/home/components/Coin';
-import { useContext } from 'react';
-import { HomeContext } from '@/sections/home2';
 import { numberFormatter } from '@/utils/number-formatter';
+import { useGlobalUser } from '@/context/UserContext';
 
 const DropCoins = () => {
   const {
     coins,
     handleCollected,
-  } = useContext(HomeContext);
+  } = useGlobalUser();
 
   if (!coins || !coins.length) return null;
 

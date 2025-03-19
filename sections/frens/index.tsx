@@ -1,88 +1,27 @@
 'use client';
 
 import LazyImage from '@/components/img';
-import { useTelegram } from '@/hooks/useTelegram';
-import type { UserData } from '@/hooks/useLogin';
-import React, { useEffect, useMemo, useState } from 'react';
-import { get } from '@/utils/http';
-import { useDebounceFn } from 'ahooks';
+import React from 'react';
 import { numberFormatter } from '@/utils/number-formatter';
-import Big from 'big.js';
 import Empty from '@components/Empty';
 import Skeleton from 'react-loading-skeleton';
-import ResourceItem from '@components/ResourceItem/ResourceItem';
-import { isAndroid } from 'react-device-detect';
 import AppHeader from '@components/header';
 import PaperclipCard from '@components/paperclip-card';
 import HeaderAvatar from '@components/header/avatar';
 import LightingButton, { LightingButtonType } from '@components/Button/lighting-button';
-
-const SingleEarn = 100;
+import { REWARD_PER_INVITE, useFrens } from '@/sections/frens/hooks';
 
 const FrensView = (props: any) => {
   const {} = props;
 
-  const { WebApp, isInitialized } = useTelegram();
-  const userData: UserData = WebApp?.initDataUnsafe?.user;
-
-  const [list, setList] = useState<GameUser[]>([]);
-  const [pageIndex, setPageIndex] = useState(1);
-  const pageSize = 15;
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  const totalEarned = useMemo(() => {
-    return numberFormatter(Big(total || 0).times(SingleEarn), 2, true, { isShort: true });
-  }, [total]);
-
-  const { run: getList } = useDebounceFn(async (_pageIndex?: number) => {
-    setLoading(true);
-    _pageIndex = _pageIndex || pageIndex;
-    const res = await get('/api/user/invitations', {
-      tg_user_id: userData.id,
-      page: _pageIndex,
-      page_size: pageSize,
-    });
-    if (res.code !== 200) {
-      setLoading(false);
-      return;
-    }
-    let _list: GameUser[] = res.data.list || [];
-    setList(_list);
-    setTotal(res.data.total);
-    setLoading(false);
-  }, { wait: 50 });
-
-  const { run: handleNext } = useDebounceFn(
-    (ev) => {
-      const el = ev.target;
-      if (el.scrollHeight - el.scrollTop < el.clientHeight * 2 && Big(total).gt(Big(pageIndex).times(pageSize))) {
-        setPageIndex(pageIndex + 1);
-        getList(pageIndex + 1);
-      }
-    },
-    { wait: 500 }
-  );
-
-  const onShare = () => {
-    if (!isInitialized) return;
-    if (!process.env.NEXT_PUBLIC_APP_LINK) return console.error('APP_LINK is not set');
-    const appLink = new URL(process.env.NEXT_PUBLIC_APP_LINK);
-    const shareLink = new URL('https://t.me/share/url');
-    appLink.searchParams.set('startapp', `inviterId=${userData?.id}&inviterSource=beraciaga`);
-    shareLink.searchParams.set('url', appLink.toString());
-    shareLink.searchParams.set('text', 'Look at this, it is so amazing');
-    WebApp?.openTelegramLink?.(shareLink.toString());
-    if (isAndroid) {
-      // 安卓下，分享后返回 app 不能继续分享，所以关闭页面
-      WebApp?.close();
-    }
-  };
-
-  useEffect(() => {
-    if (!userData) return;
-    getList();
-  }, [userData]);
+  const {
+    loading,
+    list,
+    total,
+    totalEarned,
+    onShare,
+    userData,
+  } = useFrens();
 
   return (
     <div className="relative w-full h-full bg-[radial-gradient(38.94%_84.3%_at_49.99%_49.99%,_#BFD645_0%,_#93B452_100%)]">
@@ -98,7 +37,7 @@ const FrensView = (props: any) => {
               <HeaderAvatar size={74} isLevel={false} className="shrink-0" />
               <div className="flex-1 w-0 flex flex-col justify-center gap-[11px]">
                 <div className="text-[#F7F9EA] text-stroke-2 font-cherryBomb text-[16px] leading-[100%] font-normal whitespace-nowrap overflow-ellipsis">
-                  @Mency123
+                  @{userData.username}
                 </div>
                 <div className="flex items-center gap-[10px]">
                   <LightingButton
@@ -164,7 +103,7 @@ const FrensView = (props: any) => {
                       <Skeleton width="100%" height="47px" borderRadius="10px" />
                     </>
                   ) : (
-                    list.length > 0 ? list.map((user, i: number) => (
+                    list?.length > 0 ? list.map((user, i: number) => (
                       <div key={i} className="odd:bg-[rgba(0,_0,_0,_0.10)] flex justify-between items-center gap-[10px] p-[9px] rounded-[10px] whitespace-nowrap text-[#F7F9EA] text-stroke-2 font-cherryBomb text-[16px] font-normal">
                         <div className="flex-1 w-0 flex items-center gap-[10px]">
                           <LazyImage src={user.avatar} width="30px" height="30px" className="rounded-full shrink-0" />
@@ -174,7 +113,7 @@ const FrensView = (props: any) => {
                         </div>
                         <div className="shrink-0 flex items-center gap-[6px]">
                           <div className="text-[14px]">
-                            +{SingleEarn}
+                            +{REWARD_PER_INVITE}
                           </div>
                           <LazyImage src="/images/coin.png" width="20px" height="20px" className="rounded-full shrink-0" />
                         </div>
@@ -194,10 +133,3 @@ const FrensView = (props: any) => {
 };
 
 export default FrensView;
-
-export interface GameUser {
-  avatar: string;
-  id: number;
-  tg_user_id: string;
-  username: string;
-}

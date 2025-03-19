@@ -1,10 +1,10 @@
 import { BaseButton } from "@/components/Button";
 import clsx from "clsx";
 import { useContext } from "react";
-import { HomeContext } from "..";
 import { Level } from "@/stores/useUserStore";
 import { numberFormatter } from "@/utils/number-formatter";
 import Big from "big.js";
+import { useGlobalUser } from "@/context/UserContext";
 
 const LevelContainer = ({
   children,
@@ -83,7 +83,7 @@ const BeraLevelContainer = () => {
     levels,
     userInfo,
     currentCoins
-  } = useContext(HomeContext);
+  } = useGlobalUser();
 
   if (!userInfo) return null;
 

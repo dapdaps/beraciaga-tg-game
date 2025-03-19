@@ -3,10 +3,10 @@ import Modal from "@/components/modal";
 import { useGameState } from "@/components/BearDressup/useGameState";
 import Bear from "@/components/BearDressup/Bear";
 import { useContext } from "react";
-import { HomeContext } from "..";
+import { useGlobalUser } from "@/context/UserContext";
 
 const StartBeraModal = () => {
-  const { setStartJourney, visibleStartBera, setVisibleStartBera, userLooksFlattened } = useContext(HomeContext);
+  const { setStartJourney, visibleStartBera, setVisibleStartBera, userLooksFlattened } = useGlobalUser();
 
   return (
     <Modal open={visibleStartBera} onClose={() => setVisibleStartBera(false)} isShowCloseIcon={false}>

@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { HomeContext } from '@/sections/home2';
 import { numberFormatter } from '@/utils/number-formatter';
+import { useGlobalUser } from '@/context/UserContext';
 
 const Reward = () => {
-  const { userInfo } = useContext(HomeContext);
+  const { userInfo } = useGlobalUser();
 
   return userInfo?.bind_source === 'okx_invite' && (
     <div className="flex items-center justify-center">

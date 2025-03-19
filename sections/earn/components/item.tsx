@@ -2,9 +2,17 @@ import React from 'react';
 import clsx from 'clsx';
 import { numberFormatter } from '@/utils/number-formatter';
 import LightingButton from '@components/Button/lighting-button';
+import { Quest } from '@/hooks/useQuest';
 
-const Item: React.FC<any> = (props) => {
-  const { className, quest, pending, onClick, onVerify, disabled } = props;
+const Item: React.FC<any> = (props: Props) => {
+  const {
+    className,
+    quest,
+    pending,
+    onClick,
+    onVerify,
+    disabled
+  } = props;
 
   return (
     <div className={clsx("w-full h-[68px] bg-[#FFFAEA] border-[2px] border-[#D7C69D] rounded-[16px] p-[8px_10px_8px] flex justify-between items-center gap-[10px]", className)}>
@@ -27,14 +35,14 @@ const Item: React.FC<any> = (props) => {
       </div>
       <div className="shrink-0">
         {
-          quest?.finished ? (
+          quest?.completed ? (
             <img src="/images/icon-done.svg" alt="" className="w-[28px] h-[28px] rounded-full" />
           ) : (
             <LightingButton
               disabled={pending[quest.id] || disabled}
               onClick={() => onClick(quest)}
             >
-              {quest?.visited ? 'Verify' : 'Check'}
+              {quest?.visited ? 'Verify' : quest.buttonText}
             </LightingButton>
           )
         }
@@ -44,3 +52,12 @@ const Item: React.FC<any> = (props) => {
 };
 
 export default Item;
+
+interface Props {
+  className?: string;
+  quest: Quest;
+  pending: Record<number, boolean>;
+  onClick(quest: Quest): void;
+  onVerify(quest: Quest): void;
+  disabled?: boolean;
+}

@@ -266,5 +266,6 @@ export function useCoins(options?: { debug?: boolean }) {
     handleProgressComplete,
     latestCoins,
     currentCoins,
+    addSpeed
   };
 }

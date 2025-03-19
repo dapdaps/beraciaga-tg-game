@@ -6,27 +6,28 @@ import clsx from "clsx";
 import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import { domToPng } from "modern-screenshot";
-import Skin from "./svgHoc/Skin";
-import { useContext } from "react";
-import { HomeContext } from "..";
+import Skin from "./bear-svg/Skin";
+import { CLOTHES_MAPPING } from "@/components/BearDressup/mappings";
+import Clothes from "@/components/BearDressup/Clothes";
+import { useGlobalUser } from "@/context/UserContext";
 
 
-type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'necklace' | 'vehicle' | 'decoration' | 'glasses';
+type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'vehicle' | 'decoration' | 'glasses' | 'background';
 
 const CATEGORY_NAMES: Record<Category, string> = {
   face: 'Face',
   skin: 'Skin',
   clothes: 'Clothes',
   hat: 'Hat',
-  necklace: 'Necklace',
   vehicle: 'Vehicle',
   decoration: 'Decoration',
-  glasses: 'Glasses'
+  glasses: 'Glasses',
+  background: 'Background',
 };
 
-const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'decoration', 'vehicle', 'glasses', 'necklace'];
+const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'decoration', 'vehicle', 'glasses', 'background'];
 
-const EquipmentItem = ({ category, isUnlocked }: { category: Category; isUnlocked: boolean }) => {
+const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category: Category; isUnlocked: boolean, userLooksFlattened?: any }) => {
   if (!isUnlocked) {
     return (
       <div className="w-[96px] h-[106px] flex flex-col items-center justify-center">
@@ -45,10 +46,18 @@ const EquipmentItem = ({ category, isUnlocked }: { category: Category; isUnlocke
         {category === 'skin' && <Skin />}
         {category === 'face' && (
           <Bear
-            userLooks={{a:1,b:1,c:1,d:1,e:1,f:1,g:1,h:1}} 
-            className="scale-[0.45] translate-x-[5%] translate-y-[9%]"
             showBody={false}
+            userLooks={userLooksFlattened} 
+            className="scale-[0.45] translate-x-[5%] translate-y-[9%]"
           />
+        )}
+        {category === 'clothes' && (
+          <div className="w-full h-full scale-[0.45] translate-x-[-50%] -translate-y-[90%]">
+            <Clothes 
+              clothesItem={userLooksFlattened.clothes}
+              vehicleItem={userLooksFlattened?.vehicle}
+            />
+          </div>
         )}
         <div className="font-cherryBomb text-white text-stroke-2 leading-4 absolute bottom-[-8px] left-0">
           {CATEGORY_NAMES[category]}
@@ -58,51 +67,59 @@ const EquipmentItem = ({ category, isUnlocked }: { category: Category; isUnlocke
   );
 };
 
-const CharacterCustomization = () => {
-  const { userLooksFlattened } = useContext(HomeContext);
-
+const CharacterCustomization = ({
+  userLooksFlattened
+}: {
+  userLooksFlattened: any
+}) => {
   return (
     <div className="w-full flex flex-col gap-3">
       <div className="flex justify-end">
+        {/* Skin */}
         {CATEGORIES.slice(0, 1).map((category) => (
           <EquipmentItem 
             key={category}
             category={category}
             isUnlocked={!!userLooksFlattened?.[category]?.use}
+            userLooksFlattened={userLooksFlattened}
           />
         ))}
       </div>
       <div className="flex justify-end">
+        {/* Face */}
         {CATEGORIES.slice(1, 2).map((category) => (
           <EquipmentItem 
             key={category}
             category={category}
             isUnlocked={!!userLooksFlattened?.[category]?.use}
+            userLooksFlattened={userLooksFlattened}
           />
         ))}
       </div>
-
+        {/* Clothes, Hat, decoration */}
       <div className="flex items-center justify-between">
         {CATEGORIES.slice(2, 5).map((category) => (
           <EquipmentItem 
             key={category}
             category={category}
             isUnlocked={!!userLooksFlattened?.[category]?.use}
+            userLooksFlattened={userLooksFlattened}
           />
         ))}
       </div>
-
+      {/* Vehicle, Glasses, Background */}
       <div className="flex items-center gap-3">
         {CATEGORIES.slice(5, 7).map((category) => (
           <EquipmentItem 
             key={category}
             category={category}
             isUnlocked={!!userLooksFlattened?.[category]?.use}
+            userLooksFlattened={userLooksFlattened}
           />
         ))}
         <div className="w-[96px] h-[106px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center">
           <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative ">
-            <div className="w-full h-full bg-red-100  rounded-xl"></div>
+            <div className="w-full h-full bg-[#FFF5A8]  rounded-xl"></div>
             <div className="text-white font-cherryBomb text-stroke-2 leading-4 absolute bottom-[-8px] left-0">
               Background
             </div>
@@ -143,17 +160,18 @@ const GradientBorderBox = ({
 
 const BearControlModal = ({
   show,
-  onClose
+  onClose,
+  onChangeLook,
 }: {
   show: boolean;
   onClose: () => void;
+  onChangeLook: () => void;
 }) => {
 
   const {
-    levels,
+    userLooksFlattened,
     userInfo,
-    userLooksFlattened
-  } = useContext(HomeContext);
+  } = useGlobalUser();
 
   const handlePhoto = () => {
     const element = document.querySelector("#beraRole");
@@ -178,11 +196,11 @@ const BearControlModal = ({
           className="w-[34px] h-[34px]"
         />
       }
-      closeIconClassName="top-[-17px] right-[-17px]"
+      closeIconClassName="top-[-17px] -right-[8px]"
     >
       <div className="bg-[url(/images/home/modal-box.png)] relative bg-contain bg-no-repeat w-[370px] h-[637px] px-2 pt-2">
         <GradientBorderBox containerClassNames="min-h-[426px] w-full">
-          <CharacterCustomization />
+          <CharacterCustomization userLooksFlattened={userLooksFlattened} />
         </GradientBorderBox>
         <div className="w-[240px] h-[280px] bg-white border-[2px] border-[#4B371F] absolute top-0 left-0 rotate-[-2deg] rounded-xl p-[6px] shadow-shadow1">
           <div className="w-full h-full relative z-0">
@@ -206,12 +224,14 @@ const BearControlModal = ({
               <span className="text-[#FF8DE3]">10%</span>
             </div> */}
             <div className="text-white text-stroke-2 font-cherryBomb text-[18px] leading-[18px] mt-2">
-              Beraciaga #51235
+              Beraciaga #{userInfo.id}
             </div>
           </div>
         </div>
         <div className="flex items-center justify-between mt-[18px]">
-          <IconChangeLook />
+          <IconChangeLook onClick={() => {
+            onChangeLook();
+          }} />
           <IconPhoto onClick={handlePhoto} />
         </div>
       </div>

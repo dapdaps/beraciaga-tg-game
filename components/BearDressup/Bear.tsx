@@ -27,6 +27,7 @@ const Bear: React.FC<BearProps> = ({
     FACES_MAPPING[userLooks?.face?.look_id as keyof typeof FACES_MAPPING] ||
     FACES_MAPPING.F_001;
 
+
   const bearColor =
     SKINS_MAPPING[userLooks?.skin?.look_id as keyof typeof SKINS_MAPPING] ||
     SKINS_MAPPING.S_001;

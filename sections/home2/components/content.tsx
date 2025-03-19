@@ -3,12 +3,12 @@ import Reward from '@/sections/home2/components/reward';
 import Speed from '@/sections/home2/components/speed';
 import ComingSoon from '@components/ComingSoon';
 import RingButton from '@components/Ring';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
 import IconButtonGetBera from '@public/svg/button-get-bera.svg'
 import { startLook } from '@/apis/look';
-import { HomeContext } from '..';
 import StartBeraModal from './StartBeraModal';
+import { useGlobalUser } from '@/context/UserContext';
 
 
 const calcScale = (viewportHeight: number) => {
@@ -23,7 +23,7 @@ const calcScale = (viewportHeight: number) => {
 const Content = () => {
   const { WebApp } = useTelegram();
 
-  const { setVisibleStartBera } = useContext(HomeContext);
+  const { setVisibleStartBera } = useGlobalUser();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
