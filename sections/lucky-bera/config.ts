@@ -10,22 +10,37 @@ export const SPIN_CATEGORIES: Record<SpinCategory, any> = {
   [SpinCategory.Coin]: {
     code: "1",
     icon: "/images/lucky-bera/reward-coin.svg",
+    value: SpinCategory.Coin,
+    centerScale: 0.85,
+    centerY: -4,
   },
   [SpinCategory.Gem]: {
     code: "2",
     icon: "/images/lucky-bera/reward-gem.svg",
+    value: SpinCategory.Gem,
+    centerScale: 0.85,
+    centerY: -2,
   },
   [SpinCategory.Bear]: {
     code: "3",
     icon: "/images/lucky-bera/reward-bear.svg",
+    value: SpinCategory.Bear,
+    centerScale: 0.85,
+    centerY: 0,
   },
   [SpinCategory.Bee]: {
     code: "4",
     icon: "/images/lucky-bera/reward-bee.svg",
+    value: SpinCategory.Bee,
+    centerScale: 0.85,
+    centerY: -2,
   },
   [SpinCategory.Honey]: {
     code: "5",
     icon: "/images/lucky-bera/reward-honey.svg",
+    value: SpinCategory.Honey,
+    centerScale: 0.85,
+    centerY: 2,
   },
 };
 
