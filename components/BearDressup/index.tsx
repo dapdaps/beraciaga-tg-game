@@ -9,12 +9,12 @@ import { Category } from "@/components/BearDressup/mappings";
 import Transportation from "@/components/BearDressup/Transportation";
 import Airflow from './Airflows'
 import clsx from 'clsx';
-import { HomeContext } from '@/sections/home2';
+import { useGlobalUser } from '@/context/UserContext';
 
 const DressUpGame: React.FC<any> = (props) => {
   const { className, style, onClick } = props;
 
-  const { userInfo, userLooksFlattened } = useContext(HomeContext);
+  const { userInfo, userLooksFlattened } = useGlobalUser();
 
   const { level: userLevel } = userInfo || {};
 

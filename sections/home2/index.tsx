@@ -1,56 +1,40 @@
-import { createContext, memo, useContext, useEffect, useState, Suspense } from 'react';
+import { memo, useEffect, useState, Suspense } from 'react';
 import Header from '@/sections/home2/components/header';
 import Content from '@/sections/home2/components/content';
-import { useCoins } from '@/sections/home2/hooks/use-coins';
 import useLogin from '@/hooks/useLogin';
-import { useUser } from '@/hooks/useUser';
 import { useTelegram } from '@/hooks/useTelegram';
-
-import { getUserLookList, UserLookItem } from '@/apis/look';
+import { useGlobalUser } from '@/context/UserContext';
 
 const DEBUG_MODE = process.env.NODE_ENV === 'development';
-import { useRouter } from 'next/navigation';
 
 import MainScene from './components/MainScene';
 import Loading from '@/components/Loading';
-import { Category } from '@/components/BearDressup/mappings';
-
-export const HomeContext = createContext<any>({});
 
 export default memo(function Home() {
-  const { coins,currentCoins, handleCollected, addSpeed } = useCoins({ debug: DEBUG_MODE });
   const [isInitialized, setIsInitialized] = useState(false);
   const { handleLogin } = useLogin();
-  const user = useUser();
   const { WebApp } = useTelegram();
-  const router = useRouter()
-  const [updater, setUpdater] = useState(0);
-  const [visibleStartBera, setVisibleStartBera] = useState(false);
-  const [startJourney, setStartJourney] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
+
+  const {
+    user: { fetchLookUserProfile, getUserInfo, getLevels },
+    userLooksItem,
+    startJourney
+  } = useGlobalUser();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
-  const {
-    fetchLookUserProfile,
-    levels,
-    getLevels,
-    getUserInfo,
-    userLooksItem,
-    userInfo,
-  } = user;
-
   const init = async () => {
-     try {
-        setIsLoading(true);
-        await fetchLookUserProfile();
-        await getUserInfo();
-        await getLevels();
-     } catch (error) {
-        console.log(error, '<===')
-     } finally {
-        setIsLoading(false);
-     }
+    try {
+      setIsLoading(true);
+      await fetchLookUserProfile();
+      await getUserInfo();
+      await getLevels();
+    } catch (error) {
+      console.log(error, '<===');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -68,38 +52,15 @@ export default memo(function Home() {
 
   const isInitTGUser = userLooksItem?.length === 0;
 
-  const userLooksFlattened = userLooksItem?.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
-    acc[item.category] = item
-    return acc
-  }, {} as Record<Category, UserLookItem>)
-
   return (
-    <HomeContext.Provider value={{ 
-      coins, 
-      addSpeed,
-      currentCoins, 
-      handleCollected, 
-      levels,
-      user, 
-      updater, 
-      setUpdater,
-      visibleStartBera,
-      setVisibleStartBera,
-      startJourney,
-      setStartJourney,
-      userLooksItem,
-      userInfo,
-      userLooksFlattened
-    }}>
-      <Suspense fallback={<LoadingScene />}>
-        {isLoading ? (
-          <LoadingScene />
-        ) : (
-          (isInitTGUser && !startJourney) ? <InitScene /> : <MainScene />
-        )}
-      </Suspense>
-    </HomeContext.Provider>
-  )
+    <Suspense fallback={<LoadingScene />}>
+      {isLoading ? (
+        <LoadingScene />
+      ) : (
+        (isInitTGUser && !startJourney) ? <InitScene /> : <MainScene />
+      )}
+    </Suspense>
+  );
 });
 
 const InitScene = () => {

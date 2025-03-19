@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import Congrats from '@/sections/home2/components/congrats';
 import Invite from '@/sections/home2/components/invite';
 import { useLayoutStore } from '@/stores/useLayoutStore';
+import { UserProvider } from '@/context/UserContext';
 
 export default function RootLayout({
   children,
@@ -55,9 +56,11 @@ export default function RootLayout({
           <TelegramProvider>
             <SkeletonTheme baseColor='#96D6FF' highlightColor='#FFF5A9'>
                 <BitgetProvider>
-                  <Suspense fallback={<></>}>
-                    {children}
-                  </Suspense>
+                  <UserProvider>
+                    <Suspense fallback={<></>}>
+                      {children}
+                    </Suspense>
+                  </UserProvider>
                 </BitgetProvider>
             </SkeletonTheme>
           </TelegramProvider>

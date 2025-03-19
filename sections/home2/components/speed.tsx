@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
-import { HomeContext } from '@/sections/home2';
 import { numberFormatter } from '@/utils/number-formatter';
 import Big from 'big.js';
+import { useGlobalUser } from '@/context/UserContext';
 
 const Speed = () => {
 
@@ -9,7 +9,7 @@ const Speed = () => {
     currentCoins,
     userInfo,
     addSpeed,
-  } = useContext(HomeContext);
+  } = useGlobalUser();
 
   const speed = useMemo(() => {
     const start = 1;

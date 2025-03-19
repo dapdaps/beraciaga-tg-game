@@ -4,14 +4,14 @@ import clsx from 'clsx';
 import HeaderAvatar from '@components/header/avatar';
 import Connect from './connect';
 import { useContext, useMemo } from 'react';
-import { HomeContext } from '@/sections/home2';
 import Big from 'big.js';
 import { numberFormatter } from '@/utils/number-formatter';
+import { useGlobalUser } from '@/context/UserContext';
 
 const AppHeader = (props: any) => {
   const { className } = props;
 
-  const { userInfo, currentCoins, addSpeed = 0, levels } = useContext(HomeContext);
+  const { userInfo, currentCoins, addSpeed = 0, levels } = useGlobalUser();
 
   const speed = useMemo(() => {
     const start = 1;

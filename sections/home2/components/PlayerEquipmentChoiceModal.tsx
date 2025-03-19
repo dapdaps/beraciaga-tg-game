@@ -3,9 +3,11 @@ import { useState } from "react";
 import PlayerEquipmentList from "./PlayerEquipmentList";
 import IconSaveButton from "@public/svg/save-button.svg"
 const PlayerEquipmentChoiceModal = ({
-  show
+  show,
+  onClose
 }: {
   show: boolean;
+  onClose: () => void;
 }) => {
     const [activeTab, setActiveTab] = useState('Clothes');
 
@@ -13,7 +15,7 @@ const PlayerEquipmentChoiceModal = ({
     return (
         <Modal
       open={show}
-      onClose={() => {}}
+      onClose={onClose}
       closeIcon={
         <img
           src="/images/home/close.png"

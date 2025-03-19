@@ -7,10 +7,9 @@ import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import { domToPng } from "modern-screenshot";
 import Skin from "./bear-svg/Skin";
-import { useContext } from "react";
-import { HomeContext } from "..";
 import { CLOTHES_MAPPING } from "@/components/BearDressup/mappings";
 import Clothes from "@/components/BearDressup/Clothes";
+import { useGlobalUser } from "@/context/UserContext";
 
 
 type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'vehicle' | 'decoration' | 'glasses' | 'background';
@@ -172,7 +171,7 @@ const BearControlModal = ({
   const {
     userLooksFlattened,
     userInfo,
-  } = useContext(HomeContext);
+  } = useGlobalUser();
 
   const handlePhoto = () => {
     const element = document.querySelector("#beraRole");

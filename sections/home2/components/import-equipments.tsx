@@ -3,9 +3,9 @@ import { Autoplay } from 'swiper/modules';
 
 import 'swiper/css/autoplay';
 import EquipmentsModal from '@/sections/home2/components/equipments-modal';
-import { useContext, useState } from 'react';
-import { HomeContext } from '@/sections/home2';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useGlobalUser } from '@/context/UserContext';
 
 const Equipments = [
   { key: 1, icon: '/images/beraciaga/equipments.svg' },
@@ -14,7 +14,7 @@ const Equipments = [
 ];
 
 const ImportEquipments = () => {
-  const { userInfo } = useContext(HomeContext);
+  const { userInfo } = useGlobalUser();
   const router = useRouter();
 
   const [visible, setVisible] = useState(false);
