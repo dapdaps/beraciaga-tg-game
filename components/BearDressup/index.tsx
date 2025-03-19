@@ -21,7 +21,7 @@ const DressUpGame: React.FC<any> = (props) => {
   const controls = useAnimation()
 
   useEffect(() => {
-    if (!userLevel || !userLooksFlattened.vehicle || userLooksFlattened?.vehicle?.level < 4) return 
+    if (!userLevel || !userLooksFlattened?.vehicle || userLooksFlattened?.vehicle?.level < 4) return
     controls.start({
       scaleY: [1, 0.98, 1], 
       transition: {

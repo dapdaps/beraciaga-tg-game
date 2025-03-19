@@ -66,9 +66,9 @@ export default memo(function Home() {
     init();
   }, [tgUserId]);
 
-  const isInitTGUser = userLooksItem.length === 0;
+  const isInitTGUser = userLooksItem?.length === 0;
 
-  const userLooksFlattened = userLooksItem.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
+  const userLooksFlattened = userLooksItem?.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
     acc[item.category] = item
     return acc
   }, {} as Record<Category, UserLookItem>)
