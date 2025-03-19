@@ -54,4 +54,5 @@ interface Props extends Quest {
   className?: string;
   disabled?: boolean;
   onClick?(): void;
+  finished: any;
 }
