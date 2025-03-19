@@ -28,7 +28,7 @@ const MainScene = () => {
           <BeraLevelContainer />
         </div>
         <BearControlModal onChangeLook={() => setChangeLook(true)} show={openBearControlModal} onClose={() => setOpenBearControlModal(false) }/>
-        <PlayerEquipmentChoiceModal show={changeLook} />
+        <PlayerEquipmentChoiceModal onClose={() => setOpenBearControlModal(false)} show={changeLook} />
     </div>
     )
   }
