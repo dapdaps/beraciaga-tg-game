@@ -3,7 +3,6 @@ import DropCoins from "./drop-coins";
 import BearDressup from "@/components/BearDressup";
 import BeraLevelContainer from "./BeraLevelContainer";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/hooks/useUser";
 import BearControlModal from "./BearControlModal";
 import { useState } from "react";
 import PlayerEquipmentChoiceModal from "./PlayerEquipmentChoiceModal";
@@ -28,7 +27,7 @@ const MainScene = () => {
           <BeraLevelContainer />
         </div>
         <BearControlModal onChangeLook={() => setChangeLook(true)} show={openBearControlModal} onClose={() => setOpenBearControlModal(false) }/>
-        <PlayerEquipmentChoiceModal onClose={() => setOpenBearControlModal(false)} show={changeLook} />
+        <PlayerEquipmentChoiceModal onClose={() => setChangeLook(false)} show={changeLook} />
     </div>
     )
   }

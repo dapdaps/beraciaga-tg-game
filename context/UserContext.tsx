@@ -19,10 +19,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
     levels,
     userLooksItem = [],
     userInfo,
+    tgUserId
   } = user;
 
   const userLooksFlattened = userLooksItem?.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
-    acc[item.category] = item;
+    if (item.use) {
+        acc[item.category] = item;
+    }
     return acc;
   }, {} as Record<Category, UserLookItem>);
 
@@ -42,7 +45,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
       setStartJourney,
       userLooksItem,
       userInfo,
-      userLooksFlattened
+      userLooksFlattened,
+      tgUserId
     }}>
       {children}
     </UserContext.Provider>

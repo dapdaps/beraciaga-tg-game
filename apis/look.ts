@@ -30,8 +30,8 @@ export interface UseLookResponse {
   data: UseLookResponseItem[];
 }
 
-export const getLookList = async (params: any) =>
-  await get("/api/look/list", {
+export const getLookList = async (params?: any) =>
+  await get("/api/look/list", params && {
     category: params,
   });
 
