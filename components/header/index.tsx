@@ -1,3 +1,5 @@
+"use client";
+
 import BearDressup from '@/components/BearDressup';
 import { CapsuleButton } from '@components/Button';
 import clsx from 'clsx';
@@ -7,11 +9,14 @@ import { useContext, useMemo } from 'react';
 import Big from 'big.js';
 import { numberFormatter } from '@/utils/number-formatter';
 import { useGlobalUser } from '@/context/UserContext';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 const AppHeader = (props: any) => {
-  const { className } = props;
+  const { className, isBack } = props;
 
   const { userInfo, currentCoins, addSpeed = 0, levels } = useGlobalUser();
+  const router = useRouter();
 
   const speed = useMemo(() => {
     const start = 1;
@@ -23,7 +28,24 @@ const AppHeader = (props: any) => {
 
   return (
     <div className={clsx("flex items-center justify-between px-2 pt-2", className)}>
-      <HeaderAvatar level={userInfo.level} size={54} bgColor="#FFF5A8" />
+      {
+        isBack ? (
+          <motion.button
+            type="button"
+            className="w-[43px] h-[40px] shrink-0 origin-bottom"
+            onClick={() => {
+              router.back();
+            }}
+            whileTap={{
+              scaleY: 0.9,
+            }}
+          >
+            <img src="/images/icon-page-back.svg" alt="" className="w-full h-full object-center object-contain" />
+          </motion.button>
+          ) : (
+          <HeaderAvatar level={userInfo.level} size={54} bgColor="#FFF5A8" />
+        )
+      }
       <CapsuleButton>
         <div className='flex items-center justify-between px-[1px]'>
           <img src='/images/home/coin.png' alt='coin' className='w-6 h-6' />
