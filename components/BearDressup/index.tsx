@@ -54,8 +54,8 @@ const DressUpGame: React.FC<any> = (props) => {
           <Bear userLooks={userLooksFlattened} />
           {
             userLooksFlattened?.hat && (
-              <Hat 
-                userLooks={userLooksFlattened}
+              <Hat
+                item={userLooksFlattened}
               />
             )
           }
@@ -70,7 +70,7 @@ const DressUpGame: React.FC<any> = (props) => {
           {
             userLooksFlattened?.vehicle && (
               <Transportation 
-                userLooks={userLooksFlattened}
+                item={userLooksFlattened}
               />
             )
           }
