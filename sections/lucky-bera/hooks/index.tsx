@@ -28,7 +28,7 @@ export function useLuckyBera() {
     manual: true,
   });
 
-  const { run: handleSpinResult, data: spinResultData, loading: spinResultDataLoading } = useRequestByToken<SpinResultData | boolean, any>(async () => {
+  const { runAsync: handleSpinResult, data: spinResultData, loading: spinResultDataLoading } = useRequestByToken<SpinResultData | boolean, any>(async () => {
     const res = await post("/api/spin", {
       spin: spinMultiplier,
     });
