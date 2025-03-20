@@ -55,3 +55,26 @@ export enum SpinMultiplier {
   X1000 = 1000,
   X5000 = 5000,
 }
+
+export interface SpinUserData {
+  id: number;
+  tg_user_id: string;
+  spin: number;
+  bee: number;
+  bee_level: number;
+  refill_time: number;
+  gem: number;
+  bee_level_amount: number;
+  bee_level_reward_coins: number;
+}
+
+export interface SpinResultData {
+  amount: number;
+  bee: number;
+  bee_level_amount: number;
+  bee_level_reward_coins: number;
+  category: SpinCategory;
+  code: string;
+  gem: number;
+  spin: number;
+}
