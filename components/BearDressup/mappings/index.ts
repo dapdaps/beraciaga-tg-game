@@ -16,7 +16,21 @@ export {
     NECKLACES_MAPPING,
 }
 
-export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'necklace' | 'vehicle' | 'decoration' | 'glasses' | 'background';
+export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'vehicle' | 'decoration' | 'glasses' | 'background';
+
+export const CATEGORY_NAMES: Record<Category, string> = {
+  face: 'Face',
+  skin: 'Skin',
+  clothes: 'Clothes',
+  hat: 'Hat',
+  vehicle: 'Vehicle',
+  decoration: 'Decoration',
+  glasses: 'Glasses',
+  background: 'Background',
+};
+
+export const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'decoration', 'vehicle', 'glasses', 'background'];
+
 
 /* 
 *  Clothes level = y 有个隐藏条件 当且仅当 x < 8 时，衣服渲染为站立衣服，否则渲染为坐着衣服。

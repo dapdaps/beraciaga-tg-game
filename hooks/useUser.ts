@@ -130,7 +130,7 @@ export function useUser() {
     try {
       const data = await getUserLookList({
         tg_user_id: tgUserId,
-        use: true,
+        use: false,
       })
       if (data.code === 200) {
         setUserLooksItem(data.data); 
@@ -164,6 +164,7 @@ export function useUser() {
     addSpeed,
     userLooksItem,
     setUserLooksItem,
-    fetchLookUserProfile
+    fetchLookUserProfile,
+    tgUserId
   };
 }

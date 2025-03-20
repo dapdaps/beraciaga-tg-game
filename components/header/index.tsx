@@ -38,7 +38,7 @@ const AppHeader = (props: any) => {
       <CapsuleButton containerClass='w-[88px]' firstClass='bg-[#FFBABB]'>
         <div className='flex items-center px-2'>
           <img src="/images/home/gem.png" className='w-[30px] mr-1' alt="" />
-          <span className='text-white text-stroke-2 font-cherryBomb font-[400]'>{userInfo.stats.gem || 0}</span>
+          <span className='text-white text-stroke-2 font-cherryBomb font-[400]'>{userInfo?.stats?.gem || 0}</span>
         </div>
       </CapsuleButton>
       <Connect />

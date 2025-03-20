@@ -1,37 +1,380 @@
-import { motion } from 'framer-motion';
-import { memo } from "react";
-export default memo(function tiger() {
+import { motion, useAnimate, useMotionValue } from 'framer-motion';
+import { memo, useEffect, useRef } from 'react';
+import { SPIN_CATEGORIES, SpinCategory } from '@/sections/lucky-bera/config';
+import LightingButton from '@components/Button/lighting-button';
+import { numberFormatter } from '@/utils/number-formatter';
+import { useRequestByToken } from '@/hooks/use-request-by-token';
+import useToast from '@/hooks/use-toast';
+import { random } from 'lodash-es';
+import Big from 'big.js';
+
+const WHEEL_SIZE = 500;
+const WHEEL_AREA = 120;
+const WHEEL_ICON_SIZE = 60;
+const SPIN_PROGRESS_BASE = 10; // percent
+const EXPLOSION_COIN_SIZE = 100;
+
+const TOTAL_SPINS = 50;
+
+const SpinCategories = Object.values(SPIN_CATEGORIES);
+const SpinCategoryRotation = WHEEL_AREA / SpinCategories.length;
+const SpinBase = 10;
+
+const WheelInfinityDelay = 0.3;
+const WheelInfinitySlowDuration = 20;
+const WheelInfinityAnimation: any = {
+  duration: WheelInfinityDelay,
+  ease: 'linear',
+  repeat: Infinity,
+};
+
+export default memo(function Tiger(props: any) {
+  const {
+    spinMultiplier,
+    toggleSpinMultiplier,
+    spinUserData,
+    lastSpinResult,
+    handleSpinResult,
+  } = props;
+
+  const toast = useToast();
+
+  const [leftWheel, leftWheelAnimate] = useAnimate();
+  const leftWheelRotation = useMotionValue(24);
+  const [centerWheel, centerWheelAnimate] = useAnimate();
+  const centerWheelRotation = useMotionValue(-1);
+  const [rightWheel, rightWheelAnimate] = useAnimate();
+  const rightWheelRotation = useMotionValue(-48 + (-SpinCategoryRotation * 1.5));
+  const spinRef = useRef<any>();
+  const spinTimerInfinityLeft = useRef<any>();
+  const spinTimerInfinityCenter = useRef<any>();
+  const spinTimerInfinityRight = useRef<any>();
+
+  const createCoin = (x: number, y: number, icon: string) => {
+    const coin = document.createElement('div');
+    // Set basic styles for coin element
+    coin.style.position = 'fixed';
+    coin.style.left = `${x}px`;
+    coin.style.top = `${y}px`;
+    coin.style.width = `${EXPLOSION_COIN_SIZE}px`;
+    coin.style.height = `${EXPLOSION_COIN_SIZE}px`;
+    coin.style.backgroundImage = `url('${icon}')`;
+    coin.style.backgroundSize = 'contain';
+    coin.style.backgroundRepeat = 'no-repeat';
+    coin.style.pointerEvents = 'none';
+    coin.style.zIndex = '9999';
+    coin.style.transformStyle = 'preserve-3d';
+    coin.style.backfaceVisibility = 'visible';
+    coin.style.opacity = '0';
+
+    document.body.appendChild(coin);
+    return coin;
+  };
+
+  const animateCoin = (coin: HTMLDivElement, startX: number, startY: number) => {
+    const horizontalDistance = (Math.random() - 0.5) * 400;
+    const maxHeight = -(Math.random() * 400 + 300);
+
+    // Movement and rotation animation keyframes
+    const moveKeyframes = [
+      // Initial position
+      {
+        transform: 'translate(0, 50px) rotate3d(1, 1, 1, 0deg)',
+        offset: 0
+      },
+      // First rapid ascent phase
+      {
+        transform: `translate(${horizontalDistance * 0.2}px, ${maxHeight * 0.3}px) rotate3d(1, 1, 1, ${Math.random() * 180}deg)`,
+        offset: 0.15
+      },
+      // Second rapid ascent phase
+      {
+        transform: `translate(${horizontalDistance * 0.4}px, ${maxHeight * 0.7}px) rotate3d(1, 1, 1, ${Math.random() * 360}deg)`,
+        offset: 0.3
+      },
+      // Peak point
+      {
+        transform: `translate(${horizontalDistance * 0.6}px, ${maxHeight}px) rotate3d(1, 1, 1, ${Math.random() * 540}deg)`,
+        offset: 0.4
+      },
+      // Start slow descent
+      {
+        transform: `translate(${horizontalDistance * 0.8}px, ${maxHeight * 0.6}px) rotate3d(1, 1, 1, ${Math.random() * 720}deg)`,
+        offset: 0.7
+      },
+      // Accelerated descent
+      {
+        transform: `translate(${horizontalDistance}px, ${Math.abs(maxHeight * 0.5)}px) rotate3d(1, 1, 1, ${Math.random() * 1080}deg)`,
+        offset: 1
+      }
+    ];
+
+    // Opacity animation keyframes
+    const opacityKeyframes = [
+      { opacity: 0, offset: 0 },     // Initially invisible
+      { opacity: 1, offset: 0.1 },  // Brief invisibility period
+      { opacity: 1, offset: 0.2 },  // Quick fade in
+      { opacity: 0, offset: 0.8 },   // Maintain visibility
+      { opacity: 0, offset: 1 }      // Fade out
+    ];
+
+    // Create animations with adjusted duration
+    const moveAnimation = coin.animate(moveKeyframes, {
+      duration: 4000,
+      easing: 'cubic-bezier(0.2, 1, 0.3, 1)', // Adjusted easing for smoother motion
+      fill: 'forwards'
+    });
+
+    const opacityAnimation = coin.animate(opacityKeyframes, {
+      duration: 3000, // Match movement animation duration
+      easing: 'linear',
+      fill: 'forwards'
+    });
+
+    // Cleanup function to remove element when animations complete
+    const removeElement = () => {
+      if (moveAnimation.playState === 'finished' && opacityAnimation.playState === 'finished') {
+        coin.remove();
+      }
+    };
+
+    moveAnimation.onfinish = removeElement;
+    opacityAnimation.onfinish = removeElement;
+  };
+
+  const createCoinsExplosion = (centerX: number, centerY: number, icon: string) => {
+    const numberOfCoins = 15;
+    const delayBetweenCoins = 100; // Delay between each coin's animation
+
+    // Create multiple waves of coins with different delays and parameters
+    const createWave = (delay: number, count: number) => {
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const coin = createCoin(centerX, centerY, icon);
+          animateCoin(coin, centerX, centerY);
+        }, i * delayBetweenCoins + delay);
+      }
+    };
+
+    // Create waves with adjusted intervals
+    createWave(0, numberOfCoins);      // First wave
+    createWave(120, numberOfCoins);    // Second wave with delay
+    createWave(240, numberOfCoins);    // Third wave with delay
+  };
+
+  const startCoinExplosion = (params: any) => {
+    const { category } = params;
+
+    const currCategory = SPIN_CATEGORIES[category as SpinCategory];
+
+    if (!spinRef.current || !currCategory) return;
+
+    // Calculate center position for coin explosion
+    const rect = spinRef.current.getBoundingClientRect();
+    const startX = rect.left + rect.width / 2 - EXPLOSION_COIN_SIZE / 2;
+    const startY = rect.top + rect.height / 2 - EXPLOSION_COIN_SIZE;
+
+    createCoinsExplosion(startX, startY, currCategory.icon);
+  };
+
+  const startSlowScroll = () => {
+    leftWheelAnimate(leftWheel.current, {
+      rotate: [leftWheelRotation.get(), leftWheelRotation.get() + 360]
+    }, {
+      ...WheelInfinityAnimation,
+      duration: WheelInfinitySlowDuration,
+    });
+    centerWheelAnimate(centerWheel.current, {
+      rotateX: [centerWheelRotation.get(), centerWheelRotation.get() + 360]
+    }, {
+      ...WheelInfinityAnimation,
+      duration: WheelInfinitySlowDuration,
+    });
+    rightWheelAnimate(rightWheel.current, {
+      rotate: [rightWheelRotation.get(), rightWheelRotation.get() - 360]
+    }, {
+      ...WheelInfinityAnimation,
+      duration: WheelInfinitySlowDuration,
+    });
+  };
+
+  const startInfinityScroll: () => Promise<any> = () => new Promise((resolve) => {
+    let leftWheelAnimation: any;
+    let centerWheelAnimation: any;
+    let rightWheelAnimation: any;
+    leftWheelAnimation = leftWheelAnimate(leftWheel.current, {
+      rotate: [leftWheelRotation.get(), leftWheelRotation.get() + 360]
+    }, WheelInfinityAnimation);
+    spinTimerInfinityLeft.current = setTimeout(() => {
+      clearTimeout(spinTimerInfinityLeft.current);
+      centerWheelAnimation = centerWheelAnimate(centerWheel.current, {
+        rotateX: [centerWheelRotation.get(), centerWheelRotation.get() + 360]
+      }, WheelInfinityAnimation);
+    }, WheelInfinityDelay * 1000);
+    spinTimerInfinityCenter.current = setTimeout(() => {
+      clearTimeout(spinTimerInfinityCenter.current);
+      rightWheelAnimation = rightWheelAnimate(rightWheel.current, {
+        rotate: [rightWheelRotation.get(), rightWheelRotation.get() - 360]
+      }, WheelInfinityAnimation);
+    }, WheelInfinityDelay * 1000 * 2);
+
+    spinTimerInfinityRight.current = setTimeout(() => {
+      clearTimeout(spinTimerInfinityRight.current);
+      resolve({
+        leftWheelAnimation,
+        centerWheelAnimation,
+        rightWheelAnimation,
+      });
+    }, WheelInfinityDelay * 3 * 1000);
+  });
+
+  const startWheelResultScroll: (params: any) => Promise<any> = (params) => new Promise((resolve) => {
+    // calc wheel position
+    const { code, category } = params.data;
+    const [leftCode, centerCode, rightCode] = code.split(",");
+
+    const leftCategoryIndex = SpinCategories.findIndex((it) => it.code === leftCode);
+    const centerCategoryIndex = SpinCategories.findIndex((it) => it.code === centerCode);
+    const rightCategoryIndex = SpinCategories.findIndex((it) => it.code === rightCode);
+
+    console.log(
+      "lottery code is left: %o(%o), center: %o(%o), right: %o(%o)",
+      leftCode,
+      SpinCategories[leftCategoryIndex].value,
+      centerCode,
+      SpinCategories[centerCategoryIndex].value,
+      rightCode,
+      SpinCategories[rightCategoryIndex].value,
+    );
+
+    const leftRandomArea = 0;
+    const centerRandomArea = 0;
+    const rightRandomArea = 0;
+    const baseRotation = 360 * SpinBase;
+
+    console.log("lottery wheel random area: %o, center: %o, right: %o", leftRandomArea, centerRandomArea, rightRandomArea);
+
+    const leftWheelCodeRotation = baseRotation + WHEEL_AREA * leftRandomArea + (WHEEL_AREA - leftCategoryIndex * SpinCategoryRotation);
+    const centerWheelCodeRotation = baseRotation + WHEEL_AREA * centerRandomArea + (WHEEL_AREA - centerCategoryIndex * SpinCategoryRotation) - 1;
+    const rightWheelCodeRotation = baseRotation + WHEEL_AREA * rightRandomArea + (WHEEL_AREA - rightCategoryIndex * SpinCategoryRotation) + SpinCategoryRotation * 1.5;
+
+    console.log("lottery wheel rotation left: %o, center: %o, right: %o", leftWheelCodeRotation, centerWheelCodeRotation, rightWheelCodeRotation);
+
+    leftWheelAnimate(leftWheel.current, {
+      rotate: [leftWheelRotation.get(), leftWheelCodeRotation]
+    }, {
+      type: "spring",
+      onComplete: () => {
+        centerWheelAnimate(centerWheel.current, {
+          rotateX: [centerWheelRotation.get(), centerWheelCodeRotation]
+        }, {
+          type: "spring",
+          onComplete: () => {
+            rightWheelAnimate(rightWheel.current, {
+              rotate: [rightWheelRotation.get(), -rightWheelCodeRotation]
+            }, {
+              type: "spring",
+              onComplete: () => {
+                resolve({});
+              },
+            });
+          },
+        });
+      },
+    });
+    // spinTimerResult.current = setTimeout(() => {
+    //   clearTimeout(spinTimerResult.current);
+    //   resolve({});
+    // }, WheelInfinityDelay * 3 * 1000);
+  });
+
+  const { run: handleSpin, loading: spinning } = useRequestByToken<any, any>(async () => {
+    // start wheel scroll
+    const animations = await startInfinityScroll();
+
+    // request api
+    const res = await handleSpinResult();
+    if (!res) {
+      // animations.leftWheelAnimation.pause();
+      // animations.centerWheelAnimation.pause();
+      // animations.rightWheelAnimation.pause();
+      startSlowScroll();
+      return;
+    }
+
+    await startWheelResultScroll({
+      ...animations,
+      data: res,
+    });
+
+    startCoinExplosion(res);
+  }, {
+    manual: true,
+  });
+
+  useEffect(() => {
+    startSlowScroll();
+
+    return () => {
+      clearTimeout(spinTimerInfinityLeft.current);
+      clearTimeout(spinTimerInfinityCenter.current);
+      clearTimeout(spinTimerInfinityRight.current);
+    };
+  }, []);
+
   return (
-    <div className="flex items-center justify-center">
-      <div className="relative w-[368px] h-[365px] bg-[url('/images/lucky-bera/bear-top.png')] bg-center bg-contain">
+    <div className="w-full flex flex-col items-center justify-center pt-[88px]">
+      <div className="relative w-[368px] h-[365px] max-w-full bg-[url('/images/lucky-bera/bear-top.png')] bg-center bg-contain">
         <div className="absolute w-[266px] left-[52px] top-[18px]">
           <img src="/images/lucky-bera/title.png" alt="title" />
         </div>
         <div className="absolute top-[86px] left-0 right-0 flex flex-col items-center">
           <div className="flex items-center justify-center gap-[4px] w-[231px] h-[34px] bg-[url('/images/lucky-bera/amount-bg.svg')] bg-center bg-contain">
-            <div className="w-[22px]">
-              <img src="/images/lucky-bera/coin_1.svg" alt="coin_1" />
-            </div>
-            <div className="text-[#FFF4C2] text-stroke-2 text-[24px] font-cherryBomb">8,000</div>
+            {
+              !!lastSpinResult?.amount && (
+                <>
+                  {
+                    !!SPIN_CATEGORIES[lastSpinResult.category as SpinCategory] && (
+                      <div className="w-[22px]">
+                        <img
+                          src={SPIN_CATEGORIES[lastSpinResult.category as SpinCategory].icon}
+                          alt={SPIN_CATEGORIES[lastSpinResult.category as SpinCategory].value}
+                          className="translate-y-0.5"
+                        />
+                      </div>
+                    )
+                  }
+                  <div className="text-[#FFF4C2] text-stroke-2 text-[24px] font-cherryBomb">
+                    {numberFormatter(lastSpinResult.amount, 2, true)}
+                  </div>
+                </>
+              )
+            }
           </div>
           <div className="m-[6px_0_8px] relative pl-[4px] w-[200px] h-[25px] flex items-center  rounded-[10px] border-2 border-[#E49F63] bg-[#582911]">
-            <div className="absolute -left-[22px] w-[32px] ">
-              <img src="/images/lucky-bera/theme.svg" alt="theme" />
+            <div className="absolute -left-[15px] w-[32px] ">
+              <img src="/images/lucky-bera/reward-bee.svg" alt="theme" className="w-[27px]" />
             </div>
-            <div className="w-[130px] h-[18px] rounded-[6px] border-2 border-[#F8C200] bg-[#FFE380] shadow-[0px_4px_0px_0px_rgba(255, 255, 255, 0.50)_inset]" />
+            <motion.div
+              className="h-[18px] rounded-[6px] border-2 border-[#F8C200] bg-[#FFE380] shadow-[0px_4px_0px_0px_rgba(255, 255, 255, 0.50)_inset]"
+              animate={{
+                width: Big(spinUserData?.bee_level_amount ?? 0).gt(0) ? Big(spinUserData?.bee ?? 0).div(spinUserData?.bee_level_amount).times(100).toFixed(2) + "%" : "0%"
+              }}
+            />
 
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-cherryBomb text-[12px] text-stroke-1-FFF4C2 bg-gradient-to-b from-[#926D48] to-[#221911] bg-clip-text text-transparent">
-              12,250 / 20,000
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-cherryBomb text-[12px] text-stroke-1-FFF4C2 bg-gradient-to-b from-[#926D48] to-[#221911] bg-clip-text text-transparent [-webkit-text-fill-color: transparent]">
+              {numberFormatter(spinUserData?.bee, 2, true)} / {numberFormatter(spinUserData?.bee_level_amount, 2, true)}
             </div>
 
             <div className="absolute -right-[9.4px] -top-[1.55px]">
               <div className="w-[26px]">
                 <img src="/images/lucky-bera/coin_2.svg" alt="coin_2" />
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 -bottom-[4px] font-cherryBomb text-[16px] text-[#FFE7A5] [text-shadow:0_2px_0_rgba(0,0,0,0.5)] [-webkit-text-stroke:1px_#4B371F] leading-none">100K</div>
+              <div className="absolute left-1/2 -translate-x-1/2 -bottom-[4px] font-cherryBomb text-[16px] text-[#FFE7A5] [text-shadow:0_2px_0_rgba(0,0,0,0.5)] [-webkit-text-stroke:1px_#4B371F] leading-none">
+                {numberFormatter(spinUserData?.bee_level_reward_coins, 2, true, { isShort: true, isShortUppercase: true })}
+              </div>
             </div>
           </div>
-
           <div className="relative flex items-center w-[266px] h-[141px] bg-[url('/images/lucky-bera/turntable_bg.svg')] bg-center bg-contain bg-no-repeat">
             <div className="absolute -] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42px]">
               <img src="/images/lucky-bera/pointer.svg" alt="pointer" />
@@ -40,72 +383,160 @@ export default memo(function tiger() {
               <img src="/images/lucky-bera/pointer.svg" alt="pointer" />
             </div>
 
-            <div className='absolute left-[6px] right-[6px] top-[5px] bottom-[5px] overflow-hidden'>
-              <motion.div animate={{
-                transform: [
-                  "translate3d(0, -50%, 0) rotate(0deg)", "translate3d(0, -50%, 0) rotate(360deg)"
-                ],
-                transition: {
-                  duration: 2,
-                  ease: 'linear',
-                  repeat: Infinity,
-                }
-
-              }} className="absolute left-0 top-1/2 w-[400px] h-[400px] rounded-full">
+            <div className="absolute left-[6px] right-[6px] top-[5px] bottom-[5px] overflow-hidden">
+              {/*#region Left*/}
+              <motion.div
+                ref={leftWheel}
+                className="absolute left-0 top-1/2 rounded-full"
+                style={{
+                  y: "-50%",
+                  rotate: leftWheelRotation,
+                  width: WHEEL_SIZE,
+                  height: WHEEL_SIZE,
+                }}
+              >
                 {
-                  new Array(15).fill(null).map((_, index) => (
-                    <div className="absolute left-0 right-0 top-1/2 h-[60px] px-[10px]" style={{ transform: "translateY(-50%) rotate(" + (index * 24) + "deg)" }} key={index}>
-                      <div className="w-[60px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="62" height="61" viewBox="0 0 62 61" fill="none">
-                          <path d="M47.9386 26.562C50.7966 39.5385 43.7015 51.9277 32.3698 54.4235C21.0382 56.9192 9.39472 48.657 6.53674 35.6805C3.67875 22.704 10.7738 10.3147 22.1055 7.81896C33.4372 5.32324 45.0806 13.5855 47.9386 26.562Z" fill="#CF7200" stroke="#4B371F" stroke-width="2" />
-                          <path d="M55.0417 24.7856C57.8996 37.7621 50.8046 50.1514 39.4729 52.6471C28.1412 55.1428 16.4977 46.8806 13.6398 33.9041C10.7818 20.9276 17.8769 8.53832 29.2085 6.0426C40.5402 3.54687 52.1837 11.8091 55.0417 24.7856Z" fill="#FFF549" stroke="#4B371F" stroke-width="2" />
-                          <path d="M48.7136 26.18C50.7095 35.2424 45.7487 43.8346 37.9118 45.5606C30.0749 47.2866 21.9634 41.5735 19.9675 32.5112C17.9716 23.4489 22.9324 14.8566 30.7693 13.1306C38.6062 11.4046 46.7177 17.1177 48.7136 26.18Z" fill="#FFCF23" stroke="#AF7026" stroke-width="2" />
-                          <path d="M26.8785 27.5765L26.0657 28.159C25.6542 27.5848 25.3494 26.9294 25.168 26.2373C24.9867 25.5451 24.9311 24.8248 25.0086 24.1231C25.086 23.4215 25.2958 22.7473 25.6345 22.1504C25.9735 21.5528 26.4354 21.0445 26.9976 20.6732C27.5609 20.3011 28.2025 20.0818 28.8745 20.0343C29.5456 19.9869 30.2172 20.1129 30.8418 20.389C31.2409 20.5654 31.6147 20.8002 31.9551 21.083C32.4336 20.8945 32.9307 20.7613 33.4393 20.6853C33.637 20.1493 33.9228 19.6554 34.2916 19.2319C34.8229 18.622 35.506 18.183 36.2787 17.9765L26.8785 27.5765ZM26.8785 27.5765L26.0657 28.159C26.3593 28.5687 26.7048 28.9334 27.092 29.238C27.1147 30.5006 27.3641 31.7664 27.8246 32.9555C28.3523 34.3182 29.1461 35.5505 30.1471 36.5447C31.1482 37.5391 32.3341 38.2724 33.6126 38.6642C34.8931 39.0566 36.2237 39.0925 37.4854 38.7544C38.7471 38.4164 39.8814 37.72 40.7942 36.7399C41.7056 35.7614 42.3659 34.5333 42.7357 33.1716C43.1055 31.8101 43.1767 30.346 42.9524 28.902C42.7567 27.642 42.3397 26.4211 41.7282 25.3164C42.0161 24.5973 42.1391 23.8037 42.0967 23.0049C42.0434 22.002 41.731 21.0147 41.1968 20.1696C40.6629 19.3248 39.9196 18.6427 39.0454 18.239C38.1676 17.8336 37.1996 17.73 36.2794 17.9763M26.8785 27.5765L36.2794 17.9763M36.2794 17.9763C36.2793 17.9763 36.2791 17.9764 36.279 17.9764L36.2794 17.9763Z" fill="#FFF549" stroke="#AF7026" stroke-width="2" />
-                          <path d="M17.8454 29.8486C17.8458 27.0316 17.8456 15.7668 26.2938 12.9505" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                  new Array(360 / WHEEL_AREA).fill(null).map((_, index) => SpinCategories.map((item, idx) => (
+                    <div
+                      key={`${index}-${idx}`}
+                      className="absolute left-0 right-0 top-1/2 px-[10px] w-full"
+                      style={{
+                        transform: "translateY(-50%) rotate(" + (index * WHEEL_AREA + idx * SpinCategoryRotation) + "deg)",
+                        height: WHEEL_ICON_SIZE,
+                      }}
+                    >
+                      <div
+                        className=""
+                        style={{
+                          width: WHEEL_ICON_SIZE,
+                        }}
+                      >
+                        <img src={item.icon} alt="" className="w-full" />
                       </div>
                     </div>
-                  ))
+                  )))
                 }
               </motion.div>
-
-
-              <motion.div animate={{
-                transform: [
-                  "translate3d(0, -50%, 0) rotate(360deg)", "translate3d(0, -50%, 0) rotate(0)"
-                ],
-                transition: {
-                  duration: 2,
-                  ease: 'linear',
-                  repeat: Infinity,
-                }
-
-              }} className="absolute right-0 top-1/2 w-[400px] h-[400px] rounded-full">
+              {/*#endregion*/}
+              {/*#region Center*/}
+              <motion.div
+                className="absolute left-1/2 top-1/2 translate-x-[calc(-50%_+_5px)] -translate-y-1/2 [perspective:1000px]"
+                style={{
+                  width: WHEEL_SIZE,
+                  height: WHEEL_SIZE,
+                }}
+              >
+                <motion.div
+                  ref={centerWheel}
+                  className="w-full h-full relative [transform-style:preserve-3d]"
+                  style={{
+                    rotateX: centerWheelRotation,
+                  }}
+                >
+                  {
+                    new Array(360 / WHEEL_AREA).fill(null).map((_, index) => SpinCategories.map((item, idx) => (
+                      <div
+                        key={`${index}-${idx}`}
+                        className="absolute rounded-full top-1/2 left-1/2 origin-center opacity-100 -mt-[30px] -ml-[30px] [backface-visibility:hidden]"
+                        style={{
+                          transform: `rotateX(${index * WHEEL_AREA + idx * SpinCategoryRotation}deg) translateZ(${WHEEL_SIZE * 0.7 / 2}px) translateY(${item.centerY}px)`,
+                          width: WHEEL_ICON_SIZE * item.centerScale,
+                          height: WHEEL_ICON_SIZE * item.centerScale,
+                        }}
+                      >
+                        <img src={item.icon} alt="" className="w-full" />
+                      </div>
+                    )))
+                  }
+                </motion.div>
+              </motion.div>
+              {/*#endregion*/}
+              {/*#region Right*/}
+              <motion.div
+                ref={rightWheel}
+                className="absolute right-0 top-1/2 rounded-full"
+                style={{
+                  rotate: rightWheelRotation,
+                  y: "-50%",
+                  width: WHEEL_SIZE,
+                  height: WHEEL_SIZE,
+                }}
+              >
                 {
-                  new Array(15).fill(null).map((_, index) => (
-                    <div className="absolute left-0 right-0 top-1/2 h-[60px] px-[10px]" style={{ transform: "translateY(-50%) rotate(" + (index * 24) + "deg)" }} key={index}>
-                      <div className="w-[60px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="62" height="61" viewBox="0 0 62 61" fill="none">
-                          <path d="M47.9386 26.562C50.7966 39.5385 43.7015 51.9277 32.3698 54.4235C21.0382 56.9192 9.39472 48.657 6.53674 35.6805C3.67875 22.704 10.7738 10.3147 22.1055 7.81896C33.4372 5.32324 45.0806 13.5855 47.9386 26.562Z" fill="#CF7200" stroke="#4B371F" stroke-width="2" />
-                          <path d="M55.0417 24.7856C57.8996 37.7621 50.8046 50.1514 39.4729 52.6471C28.1412 55.1428 16.4977 46.8806 13.6398 33.9041C10.7818 20.9276 17.8769 8.53832 29.2085 6.0426C40.5402 3.54687 52.1837 11.8091 55.0417 24.7856Z" fill="#FFF549" stroke="#4B371F" stroke-width="2" />
-                          <path d="M48.7136 26.18C50.7095 35.2424 45.7487 43.8346 37.9118 45.5606C30.0749 47.2866 21.9634 41.5735 19.9675 32.5112C17.9716 23.4489 22.9324 14.8566 30.7693 13.1306C38.6062 11.4046 46.7177 17.1177 48.7136 26.18Z" fill="#FFCF23" stroke="#AF7026" stroke-width="2" />
-                          <path d="M26.8785 27.5765L26.0657 28.159C25.6542 27.5848 25.3494 26.9294 25.168 26.2373C24.9867 25.5451 24.9311 24.8248 25.0086 24.1231C25.086 23.4215 25.2958 22.7473 25.6345 22.1504C25.9735 21.5528 26.4354 21.0445 26.9976 20.6732C27.5609 20.3011 28.2025 20.0818 28.8745 20.0343C29.5456 19.9869 30.2172 20.1129 30.8418 20.389C31.2409 20.5654 31.6147 20.8002 31.9551 21.083C32.4336 20.8945 32.9307 20.7613 33.4393 20.6853C33.637 20.1493 33.9228 19.6554 34.2916 19.2319C34.8229 18.622 35.506 18.183 36.2787 17.9765L26.8785 27.5765ZM26.8785 27.5765L26.0657 28.159C26.3593 28.5687 26.7048 28.9334 27.092 29.238C27.1147 30.5006 27.3641 31.7664 27.8246 32.9555C28.3523 34.3182 29.1461 35.5505 30.1471 36.5447C31.1482 37.5391 32.3341 38.2724 33.6126 38.6642C34.8931 39.0566 36.2237 39.0925 37.4854 38.7544C38.7471 38.4164 39.8814 37.72 40.7942 36.7399C41.7056 35.7614 42.3659 34.5333 42.7357 33.1716C43.1055 31.8101 43.1767 30.346 42.9524 28.902C42.7567 27.642 42.3397 26.4211 41.7282 25.3164C42.0161 24.5973 42.1391 23.8037 42.0967 23.0049C42.0434 22.002 41.731 21.0147 41.1968 20.1696C40.6629 19.3248 39.9196 18.6427 39.0454 18.239C38.1676 17.8336 37.1996 17.73 36.2794 17.9763M26.8785 27.5765L36.2794 17.9763M36.2794 17.9763C36.2793 17.9763 36.2791 17.9764 36.279 17.9764L36.2794 17.9763Z" fill="#FFF549" stroke="#AF7026" stroke-width="2" />
-                          <path d="M17.8454 29.8486C17.8458 27.0316 17.8456 15.7668 26.2938 12.9505" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                  new Array(360 / WHEEL_AREA).fill(null).map((_, index) => [...SpinCategories].reverse().map((item, idx) => (
+                    <div
+                      key={`${index}-${idx}`}
+                      className="absolute left-0 right-0 top-1/2 w-full px-[10px]"
+                      style={{
+                        transform: "translateY(-50%) rotate(" + (index * WHEEL_AREA + idx * SpinCategoryRotation) + "deg)",
+                        height: WHEEL_ICON_SIZE,
+                      }}
+                    >
+                      <div
+                        className="-rotate-180"
+                        style={{
+                          width: WHEEL_ICON_SIZE,
+                        }}
+                      >
+                        <img src={item.icon} alt="" className="w-full" />
                       </div>
                     </div>
-                  ))
+                  )))
                 }
               </motion.div>
+              {/*#endregion*/}
             </div>
-
 
             <div className="absolute left-[4.25px] top-[5px] right-[5.11px] bottom-[5px] z-10">
               <img src="/images/lucky-bera/turntable_masker.svg" alt="turntable_masker" />
             </div>
           </div>
         </div>
+        <LightingButton
+          outerClassName="absolute bottom-[18px] w-[146px] h-[36px] left-1/2 -translate-x-1/2"
+          className="flex justify-center items-center gap-[3px]"
+          onClick={toggleSpinMultiplier}
+        >
+          <div className="text-[18px]">
+            BET X{numberFormatter(spinMultiplier, 0, true, { isShort: true, isShortUppercase: true })}
+          </div>
+          <img src="/images/lucky-bera/icon-flash.png" alt="" className="w-[16px] shrink-0 h-[25px] object-center object-contain bg-no-repeat" />
+        </LightingButton>
+      </div>
+      <div className="relative flex justify-center w-full h-[216px] translate-y-[-5px] overflow-hidden">
+        <img src="/images/lucky-bera/bear-bottom-coins-left.svg" alt="" className="absolute translate-x-[-140px] z-[1]" />
+        <img src="/images/lucky-bera/bear-bottom-coins-right.svg" alt="" className="absolute translate-x-[160px] z-[1]" />
+        <div className="relative z-[2] flex flex-col items-center w-[338px] max-w-full h-full bg-[url('/images/lucky-bera/bear-bottom.png')] bg-top bg-contain bg-no-repeat">
+          <motion.button
+            ref={spinRef}
+            type="button"
+            disabled={spinning || !spinUserData?.spin}
+            className="w-[143px] h-[76px] bg-[url('/images/lucky-bera/spin-button.svg')] bg-no-repeat bg-center bg-contain disabled:opacity-50 disabled:cursor-not-allowed"
+            whileTap={spinning || !spinUserData?.spin ? {} : {
+              scaleY: 0.9,
+            }}
+            style={{
+              transformOrigin: "center bottom",
+              y: 15,
+            }}
+            onClick={handleSpin}
+          />
+          <div className="absolute flex pl-[35px] pr-[13px] items-center bottom-[25px] w-[241px] h-[64px] bg-[url('/images/lucky-bera/honey-progress.svg')] bg-no-repeat bg-center bg-contain">
+            <img src="/images/lucky-bera/honey-progress-icon.svg" alt="" className="w-[77px] h-[68px] shrink-0 absolute z-[2] left-[-22px] top-[2px]" />
+            <motion.div
+              className="h-[24px] relative border-[2px] overflow-hidden border-[#F8C200] bg-[#F8D61F] rounded-[12px] shadow-[0px_4px_0px_0px_rgba(255,255,255,0.50)_inset]"
+              animate={{
+                width: `${Big(SPIN_PROGRESS_BASE).plus(Big(spinUserData?.spin ?? 0).div(TOTAL_SPINS).times(Big(100).minus(SPIN_PROGRESS_BASE))).toFixed(2)}%`,
+              }}
+            >
+              <div className="w-full h-full rounded-[8px] bg-[#f8d621] translate-y-[2px]"></div>
+            </motion.div>
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-[linear-gradient(180deg,_#926D48_0%,_#221911_100%)] bg-clip-text [-webkit-text-fill-color: transparent] text-[20px] font-cherryBomb text-stroke-1-FFF4C2 font-[400] leading-[100%] text-center">
+              {spinUserData?.spin || 0} / {TOTAL_SPINS}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
-})
+});

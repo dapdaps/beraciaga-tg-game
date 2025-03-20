@@ -7,25 +7,12 @@ import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import { domToPng } from "modern-screenshot";
 import Skin from "./bear-svg/Skin";
-import { CLOTHES_MAPPING } from "@/components/BearDressup/mappings";
+import { CATEGORIES, Category, CATEGORY_NAMES } from "@/components/BearDressup/mappings";
 import Clothes from "@/components/BearDressup/Clothes";
 import { useGlobalUser } from "@/context/UserContext";
 
 
-type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'vehicle' | 'decoration' | 'glasses' | 'background';
 
-const CATEGORY_NAMES: Record<Category, string> = {
-  face: 'Face',
-  skin: 'Skin',
-  clothes: 'Clothes',
-  hat: 'Hat',
-  vehicle: 'Vehicle',
-  decoration: 'Decoration',
-  glasses: 'Glasses',
-  background: 'Background',
-};
-
-const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'decoration', 'vehicle', 'glasses', 'background'];
 
 const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category: Category; isUnlocked: boolean, userLooksFlattened?: any }) => {
   if (!isUnlocked) {
@@ -196,10 +183,10 @@ const BearControlModal = ({
           className="w-[34px] h-[34px]"
         />
       }
-      closeIconClassName="top-[-17px] -right-[8px]"
+      closeIconClassName="top-[-17px] !right-[-8px]"
     >
       <div className="bg-[url(/images/home/modal-box.png)] relative bg-contain bg-no-repeat w-[370px] h-[637px] px-2 pt-2">
-        <GradientBorderBox containerClassNames="min-h-[426px] w-full">
+        <GradientBorderBox containerClassNames="min-h-[426px] w-full pb-8">
           <CharacterCustomization userLooksFlattened={userLooksFlattened} />
         </GradientBorderBox>
         <div className="w-[240px] h-[280px] bg-white border-[2px] border-[#4B371F] absolute top-0 left-0 rotate-[-2deg] rounded-xl p-[6px] shadow-shadow1">
@@ -228,7 +215,7 @@ const BearControlModal = ({
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between mt-[18px]">
+        <div className="flex items-center justify-between mt-[30px]">
           <IconChangeLook onClick={() => {
             onChangeLook();
           }} />

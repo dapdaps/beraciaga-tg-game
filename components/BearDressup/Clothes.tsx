@@ -2,12 +2,13 @@ import { UserLookItem } from '@/apis/look';
 
 import { CLOTHES_MAPPING } from './mappings';
 import { LimitMinCarLevel } from './mappings';
+import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 
 const Clothes = ({
     clothesItem,
     vehicleItem
 }: {
-    clothesItem: UserLookItem,
+    clothesItem: UserLookItem | EquipmentItem,
     vehicleItem?: UserLookItem
 }) => {
 
