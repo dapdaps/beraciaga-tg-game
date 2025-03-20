@@ -1,15 +1,16 @@
 import { UserLookItem } from '@/apis/look';
 import { Category, HAT_MAPPING } from './mappings'
+import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 
 const Hat = ({
-    userLooks
+    item
 }: {
-    userLooks: Record<Category, UserLookItem>;
+    item: UserLookItem | EquipmentItem;
 }) => {
 
-    if (!userLooks || !userLooks.hat) return null;
+    if (!item) return null;
 
-    const HatComponent = HAT_MAPPING[userLooks?.hat?.look_id as keyof typeof HAT_MAPPING] || HAT_MAPPING.H_001;
+    const HatComponent = HAT_MAPPING[item?.look_id as keyof typeof HAT_MAPPING] || HAT_MAPPING.H_001;
 
     if (!HatComponent) return null
     

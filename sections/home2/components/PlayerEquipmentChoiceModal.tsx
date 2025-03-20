@@ -65,7 +65,7 @@ const PlayerEquipmentChoiceModal = ({
               <button
                 key={tab}
                 onClick={() => setActiveTab(CATEGORY_NAMES[tab])}
-                className={`relative px-[10px] text-center
+                className={`relative px-[10px] text-center z-10
                     rounded-t-[10px] border-x-[2px] border-t-[2px] border-[#E5C375] 
                     font-cherryBomb text-stroke-2 leading-4 text-white
                     ${
@@ -84,7 +84,7 @@ const PlayerEquipmentChoiceModal = ({
 
           {/* 内容区域 */}
           <div className="bg-[#FFF1C7] rounded-b-[10px] border-x-[2px] border-b-[2px] border-[#E5C375] h-[425px] overflow-x-hidden overflow-y-scroll">
-            <div className="px-[18px] pt-5">
+            <div className="px-[18px] pt-5 pb-5">
               <PlayerEquipmentList 
                 category={activeTab} 
                 onEquipmentChange={handleEquipmentChange}

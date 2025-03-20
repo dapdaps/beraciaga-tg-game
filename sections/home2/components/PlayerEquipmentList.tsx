@@ -2,10 +2,9 @@ import { getLookList } from '@/apis/look';
 import Empty from '@/components/Empty';
 import { useGlobalUser } from '@/context/UserContext';
 import React, { useEffect, useState } from 'react';
-import Clothes from '@/components/BearDressup/Clothes';
-import Hat from '@/components/BearDressup/Hat';
-import Vehicle from '@/components/BearDressup/Transportation';
 import clsx from 'clsx';
+import Loading from '@/components/Loading';
+import ItemImage from './item-image';
 
 interface IResponseItem {
   look_id: string;
@@ -91,6 +90,10 @@ const PlayerEquipmentList = ({
   }
   const filteredItems = equipmentItems.filter(item => item.category === category.toLowerCase());
 
+  if (loading) {
+    return <div className='w-full h-full flex justify-center mt-[50px]'><Loading circleColor='#DCC9B1' /></div>;
+  }
+
   if (filteredItems.length === 0) {
     return (
       <Empty desc="No more items" mt={80} />
@@ -106,39 +109,10 @@ const PlayerEquipmentList = ({
           >
             {/* Item Image Container */}
             <div className="relative">
-              {item.owned ? (
-                // Owned item container
-                <div className="relative w-[86px] h-[86px] rounded-xl border-2 border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center">
-                    {
-                      item.category === 'background' ? (<div className='bg-[#f99] w-full h-full'></div>)
-                       : (
-                        item.category === 'clothes' ?  (
-                        <div className='w-full h-full scale-[0.45] -translate-x-[50%] -translate-y-[100%]'>
-                          <Clothes clothesItem={item} vehicleItem={userLooksFlattened?.vehicle}  />
-                        </div>
-                       ) : (<img 
-                        src={item.image} 
-                        className="w-full h-full object-contain"
-                      />))
-                    }
-                </div>
-              ) : (
-                // Unowned item container (grayed out)
-                <div className="overflow-hidden w-[86px] h-[86px] rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center">
-                  {
-                    item.category === 'background' ? (<div className='bg-[#f99] w-full h-full opacity-10'></div>)
-                    : (
-                     item.category === 'clothes' ?  (
-                     <div className='w-full h-full scale-[0.45] -translate-x-[50%] -translate-y-[100%] opacity-10'>
-                       <Clothes clothesItem={item} vehicleItem={userLooksFlattened?.vehicle}  />
-                     </div>
-                    ) : (<img 
-                     src={item.image} 
-                     className="w-full h-full object-contain opacity-10"
-                   />))
-                 }
-                </div>
-              )}
+              <ItemImage 
+                item={item} 
+                vehicleItem={userLooksFlattened?.vehicle} 
+              />
               {/* Checkbox for owned items */}
               {item.owned && (
                 <button 
