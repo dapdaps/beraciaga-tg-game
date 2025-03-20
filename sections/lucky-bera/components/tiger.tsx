@@ -35,6 +35,7 @@ export default memo(function Tiger(props: any) {
     spinUserData,
     lastSpinResult,
     handleSpinResult,
+    toggleOutHoneyVisible,
   } = props;
 
   const toast = useToast();
@@ -231,7 +232,7 @@ export default memo(function Tiger(props: any) {
   const startWheelResultScroll: (params: any) => Promise<any> = (params) => new Promise((resolve) => {
     // calc wheel position
     const { code, category } = params.data;
-    const [leftCode, centerCode, rightCode] = code.split(",");
+    const [leftCode, centerCode, rightCode] = [code.slice(0, 1), code.slice(1, 2), code.slice(2)];
 
     const leftCategoryIndex = SpinCategories.findIndex((it) => it.code === leftCode);
     const centerCategoryIndex = SpinCategories.findIndex((it) => it.code === centerCode);
@@ -289,6 +290,11 @@ export default memo(function Tiger(props: any) {
   });
 
   const { run: handleSpin, loading: spinning } = useRequestByToken<any, any>(async () => {
+    if (!spinUserData?.spin) {
+      toggleOutHoneyVisible(true);
+      return;
+    }
+
     // start wheel scroll
     const animations = await startInfinityScroll();
 
@@ -510,9 +516,9 @@ export default memo(function Tiger(props: any) {
           <motion.button
             ref={spinRef}
             type="button"
-            disabled={spinning || !spinUserData?.spin}
+            disabled={spinning}
             className="w-[143px] h-[76px] bg-[url('/images/lucky-bera/spin-button.svg')] bg-no-repeat bg-center bg-contain disabled:opacity-50 disabled:cursor-not-allowed"
-            whileTap={spinning || !spinUserData?.spin ? {} : {
+            whileTap={spinning ? {} : {
               scaleY: 0.9,
             }}
             style={{
