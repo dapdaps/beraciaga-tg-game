@@ -15,6 +15,7 @@ export function useLuckyBera() {
   const { setLastSpinResult, lastSpinResult } = useLuckyBeraStore();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
+  const multipliers = Object.values(SpinMultiplier).filter(multiplier => typeof multiplier === "number");
 
   const [spinMultiplier, setSpinMultiplier] = useState<SpinMultiplier>(SpinMultiplier.X1);
 
@@ -22,7 +23,11 @@ export function useLuckyBera() {
     const res = await get("/api/spin/user", {
       tg_user_id: tgUserId,
     });
-    if (res.code !== 200) return {};
+    if (res.code !== 200) {
+      checkSpinMultiplier();
+      return {};
+    }
+    checkSpinMultiplier(res.data);
     return res.data;
   }, {
     manual: true,
@@ -46,7 +51,6 @@ export function useLuckyBera() {
 
   const toggleSpinMultiplier = () => {
     if (!spinUserData?.spin) return;
-    const multipliers = Object.values(SpinMultiplier).filter(multiplier => typeof multiplier === "number");
     let currIndex = multipliers.indexOf(spinMultiplier);
     let nextIndex = currIndex + 1;
     if (nextIndex >= multipliers.length - 1) nextIndex = 0;
@@ -54,6 +58,17 @@ export function useLuckyBera() {
       nextIndex = 0;
     }
     setSpinMultiplier(multipliers[nextIndex]);
+  };
+
+  const checkSpinMultiplier = (_spinUserData?: SpinUserData) => {
+    if (!_spinUserData?.spin) {
+      setSpinMultiplier(SpinMultiplier.X1);
+      return;
+    }
+    let currIndex = multipliers.indexOf(spinMultiplier);
+    if (multipliers[currIndex] > _spinUserData.spin) {
+      setSpinMultiplier(SpinMultiplier.X1);
+    }
   };
 
   useEffect(() => {
