@@ -4,11 +4,11 @@ import IconStand from "@public/svg/dressup/bears/stand.svg";
 import IconHead from "@public/svg/dressup/bears/head.svg";
 import {
   Category,
-  FACES_MAPPING,
   LimitMinCarLevel,
   SKINS_MAPPING,
 } from "./mappings";
 import { UserLookItem } from "@/apis/look";
+import Face from "./Face";
 
 interface BearProps {
   userLooks: Record<Category, UserLookItem>;
@@ -23,17 +23,11 @@ const Bear: React.FC<BearProps> = ({
 }) => {
   if (!userLooks || !userLooks.face) return null;
 
-  const FaceComponent =
-    FACES_MAPPING[userLooks?.face?.look_id as keyof typeof FACES_MAPPING] ||
-    FACES_MAPPING.F_001;
-
-
   const bearColor =
     SKINS_MAPPING[userLooks?.skin?.look_id as keyof typeof SKINS_MAPPING] ||
     SKINS_MAPPING.S_001;
 
   const level = userLooks.vehicle?.level || 0;
-
   const hasPassedLimitMinCarLevel = level >= LimitMinCarLevel;
 
   return (
@@ -62,19 +56,11 @@ const Bear: React.FC<BearProps> = ({
           style={
             {
               color: bearColor,
-              // '--ear-color': bearColor,
             } as React.CSSProperties
           }
         />
-
-        <g transform="translate(82,70)">
-          <FaceComponent
-            style={{
-              color: bearColor,
-              // '--eyebrow-color': bearColor.eyebrow,
-            }}
-          />
-        </g>
+        
+        <Face item={userLooks.face} bearColor={bearColor} />
       </svg>
     </g>
   );

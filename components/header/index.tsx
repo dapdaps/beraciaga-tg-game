@@ -5,7 +5,7 @@ import { CapsuleButton } from '@components/Button';
 import clsx from 'clsx';
 import HeaderAvatar from '@components/header/avatar';
 import Connect from './connect';
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import Big from 'big.js';
 import { numberFormatter } from '@/utils/number-formatter';
 import { useGlobalUser } from '@/context/UserContext';
@@ -15,8 +15,9 @@ import { motion } from 'framer-motion';
 const AppHeader = (props: any) => {
   const { className, isBack } = props;
 
-  const { userInfo, currentCoins, addSpeed = 0, levels } = useGlobalUser();
+  const { userInfo, currentCoins, addSpeed = 0 } = useGlobalUser();
   const router = useRouter();
+  const [openSetting, setOpenSetting] = useState(false);
 
   const speed = useMemo(() => {
     const start = 1;
@@ -25,7 +26,7 @@ const AppHeader = (props: any) => {
   }, [addSpeed]);
   
   if (!userInfo) return null;
-
+  
   return (
     <div className={clsx("flex items-center justify-between px-2 pt-2", className)}>
       {
@@ -43,7 +44,7 @@ const AppHeader = (props: any) => {
             <img src="/images/icon-page-back.svg" alt="" className="w-full h-full object-center object-contain" />
           </motion.button>
           ) : (
-          <HeaderAvatar level={userInfo.level} size={54} bgColor="#FFF5A8" />
+          <HeaderAvatar onClick={() => setOpenSetting(true)} level={userInfo.level} size={54} bgColor="#FFF5A8" />
         )
       }
       <CapsuleButton>
@@ -63,7 +64,7 @@ const AppHeader = (props: any) => {
           <span className='text-white text-stroke-2 font-cherryBomb font-[400]'>{userInfo?.stats?.gem || 0}</span>
         </div>
       </CapsuleButton>
-      <Connect />
+      <Connect open={openSetting} onClose={() => setOpenSetting(false)} />
     </div>
   );
 };

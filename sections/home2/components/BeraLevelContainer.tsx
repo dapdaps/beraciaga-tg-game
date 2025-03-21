@@ -5,6 +5,9 @@ import { Level } from "@/stores/useUserStore";
 import { numberFormatter } from "@/utils/number-formatter";
 import Big from "big.js";
 import { useGlobalUser } from "@/context/UserContext";
+import { postUpgrade } from "@/apis/look";
+import useToast from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const LevelContainer = ({
   children,
@@ -82,14 +85,37 @@ const BeraLevelContainer = () => {
   const {
     levels,
     userInfo,
-    currentCoins
+    currentCoins,
+    WebApp
   } = useGlobalUser();
+  
+  const router = useRouter();
+  const toast = useToast();
 
   if (!userInfo) return null;
 
   const updateLevelData = levels.find((level: any) => level.level === userInfo.level) as Level;
 
   const canUpgrade = Big(currentCoins || 0).gte(updateLevelData.upgrade_coins || 0);
+
+
+  const handleUpdate = async () => {
+    toast.dismiss();
+    if (true) {
+      try {
+        const data = await postUpgrade(WebApp.initData)
+        if (data.code === 200) {
+          toast.success({
+            title: 'Bera Upgrade success!'
+          });
+        }
+      } catch (error) {
+        console.log('handleUpdate', error);
+      }
+    } else {
+      router.push('/shop');
+    }
+  }
 
   return (
     <LevelContainer className="mx-auto pt-[0.5px]">
@@ -108,7 +134,7 @@ const BeraLevelContainer = () => {
         />
       </div>
       <div className="absolute right-0 top-0">
-        <BaseButton onClick={() => console.log(canUpgrade, '<====canUpgrade')}>
+        <BaseButton onClick={handleUpdate}>
           <div className="flex flex-col items-center">
             <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
             {numberFormatter(updateLevelData.upgrade_coins, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
@@ -119,6 +145,7 @@ const BeraLevelContainer = () => {
           </div>
         </BaseButton>
       </div>
+      {/* <OutOfGoldModal visible={true}/> */}
     </LevelContainer>
   );
 };

@@ -35,7 +35,7 @@ const PlayerEquipmentList = ({
 
   useEffect(() => {
     fetchAllEquipmentItems()
-  }, [category]);
+  }, []);
 
   useEffect(() => {
     if (allEquipmentItems.length > 0) {
@@ -75,7 +75,6 @@ const PlayerEquipmentList = ({
   };
 
   const fetchAllEquipmentItems = async () => {
-    if (!category) return;
     try {
       setLoading(true)
       const data = await getLookList()

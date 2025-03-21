@@ -75,13 +75,13 @@ const DressUpGame: React.FC<any> = (props) => {
             )
           }
         </motion.g>
-        {
+        {/* {
           userLooksFlattened?.vehicle && userLooksFlattened.vehicle.level >= 4 && (
-            <g id="Airflow">
+            <g id="Airflows">
               <Airflow />
             </g>
           )
-        }
+        } */}
       </svg>
     </div>
   );

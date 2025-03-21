@@ -19,7 +19,8 @@ export default memo(function Home() {
   const {
     user: { fetchLookUserProfile, getUserInfo, getLevels },
     userLooksItem,
-    startJourney
+    startJourney,
+    updater,
   } = useGlobalUser();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
@@ -49,6 +50,16 @@ export default memo(function Home() {
     if (!tgUserId) return;
     init();
   }, [tgUserId]);
+
+  useEffect(() => {
+    if (updater) {
+      Promise.all([
+        fetchLookUserProfile(),
+        getUserInfo(),
+        getLevels()
+      ]);
+    }
+  }, [updater]);
 
   const isInitTGUser = userLooksItem?.length === 0;
 

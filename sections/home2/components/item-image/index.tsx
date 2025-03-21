@@ -4,6 +4,7 @@ import Hat from '@/components/BearDressup/Hat';
 import Vehicle from '@/components/BearDressup/Transportation';
 import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 import clsx from 'clsx';
+import Face from '@/components/BearDressup/Face';
 
 interface ItemImageProps {
   item: EquipmentItem;
@@ -33,6 +34,11 @@ const categoryComponents = {
   vehicle: ({ item }: ItemImageProps) => (
     <ItemWrapper>
       <Vehicle item={item} />
+    </ItemWrapper>
+  ),
+  face: ({ item }: ItemImageProps) => (
+    <ItemWrapper className='!-translate-x-[20%]'>
+      <Face item={item} />
     </ItemWrapper>
   ),
   default: ({ item }: ItemImageProps) => (
