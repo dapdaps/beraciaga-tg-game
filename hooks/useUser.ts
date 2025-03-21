@@ -165,6 +165,7 @@ export function useUser() {
     userLooksItem,
     setUserLooksItem,
     fetchLookUserProfile,
-    tgUserId
+    tgUserId,
+    WebApp
   };
 }

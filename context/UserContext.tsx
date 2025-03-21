@@ -19,7 +19,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
     levels,
     userLooksItem = [],
     userInfo,
-    tgUserId
+    tgUserId,
+    WebApp
   } = user;
 
   const userLooksFlattened = userLooksItem?.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
@@ -46,7 +47,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
       userLooksItem,
       userInfo,
       userLooksFlattened,
-      tgUserId
+      tgUserId,
+      WebApp,
     }}>
       {children}
     </UserContext.Provider>

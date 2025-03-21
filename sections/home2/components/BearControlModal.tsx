@@ -5,14 +5,11 @@ import clsx from "clsx";
 
 import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
-import { domToPng } from "modern-screenshot";
+import html2canvas from "html2canvas";
 import Skin from "./bear-svg/Skin";
 import { CATEGORIES, Category, CATEGORY_NAMES } from "@/components/BearDressup/mappings";
 import Clothes from "@/components/BearDressup/Clothes";
 import { useGlobalUser } from "@/context/UserContext";
-
-
-
 
 const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category: Category; isUnlocked: boolean, userLooksFlattened?: any }) => {
   if (!isUnlocked) {
@@ -30,7 +27,7 @@ const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category:
   return (
     <div className="w-[96px] h-[106px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center">
       <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative">
-        {category === 'skin' && <Skin />}
+        {category === 'skin' && <Skin lookId={userLooksFlattened?.skin?.look_id} />}
         {category === 'face' && (
           <Bear
             showBody={false}
@@ -160,15 +157,21 @@ const BearControlModal = ({
     userInfo,
   } = useGlobalUser();
 
-  const handlePhoto = () => {
+  const handlePhoto = async () => {
     const element = document.querySelector("#beraRole");
     if (element) {
-      domToPng(element).then((dataUrl) => {
+      try {
+        const canvas = await html2canvas(element as HTMLElement, {
+          scale: 2, 
+        });
+        const dataUrl = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.download = "beraRole.png";
         link.href = dataUrl;
         link.click();
-      });
+      } catch (error) {
+        console.error("Failed to generate image:", error);
+      }
     }
   };
 
@@ -201,7 +204,7 @@ const BearControlModal = ({
                 id="beraRole"
                 className="bg-[#FFF5A8] w-full h-full flex justify-center items-center"
               >
-                <div className="w-full h-full scale-[0.6] translate-x-[-30px] translate-y-[-40px]">
+                <div className="w-full h-full scale-[0.6] translate-x-[-20px] translate-y-[-40px]">
                   <BearDressup />
                 </div>
               </div>

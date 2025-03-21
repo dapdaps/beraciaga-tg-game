@@ -15,7 +15,7 @@ const Hat = ({
     if (!HatComponent) return null
     
     return (
-        <g id="hat">
+        <g>
           <HatComponent />
         </g>
     )

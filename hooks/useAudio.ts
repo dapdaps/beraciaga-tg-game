@@ -1,3 +1,4 @@
+import { useAudioStore } from '@/stores/useAudioStore';
 import { useEffect, useRef, useState } from 'react';
 
 interface UseAudioProps {
@@ -11,7 +12,8 @@ export const useAudio = ({ src, volume = 1, preload = true }: UseAudioProps) => 
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
+  const store = useAudioStore()
+  
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
@@ -57,8 +59,9 @@ export const useAudio = ({ src, volume = 1, preload = true }: UseAudioProps) => 
 
 
   const play = async () => {
-
     if (!audioContextRef.current) return;
+    
+    if (store.isMuted) return;
 
     if (!audioBuffer && !isLoading) {
       await loadAudio();

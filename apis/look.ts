@@ -40,7 +40,7 @@ export const startLook = async (params: any) =>
     tg_user_id: `${params}`,
   });
 
-export const useLook = async ({
+export const postLook = async ({
   look_ids,
   tg_user_id,
 }: {
@@ -62,4 +62,9 @@ export const getUserLookList = async ({
   await get("/api/look/user", {
     tg_user_id,
     use,
+  });
+
+export const postUpgrade = async (beraciagaTgToken: string): Promise<any> =>
+  await post(`/api/user/upgrade?beraciagaTgToken=${encodeURIComponent(beraciagaTgToken)}`, {
+    beraciagaTgToken,
   });

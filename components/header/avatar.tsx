@@ -3,15 +3,16 @@ import clsx from 'clsx';
 import BearDressup from '@/components/BearDressup';
 
 const HeaderAvatar: React.FC<any> = (props) => {
-  const { className, isLevel = true, size = 54, bgColor = '#ECC4BA', level = 1 } = props;
+  const { className, isLevel = true, size = 54, bgColor = '#ECC4BA', level = 1, onClick } = props;
 
   return (
     <div
-      className={clsx("relative rounded-[16px] border-[2px] border-[#4B371F] bg-[#947242] p-[0_0_5px]", className)}
+      className={clsx("relative z-10 rounded-[16px] border-[2px] border-[#4B371F] bg-[#947242] p-[0_0_5px]", className)}
       style={{
         width: size,
         height: size,
       }}
+      onClick={onClick}
     >
       <div className="w-full h-full rounded-[14px] border-[2px] border-[#FFF5DB] bg-[#dcb988] p-[2px]">
         <div

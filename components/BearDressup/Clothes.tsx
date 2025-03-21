@@ -20,7 +20,7 @@ const Clothes = ({
         const ClothesComponent = (CLOTHES_MAPPING as any).stand[clothesItem.look_id as any];
         if (!ClothesComponent) return null
         return (
-            <g id="Clothes">
+            <g>
                 <ClothesComponent />
             </g>
         )
@@ -30,7 +30,7 @@ const Clothes = ({
     if (!ClothesComponent) return null
 
     return (
-        <g id="Clothes">
+        <g>
             <ClothesComponent />
         </g>
     )
