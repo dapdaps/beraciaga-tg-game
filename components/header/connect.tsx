@@ -29,7 +29,7 @@ const Connect = ({
             <div className="w-[220px] h-[227px] bg-[#FFFAEA] border-2 border-[#D7C69D] rounded-2xl">
                 <div className="w-full h-full relative p-2">
                     <div className="flex items-center gap-2">
-                        <img src={userData.photo_url || '/svg/okx.svg'} className="w-[36px] h-[36px] rounded-full" alt="" />
+                        <img src={userData?.photo_url || '/svg/okx.svg'} className="w-[36px] h-[36px] rounded-full" alt="" />
                         <div className="font-cherryBomb text-[26px] leading-[26px] text-white text-stroke-2">@{userData.username}</div>
                     </div>
                     <svg className="mt-3" width="204" height="2" viewBox="0 0 204 2" fill="none" xmlns="http://www.w3.org/2000/svg">
