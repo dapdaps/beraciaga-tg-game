@@ -20,6 +20,7 @@ const MainScene = () => {
           <img src="/images/home/rank.png" onClick={() => router.push('/rank')} className='w-[30px] h-[30px] mr-3' alt="" />
         </div>
         <DropCoins />
+        <img src="/images/raffle/entry-raffle.png" onClick={() => router.push('/raffle')} className='w-[90px] h-[90px] absolute top-[20%] left-0' alt="" />
         <div className='absolute left-[15%] bottom-[20%]'>
             <BearDressup onClick={() => setOpenBearControlModal(true)} />
         </div>
