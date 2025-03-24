@@ -34,7 +34,7 @@ const categoryComponents = {
     </ItemWrapper>
   ),
   vehicle: ({ item }: ItemImageProps) => (
-    <ItemWrapper>
+    <ItemWrapper className='!scale-[0.2] !-translate-y-[60%] !-translate-x-[32%]'>
       <Vehicle item={item} />
     </ItemWrapper>
   ),
