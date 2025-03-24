@@ -1,5 +1,5 @@
 import { UserLookItem } from '@/apis/look';
-import { Category, HAT_MAPPING } from './mappings'
+import { HAT_MAPPING } from './mappings'
 import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 
 const Hat = ({

@@ -10,6 +10,8 @@ import Transportation from "@/components/BearDressup/Transportation";
 import Airflow from './Airflows'
 import clsx from 'clsx';
 import { useGlobalUser } from '@/context/UserContext';
+import Glasses from './Glasses';
+import Necklace from './Necklace';
 
 const DressUpGame: React.FC<any> = (props) => {
   const { className, style, onClick } = props;
@@ -68,6 +70,16 @@ const DressUpGame: React.FC<any> = (props) => {
             )
           }
           {
+            userLooksFlattened?.necklace && (
+              <Necklace item={userLooksFlattened?.necklace} />
+            )
+          }
+          {
+            userLooksFlattened?.glasses && (
+              <Glasses item={userLooksFlattened?.glasses} />
+            )
+          }
+          {
             userLooksFlattened?.vehicle && (
               <Transportation 
                 item={userLooksFlattened}
@@ -75,13 +87,13 @@ const DressUpGame: React.FC<any> = (props) => {
             )
           }
         </motion.g>
-        {/* {
+        {
           userLooksFlattened?.vehicle && userLooksFlattened.vehicle.level >= 4 && (
             <g id="Airflows">
               <Airflow />
             </g>
           )
-        } */}
+        }
       </svg>
     </div>
   );

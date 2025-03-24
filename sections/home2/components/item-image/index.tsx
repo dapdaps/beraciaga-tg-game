@@ -5,6 +5,8 @@ import Vehicle from '@/components/BearDressup/Transportation';
 import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 import clsx from 'clsx';
 import Face from '@/components/BearDressup/Face';
+import Glasses from '@/components/BearDressup/Glasses';
+import Necklace from '@/components/BearDressup/Necklace';
 
 interface ItemImageProps {
   item: EquipmentItem;
@@ -39,6 +41,16 @@ const categoryComponents = {
   face: ({ item }: ItemImageProps) => (
     <ItemWrapper className='!-translate-x-[20%]'>
       <Face item={item} />
+    </ItemWrapper>
+  ),
+  glasses: ({ item }: ItemImageProps) => (
+    <ItemWrapper className='!-translate-y-[40%] !-translate-x-[60%]'>
+      <Glasses item={item} />
+    </ItemWrapper>
+  ),
+  necklace: ({ item }: ItemImageProps) => (
+    <ItemWrapper className='!-translate-y-[80%] !-translate-x-[60%]'>
+      <Necklace item={item} />
     </ItemWrapper>
   ),
   default: ({ item }: ItemImageProps) => (

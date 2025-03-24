@@ -5,6 +5,7 @@ import { BACKGROUNDS_MAPPING } from './backgrounds';
 import { SKINS_MAPPING } from './skins';
 import { HAT_MAPPING } from './hats';
 import { NECKLACES_MAPPING } from './necklaces';
+import { GLASSES_MAPPING } from './glasses';
 
 export {
     CLOTHES_MAPPING,
@@ -14,9 +15,10 @@ export {
     SKINS_MAPPING,
     HAT_MAPPING,
     NECKLACES_MAPPING,
+    GLASSES_MAPPING
 }
 
-export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'vehicle' | 'decoration' | 'glasses' | 'background';
+export type Category = 'face' | 'skin' | 'clothes' | 'hat' | 'vehicle' | 'necklace' | 'glasses' | 'background';
 
 export const CATEGORY_NAMES: Record<Category, string> = {
   face: 'Face',
@@ -24,12 +26,12 @@ export const CATEGORY_NAMES: Record<Category, string> = {
   clothes: 'Clothes',
   hat: 'Hat',
   vehicle: 'Vehicle',
-  decoration: 'Decoration',
+  necklace: 'Necklace',
   glasses: 'Glasses',
   background: 'Background',
 };
 
-export const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'decoration', 'vehicle', 'glasses', 'background'];
+export const CATEGORIES: Category[] = ['skin', 'face', 'clothes', 'hat', 'necklace', 'vehicle', 'glasses', 'background'];
 
 
 /* 
