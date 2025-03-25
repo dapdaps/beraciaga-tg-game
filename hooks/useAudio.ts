@@ -59,9 +59,8 @@ export const useAudio = ({ src, volume = 1, preload = true }: UseAudioProps) => 
 
 
   const play = async () => {
+
     if (!audioContextRef.current) return;
-    
-    if (store.isMuted) return;
 
     if (!audioBuffer && !isLoading) {
       await loadAudio();

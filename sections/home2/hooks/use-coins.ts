@@ -124,7 +124,7 @@ export function useCoins(options?: { debug?: boolean }) {
 
   const { play: playSound } = useAudio({
     src: '/audios/coin.mp3',
-    volume: 0.5
+    volume: 0.3
   });
 
   const handleCollected = useCallback((id: number) => {

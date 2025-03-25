@@ -3,6 +3,7 @@ import Modal from "../modal"
 import { useState } from "react"
 import { UserData } from "@/hooks/useLogin";
 import { useAudioStore } from "@/stores/useAudioStore";
+import { useRingStore } from "@/stores/useRingStore";
 
 const Connect = ({
     open,
@@ -12,16 +13,17 @@ const Connect = ({
     onClose: () => void;
 }) => {
     const { WebApp } = useGlobalUser();
+    const ringStore = useRingStore();
+
 
     const userData: UserData = WebApp?.initDataUnsafe?.user;
 
-    const [isSoundOn, setIsSoundOn] = useState(true)
+    const [isSoundOn, setIsSoundOn] = useState(ringStore.open)
 
-    const store = useAudioStore()
     
     const handleSwitchIsMuteMusic = () => {
         setIsSoundOn(!isSoundOn)
-        store.set({ isMuted: !isSoundOn })
+        ringStore.setOpen(!isSoundOn)
     }
     
     if (!userData) return null
