@@ -61,7 +61,7 @@ export default memo(function Home() {
     }
   }, [updater]);
 
-  const isInitTGUser = userLooksItem?.length === 0;
+  const isInitTGUser = !userLooksItem || userLooksItem?.length === 0;
 
   return (
     <Suspense fallback={<LoadingScene />}>
