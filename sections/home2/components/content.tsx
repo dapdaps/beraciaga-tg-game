@@ -6,9 +6,10 @@ import RingButton from '@components/Ring';
 import { useEffect, useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
 import IconButtonGetBera from '@public/svg/button-get-bera.svg'
-import { startLook } from '@/apis/look';
+import { startLook, UserLookItem } from '@/apis/look';
 import StartBeraModal from './StartBeraModal';
 import { useGlobalUser } from '@/context/UserContext';
+import { Category } from '@/components/BearDressup/mappings';
 
 
 const calcScale = (viewportHeight: number) => {
@@ -24,6 +25,7 @@ const Content = () => {
   const { WebApp } = useTelegram();
 
   const { setVisibleStartBera } = useGlobalUser();
+  const [userLooksItem ,setUserLooksItem] = useState<any>();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
 
@@ -39,9 +41,17 @@ const Content = () => {
   const handleGetBera = async () => {
     try {
       const data = await startLook(tgUserId);
-      console.log(data, '---data------data------data---');
       if (data.code === 200) { 
-        setVisibleStartBera(true)
+        setVisibleStartBera(true);
+        
+        if (data.data && Array.isArray(data.data)) {
+          const flattenedLooks = data.data.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
+            const itemWithUse = { ...item, use: true };
+            acc[item.category] = itemWithUse;
+            return acc;
+          }, {} as Record<Category, UserLookItem>);
+          setUserLooksItem(flattenedLooks);
+        }
       }
     } catch (error) {
       console.error('handleGetBera ========>', error);
@@ -72,7 +82,7 @@ const Content = () => {
           </div>
           <Speed />
           <Reward />
-          <StartBeraModal  />
+          <StartBeraModal userLooks={userLooksItem} />
         </div>
       </div>
     </div>

@@ -33,6 +33,10 @@ export function useUser() {
     setAddSpeed,
     userLooksItem,
     setUserLooksItem,
+    startJourney, 
+    setStartJourney,
+    visibleStartBera,
+    setVisibleStartBera,
   } = useUserStore();
 
   const tgUserId = WebApp?.initDataUnsafe?.user?.id;
@@ -166,6 +170,10 @@ export function useUser() {
     setUserLooksItem,
     fetchLookUserProfile,
     tgUserId,
-    WebApp
+    WebApp,
+    startJourney, 
+    setStartJourney,
+    visibleStartBera,
+    setVisibleStartBera,
   };
 }

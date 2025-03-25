@@ -33,6 +33,12 @@ type UserState = {
   userLooksItem: UserLookItem[];
   setUserLooksItem: (list: UserLookItem[]) => void;
 
+  visibleStartBera: boolean;
+  setVisibleStartBera: (visible: boolean) => void;
+
+  startJourney: boolean;
+  setStartJourney: (start: boolean) => void;
+
   initData: string;
   setInitData: (data: string) => void;
 };
@@ -73,6 +79,12 @@ export const useUserStore = create(
     userLooksItem: [],
     setUserLooksItem: (list) => set({ userLooksItem: list }),
 
+    visibleStartBera: false,
+    setVisibleStartBera: (visible) => set({ visibleStartBera: visible }),
+
+    startJourney: false,
+    setStartJourney: (start) => set({ startJourney: start }),
+
     initData: "",
     setInitData: (data) => set({ initData: data }),
   }), {
@@ -80,7 +92,11 @@ export const useUserStore = create(
     version: 0.1,
     storage: createJSONStorage(() => sessionStorage),
     partialize: (state) => {
-      return ({ initData: state.initData } as any);
+      return ({ 
+        initData: state.initData,
+        startJourney: state.startJourney,
+        visibleStartBera: state.visibleStartBera,
+      } as any);
     }
   })
 );

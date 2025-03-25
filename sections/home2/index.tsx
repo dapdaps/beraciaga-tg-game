@@ -61,14 +61,14 @@ export default memo(function Home() {
     }
   }, [updater]);
 
-  const isInitTGUser = !userLooksItem || userLooksItem?.length === 0;
-
   return (
     <Suspense fallback={<LoadingScene />}>
       {isLoading ? (
         <LoadingScene />
+      ) : userLooksItem?.length > 0 ? (
+        <MainScene />
       ) : (
-        (isInitTGUser && !startJourney) ? <InitScene /> : <MainScene />
+        !startJourney ? <InitScene /> : <MainScene />
       )}
     </Suspense>
   );

@@ -11,16 +11,20 @@ const UserContext = createContext<any>({});
 export function UserProvider({ children }: { children: ReactNode }) {
   const { coins, currentCoins, handleCollected, addSpeed } = useCoins({ debug: DEBUG_MODE });
   const [updater, setUpdater] = useState(0);
-  const [visibleStartBera, setVisibleStartBera] = useState(false);
-  const [startJourney, setStartJourney] = useState(false);
+
   
   const user = useUser();
   const {
     levels,
     userLooksItem = [],
+    setUserLooksItem,
     userInfo,
     tgUserId,
-    WebApp
+    WebApp,
+    visibleStartBera, 
+    setVisibleStartBera,
+    startJourney, 
+    setStartJourney
   } = user;
 
   const userLooksFlattened = userLooksItem?.reduce((acc: Record<Category, UserLookItem>, item: UserLookItem) => {
@@ -45,6 +49,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       startJourney,
       setStartJourney,
       userLooksItem,
+      setUserLooksItem,
       userInfo,
       userLooksFlattened,
       tgUserId,

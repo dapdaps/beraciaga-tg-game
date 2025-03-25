@@ -75,7 +75,6 @@ const preloadNextComponent = async () => {
 
 // 组件管理器
 const DressupManager: React.FC<DressupManagerProps> = ({ type, props, isVisible, priority = false }) => {
-  console.log(type, 'type')
   const [hasLoaded, setHasLoaded] = useState(loadedComponents.has(type));
   
   useEffect(() => {

@@ -4,9 +4,15 @@ import { useGameState } from "@/components/BearDressup/useGameState";
 import Bear from "@/components/BearDressup/Bear";
 import { useContext } from "react";
 import { useGlobalUser } from "@/context/UserContext";
+import { Category } from "@/components/BearDressup/mappings";
+import { UserLookItem } from "@/apis/look";
 
-const StartBeraModal = () => {
-  const { setStartJourney, visibleStartBera, setVisibleStartBera, userLooksFlattened } = useGlobalUser();
+const StartBeraModal = ({
+  userLooks
+}: {
+  userLooks: Record<Category, UserLookItem>;
+}) => {
+  const { setStartJourney, visibleStartBera, setVisibleStartBera, setUpdater } = useGlobalUser();
 
   return (
     <Modal open={visibleStartBera} onClose={() => setVisibleStartBera(false)} isShowCloseIcon={false}>
@@ -18,7 +24,7 @@ const StartBeraModal = () => {
         />
         <img src="/svg/modal-line.svg" className="w-[2px] h-[280px] absolute top-[106px] left-[180px] z-[5]" alt="" />
         <div className="absolute top-[86px] left-[60px] z-0 scale-[0.895]">
-          <Bear userLooks={userLooksFlattened} />
+          <Bear userLooks={userLooks} />
         </div>
       </div>
       <img
@@ -28,6 +34,7 @@ const StartBeraModal = () => {
         onClick={() => {
           setVisibleStartBera(false)
           setStartJourney(true)
+          setUpdater((prev) => prev + 1)
         }}
       />
     </Modal>
