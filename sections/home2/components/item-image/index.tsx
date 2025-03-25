@@ -89,23 +89,19 @@ const ItemImage: React.FC<ItemImageProps> = ({ item, vehicleItem }) => {
     ? "relative w-[86px] h-[86px] rounded-xl border-2 border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center"
     : "overflow-hidden w-[86px] h-[86px] rounded-xl border-2 border-dashed border-gray-300 bg-gray-100 flex items-center justify-center";
 
-  // 渲染基于类别的内容
   const renderContent = () => {
     const category = item.category as string;
     const config = categoryConfigs[category as keyof typeof categoryConfigs];
     
-    // 如果没有配置，使用默认图片
     if (!config) {
       return <DefaultImage item={item} />;
     }
     
-    // 如果是简单组件（如背景），直接渲染
     if ('component' in config) {
       const Component = config.component;
       return <Component />;
     }
     
-    // 否则使用DressupManager按需加载
     return (
       <ItemWrapper className={config.className}>
         <DressupManager 

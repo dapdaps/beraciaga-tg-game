@@ -19,7 +19,7 @@ const DEBUG_MODE = process.env.NODE_ENV === 'development';
 const initDataUnsafeList: any = {
   user1: {
     user: {
-      "id": 6651749542,
+      "id": 5514282060,
       "first_name": "Yyy",
       "last_name": "",
       "username": "snwyzqaq",

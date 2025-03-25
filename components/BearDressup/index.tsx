@@ -6,7 +6,7 @@ import Clothes from "@/components/BearDressup/Clothes";
 
 import { Category } from "@/components/BearDressup/mappings";
 
-import Transportation from "@/components/BearDressup/Transportation";
+import Transportation from "@/components/BearDressup/Vehicle";
 import Airflow from './Airflows'
 import clsx from 'clsx';
 import { useGlobalUser } from '@/context/UserContext';

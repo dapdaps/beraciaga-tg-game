@@ -1,3 +1,4 @@
+'use client'
 import React, { lazy, Suspense, useState, useEffect, useCallback } from 'react';
 
 const LazyClothes = lazy(() => import('./Clothes').then(module => ({ 
@@ -6,7 +7,7 @@ const LazyClothes = lazy(() => import('./Clothes').then(module => ({
 const LazyHat = lazy(() => import('./Hat').then(module => ({ 
   default: module.default 
 })));
-const LazyVehicle = lazy(() => import('./Transportation').then(module => ({ 
+const LazyVehicle = lazy(() => import('./Vehicle').then(module => ({ 
   default: module.default 
 })));
 const LazyFace = lazy(() => import('./Face').then(module => ({ 
