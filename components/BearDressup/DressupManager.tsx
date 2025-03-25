@@ -57,7 +57,7 @@ const preloadNextComponent = async () => {
   
   if (nextType && !loadedComponents.has(nextType) && componentMap[nextType as keyof typeof componentMap]) {
     try {
-      await import(`./components/${nextType.charAt(0).toUpperCase() + nextType.slice(1)}`);
+      await import(`@/components/BearDressup/${nextType.charAt(0).toUpperCase() + nextType.slice(1)}`);
       loadedComponents.add(nextType);
     } catch (error) {
       console.error(`Failed to preload ${nextType}:`, error);
@@ -74,6 +74,7 @@ const preloadNextComponent = async () => {
 
 // 组件管理器
 const DressupManager: React.FC<DressupManagerProps> = ({ type, props, isVisible, priority = false }) => {
+  console.log(type, 'type')
   const [hasLoaded, setHasLoaded] = useState(loadedComponents.has(type));
   
   useEffect(() => {
