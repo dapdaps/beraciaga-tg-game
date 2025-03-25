@@ -3,7 +3,6 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     experimental: {
-      optimizeCss: true,
       optimizePackageImports: ['@/components/BearDressup'],
       largePageDataBytes: 128 * 1000,
     },
