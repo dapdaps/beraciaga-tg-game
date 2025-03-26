@@ -101,7 +101,7 @@ const BeraLevelContainer = () => {
 
   const handleUpdate = async () => {
     toast.dismiss();
-    if (true) {
+    if (canUpgrade) {
       try {
         const data = await postUpgrade(WebApp.initData)
         if (data.code === 200) {

@@ -35,7 +35,7 @@ const BindView = () => {
       if (!isLoggedIn) return;
       
       if (hasBound) {
-        router.replace('/home');
+        router.replace('/');
         return;
       }
 

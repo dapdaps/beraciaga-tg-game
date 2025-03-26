@@ -160,10 +160,10 @@ const ImportedEquipmentsView = () => {
             disabled={userInfoLoading}
             className="w-full flex-shrink-0 bg-[#FFD335] rounded-2xl h-[52px] leading-[52px] text-black text-center font-montserrat font-[700] disabled:opacity-30 disabled:!cursor-not-allowed"
             onClick={() => {
-              if (search.get('from') !== 'home' && userInfo?.bind_source === 'okx_invite') {
+              if (search.get('from') !== '/' && userInfo?.bind_source === 'okx_invite') {
                 setCongratsModalVisible(true);
               }
-              router.push('/home');
+              router.push('/');
             }}
           >
             {userInfoLoading ? <Loading /> : 'Beraciaga Now'}
