@@ -9,7 +9,7 @@ interface RingStore {
 export const useRingStore = create(
   persist<RingStore>(
     (set) => ({
-      open: true,
+      open: false,
       setOpen: (open) => {
         set(() => ({ open }));
       },

@@ -44,7 +44,8 @@ const AppHeader = (props: any) => {
             <img src="/images/icon-page-back.svg" alt="" className="w-full h-full object-center object-contain" />
           </motion.button>
           ) : (
-          <HeaderAvatar onClick={() => setOpenSetting(true)} level={userInfo.level} size={54} bgColor="#FFF5A8" />
+          // <HeaderAvatar onClick={() => setOpenSetting(true)} level={userInfo.level} size={54} bgColor="#FFF5A8" />
+          <HeaderAvatar level={userInfo.level} size={54} bgColor="#FFF5A8" />
         )
       }
       <CapsuleButton>
