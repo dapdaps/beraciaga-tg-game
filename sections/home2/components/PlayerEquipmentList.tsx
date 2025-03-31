@@ -52,15 +52,8 @@ const PlayerEquipmentList = ({
           image: `/api/placeholder/86/86`,
         };
       });
-    // 添加模拟的背景装备数据
-    const mockBackgroundItems = [
-      { look_id: 'B_001', level: 1, category: 'background', },
-      { look_id: 'B_002', level: 2, category: 'background', },
-      { look_id: 'B_003', level: 3, category: 'background', },
-      { look_id: 'B_004', level: 4, category: 'background', },
-      { look_id: 'B_005', level: 5, category: 'background', },
-    ];
-      setEquipmentItems([...processedItems, ...mockBackgroundItems]);
+
+      setEquipmentItems(processedItems);
     }
   }, [allEquipmentItems, userLooksItem]);
 
