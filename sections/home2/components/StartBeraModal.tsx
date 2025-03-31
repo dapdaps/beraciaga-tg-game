@@ -34,7 +34,7 @@ const StartBeraModal = ({
         onClick={() => {
           setVisibleStartBera(false)
           setStartJourney(true)
-          setUpdater((prev) => prev + 1)
+          setUpdater((prev: any) => prev + 1)
         }}
       />
     </Modal>
