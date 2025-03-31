@@ -4,33 +4,55 @@ import BearDressup from "@/components/BearDressup";
 import BeraLevelContainer from "./BeraLevelContainer";
 import { useRouter } from "next/navigation";
 import BearControlModal from "./BearControlModal";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import PlayerEquipmentChoiceModal from "./PlayerEquipmentChoiceModal";
+import HomeBg from '@/sections/home/components/bg';
+import { useGlobalUser } from "@/context/UserContext";
 
 const MainScene = () => {
   const router = useRouter();
   const [openBearControlModal, setOpenBearControlModal] = useState(false);
   const [changeLook, setChangeLook] = useState(false);
+  const { userInfo } = useGlobalUser();
+  const bgRef = useRef(null);
 
+  const userLevel = userInfo?.level || 1;
+  
+  const contentElement = (
+    <>
+      <AppHeader />
+      <div className='flex mt-3 justify-between relative z-30'>
+        <img src="/images/home/lottery.png" onClick={() => router.push('/lucky-bera')} className='w-[90px] h-[90px]' alt="" />
+        <img src="/images/home/rank.png" onClick={() => router.push('/rank')} className='w-[30px] h-[30px] mr-3' alt="" />
+      </div>
+      <DropCoins />
+      <img src="/images/raffle/entry-raffle.png" onClick={() => router.push('/raffle')} className='w-[90px] h-[90px] absolute top-[25%] left-0' alt="" />
+      <div className='absolute left-[15%] bottom-[20%]'>
+        <BearDressup onClick={() => setOpenBearControlModal(true)} />
+      </div>
+      <div className='w-full mx-auto absolute bottom-[90px]'>
+        <BeraLevelContainer />
+      </div>
+      <BearControlModal onChangeLook={() => setChangeLook(true)} show={openBearControlModal} onClose={() => setOpenBearControlModal(false)} />
+      <PlayerEquipmentChoiceModal onClose={() => setChangeLook(false)} show={changeLook} />
+    </>
+  );
+  
+  if (userLevel <= 1) {
     return (
       <div className='w-[100vw] relative h-[100dvh] bg-[url(/images/role/TG-phone.png)] bg-no-repeat bg-cover bg-center'>
-        <AppHeader />
-        <div className='flex mt-3 justify-between relative z-30'>
-          <img src="/images/home/lottery.png" onClick={() => router.push('/lucky-bera')} className='w-[90px] h-[90px]' alt="" />
-          <img src="/images/home/rank.png" onClick={() => router.push('/rank')} className='w-[30px] h-[30px] mr-3' alt="" />
-        </div>
-        <DropCoins />
-        <img src="/images/raffle/entry-raffle.png" onClick={() => router.push('/raffle')} className='w-[90px] h-[90px] absolute top-[25%] left-0' alt="" />
-        <div className='absolute left-[15%] bottom-[20%]'>
-            <BearDressup onClick={() => setOpenBearControlModal(true)} />
-        </div>
-        <div className='w-full mx-auto absolute bottom-[90px]'>
-          <BeraLevelContainer />
-        </div>
-        <BearControlModal onChangeLook={() => setChangeLook(true)} show={openBearControlModal} onClose={() => setOpenBearControlModal(false) }/>
-        <PlayerEquipmentChoiceModal onClose={() => setChangeLook(false)} show={changeLook} />
-    </div>
-    )
+        {contentElement}
+      </div>
+    );
   }
+  
+  return (
+    <HomeBg ref={bgRef} onSceneComplete={() => {}} speed={1}>
+      <div className='relative h-full w-full'>
+        {contentElement}
+      </div>
+    </HomeBg>
+  );
+};
 
 export default MainScene;

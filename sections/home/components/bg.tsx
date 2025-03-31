@@ -1,18 +1,33 @@
 'use client';
 
 import Scene from '@/sections/home/components/scene';
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
 import { useThrottleFn } from 'ahooks';
-import { SceneItem, SceneList, SwitchSceneDuration } from '@/sections/home/components/types';
+import { SceneItem, SceneList, SwitchSceneDuration, Scenes } from '@/sections/home/components/types';
+import { useGlobalUser } from '@/context/UserContext';
+
+const getLevelScene = (level: number): SceneItem => {
+  const sceneKeys = Object.keys(SceneList) as Scenes[];
+  const index = Math.min(Math.max(level - 1, 0), sceneKeys.length - 1);
+  return SceneList[sceneKeys[index]];
+};
 
 const HomeBg = forwardRef<any, any>((props, ref) => {
-  const { children, onSceneComplete, speed } = props;
-
-  const [currentScene, setCurrentScene] = useState<SceneItem | undefined>(SceneList.Desert);
+  const { children, onSceneComplete = () => {}, speed } = props;
+  const { userInfo } = useGlobalUser();
+  const userLevel = userInfo?.level || 1;
+  
+  const [currentScene, setCurrentScene] = useState<SceneItem | undefined>(getLevelScene(userLevel));
   const [currentSceneIndex, setCurrentSceneIndex] = useState<any>(1);
   const [nextScene, setNextScene] = useState<SceneItem | undefined>();
   const [nextSceneIndex, setNextSceneIndex] = useState<any>(1);
   const [firstScene, setFirstScene] = useState(true);
+
+  useEffect(() => {
+    if (userLevel) {
+      setCurrentScene(getLevelScene(userLevel));
+    }
+  }, [userLevel]);
 
   const { run: handleNextScene } = useThrottleFn((scene: SceneItem) => {
     if (currentScene) {
