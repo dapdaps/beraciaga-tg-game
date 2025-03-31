@@ -151,6 +151,7 @@ export function useCoins(options?: { debug?: boolean }) {
     setLatestCoins(_latestCoins);
     setCurrentCoins(_latestCoins);
 
+    // 修改这里：初始化只生成一个金币
     const createInterval = () => {
       if (coins.length >= MAX_COINS) return;
 
@@ -169,9 +170,13 @@ export function useCoins(options?: { debug?: boolean }) {
       clearInterval(coinTimer.current);
     }
 
+    // 设置定时器
     coinTimer.current = setInterval(createInterval, coins_duration * 1000);
 
-    createInterval();
+    // 初始化只调用一次，只生成一个金币
+    if (coins.length === 0) {
+      createInterval();
+    }
 
     const visibilityEvent = () => {
       const isHidden = document.hidden || document.visibilityState === 'hidden';
@@ -236,6 +241,10 @@ export function useCoins(options?: { debug?: boolean }) {
     }
 
     coinTimer.current = setInterval(createInterval, coins_duration * 1000);
+
+    if (coins.length === 0) {
+      createInterval();
+    }
 
     const visibilityEvent = () => {
       const isHidden = document.hidden || document.visibilityState === 'hidden';

@@ -1,6 +1,5 @@
 import { UserLookItem } from '@/apis/look';
-import { CLOTHES_MAPPING } from './mappings';
-import { LimitMinCarLevel } from './mappings';
+import { CLOTHES_MAPPING, LimitMinCarLevel } from './mappings';
 import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 
 const Clothes = ({
