@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { EquipmentItem } from '@/sections/home2/components/PlayerEquipmentList';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
+import { BACKGROUNDS_MAPPING } from '@/components/BearDressup/mappings';
 
-// 动态导入 DressupManager
 const DressupManager = dynamic(
   () => import('@/components/BearDressup/DressupManager'),
   { ssr: false, loading: () => <div className="w-full h-full flex justify-center items-center">加载中...</div> }
@@ -20,20 +20,24 @@ const ItemWrapper: React.FC<{ children: React.ReactNode, className?: string }> =
   </div>
 );
 
-// 基本背景组件 - 不需要懒加载
-const Background = () => (
-  <div className="bg-[#f99] w-full h-full" />
-);
+const Background: React.FC<{ item: EquipmentItem }> = ({ item }) => {
+  const bgId = BACKGROUNDS_MAPPING[item.look_id as keyof typeof BACKGROUNDS_MAPPING];
+  console.log('Background ID:', bgId);
+  if (!bgId) return null;
+  const bg = `bg-[${bgId}]`;
+  return (
+    <div className={clsx('w-full h-full', bg)} />
+  );
+};
 
-// 默认图片组件 - 不需要懒加载
 const DefaultImage = ({ item }: { item: EquipmentItem }) => (
   <img src={item.image} className="w-full h-full object-contain" />
 );
 
-// 每个类别的组件配置
 const categoryConfigs = {
   background: {
     component: Background,
+    type: 'background',
     className: '',
   },
   clothes: {
@@ -99,7 +103,7 @@ const ItemImage: React.FC<ItemImageProps> = ({ item, vehicleItem }) => {
     
     if ('component' in config) {
       const Component = config.component;
-      return <Component />;
+      return <Component item={item} />;
     }
     
     return (

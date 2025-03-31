@@ -12,9 +12,11 @@ import { useRouter } from "next/navigation";
 const LevelContainer = ({
   children,
   className,
+  level = 1
 }: {
   children: React.ReactNode;
   className?: string;
+  level?: number;
 }) => {
   return (
     <div className={clsx("relative w-[367px] h-[74px]", className)}>
@@ -28,7 +30,7 @@ const LevelContainer = ({
       >
         <path
           d="M366 30.5V58C366 66.2843 359.284 73 351 73H16C7.71573 73 1 66.2843 1 58V16C1 7.71573 7.71573 1 16 1H80.5355C84.6996 1 88.6763 2.73101 91.5139 5.77872L95.5223 10.0841C98.7382 13.5382 103.245 15.5 107.965 15.5H351C359.284 15.5 366 22.2157 366 30.5Z"
-          fill="#FFB050"
+          fill={LevelBackgroundMappings[level].background}
           stroke="#4B371F"
           stroke-width="2"
         />
@@ -44,7 +46,7 @@ const LevelContainer = ({
   );
 };
 
-const ProgressBar = ({ current, total, className = "" }: { current: number; total: number; className?: string }) => {
+const ProgressBar = ({ current, total, className = "", level = 1 }: { current: number; total: number; className?: string; level?: number }) => {
   const totalSegments = 7;
   
   const isMax = Big(current || 0).gte(total || 1);
@@ -63,7 +65,9 @@ const ProgressBar = ({ current, total, className = "" }: { current: number; tota
   return (
     <div
       className={clsx(
-        "flex items-center gap-1 p-1 rounded-lg border-2 border-[#E49F63] bg-[#916830] w-fit",
+        "flex items-center gap-1 p-1 rounded-lg border-2 w-fit",
+        LevelBackgroundMappings[level].progress.background,
+        LevelBackgroundMappings[level].progress.stroke,
         className
       )}
     >
@@ -72,8 +76,8 @@ const ProgressBar = ({ current, total, className = "" }: { current: number; tota
           key={index}
           className={`w-[30px] h-[14px] rounded-md flex-shrink-0 ${
             index <= progress
-              ? "border-2 border-[#F8C200] bg-[#FFE380] shadow-[inset_0px_4px_0px_0px_rgba(255,255,255,0.50)]"
-              : "bg-[#B28A53]"
+              ? `border-2 ${LevelBackgroundMappings[level].progress.barBorder} ${LevelBackgroundMappings[level].progress.barBg} shadow-[inset_0px_4px_0px_0px_rgba(255,255,255,0.50)]`
+              : `${LevelBackgroundMappings[level].progress.defaultBg}`
           }`}
         />
       ))}
@@ -98,7 +102,6 @@ const BeraLevelContainer = () => {
 
   const canUpgrade = Big(currentCoins || 0).gte(updateLevelData.upgrade_coins || 0);
 
-
   const handleUpdate = async () => {
     toast.dismiss();
     if (canUpgrade) {
@@ -118,7 +121,7 @@ const BeraLevelContainer = () => {
   }
 
   return (
-    <LevelContainer className="mx-auto pt-[0.5px]">
+    <LevelContainer level={userInfo?.level} className="mx-auto pt-[0.5px]">
       <div className="flex items-center justify-between px-3 w-[260px] pl-4">
         <span className="font-cherryBomb text-[26px] leading-[26px] text-stroke-2 text-white">
           Lv.{userInfo?.level || 1}
@@ -131,6 +134,7 @@ const BeraLevelContainer = () => {
         <ProgressBar 
           current={currentCoins} 
           total={updateLevelData.upgrade_coins}
+          level={userInfo?.level}
         />
       </div>
       <div className="absolute right-0 top-0">
@@ -152,35 +156,65 @@ const BeraLevelContainer = () => {
 
 export default BeraLevelContainer;
 
-const LevelBackgroundMappings = {
+const LevelBackgroundMappings: any = {
   1: {
     background: "#FFB050",
     progress: {
-      stroke: "#E49F63",
-      background: "#916830",
-      barBg: "#FFE380",
-      barBorder: "#F8C200",
-      defaultBg: "#B28A53",
+      stroke: "border-[#E49F63]",
+      background: "bg-[#916830]",
+      barBg: "bg-[#FFE380]",
+      barBorder: "border-[#F8C200]",
+      defaultBg: "bg-[#B28A53]",
     },
   },
   2: {
     background: "#7ADEC4",
     progress: {
-      stroke: "#6DEFCD",
-      background: "#34AD8E",
-      barBg: "#5EFFD5",
-      barBorder: "#4BD3AF",
-      defaultBg: "#82D5BF",
+      stroke: "border-[#6DEFCD]",
+      background: "bg-[#34AD8E]",
+      barBg: "bg-[#5EFFD5]",
+      barBorder: "border-[#4BD3AF]",
+      defaultBg: "bg-[#82D5BF]",
     },
   },
   3: {
     background: "#F9887A",
     progress: {
-      stroke: "#F7A3A8",
-      background: "#C0545B",
-      barBg: "#FFB2A7",
-      barBorder: "#E95F4E",
-      defaultBg: "#EC7279",
+      stroke: "border-[#F7A3A8]",
+      background: "bg-[#C0545B]",
+      barBg: "bg-[#FFB2A7]",
+      barBorder: "border-[#E95F4E]",
+      defaultBg: "bg-[#EC7279]",
     },
   },
+  4: {
+    background: "#C69ED3",
+    progress: {
+      stroke: "border-[#DEA2F1]",
+      background: "bg-[#8C4BA1]",
+      barBg: "bg-[#D89AFF]",
+      barBorder: "border-[#B944DF]",
+      defaultBg: "bg-[#BF88D1]",
+    },
+  },
+  5: {
+    background: "#C4E29B",
+    progress: {
+      stroke: "border-[#C2E88F]",
+      background: "bg-[#8DAB64]",
+      barBg: "bg-[#C0FE6B]",
+      barBorder: "border-[#A7C979]",
+      defaultBg: "bg-[#B4D786]",
+    },
+  },
+  6: {
+    background: "#ED7E92",
+    progress: {
+      stroke: "border-[#F7869A]",
+      background: "bg-[#C3445B]",
+      barBg: "bg-[#F46881]",
+      barBorder: "border-[#FF8DA1]",
+      defaultBg: "bg-[#F48B9E]",
+    },
+  }
 };
