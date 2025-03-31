@@ -3,9 +3,6 @@ import { useContext, useEffect } from "react";
 import Bear from "@/components/BearDressup/Bear";
 import Hat from "@/components/BearDressup/Hat";
 import Clothes from "@/components/BearDressup/Clothes";
-
-import { Category } from "@/components/BearDressup/mappings";
-
 import Transportation from "@/components/BearDressup/Vehicle";
 import Airflow from './Airflows'
 import clsx from 'clsx';
