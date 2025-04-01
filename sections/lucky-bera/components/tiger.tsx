@@ -80,32 +80,32 @@ export default memo(function Tiger(props: any) {
     const moveKeyframes = [
       // Initial position
       {
-        transform: 'translate(0, 50px) rotate3d(1, 1, 1, 0deg)',
+        transform: 'translate(0, 50px) rotate(0deg)',
         offset: 0
       },
       // First rapid ascent phase
       {
-        transform: `translate(${horizontalDistance * 0.2}px, ${maxHeight * 0.3}px) rotate3d(1, 1, 1, ${Math.random() * 180}deg)`,
+        transform: `translate(${horizontalDistance * 0.2}px, ${maxHeight * 0.3}px) rotate(${Math.random() * 180}deg)`,
         offset: 0.15
       },
       // Second rapid ascent phase
       {
-        transform: `translate(${horizontalDistance * 0.4}px, ${maxHeight * 0.7}px) rotate3d(1, 1, 1, ${Math.random() * 360}deg)`,
+        transform: `translate(${horizontalDistance * 0.4}px, ${maxHeight * 0.7}px) rotate(${Math.random() * 360}deg)`,
         offset: 0.3
       },
       // Peak point
       {
-        transform: `translate(${horizontalDistance * 0.6}px, ${maxHeight}px) rotate3d(1, 1, 1, ${Math.random() * 540}deg)`,
+        transform: `translate(${horizontalDistance * 0.6}px, ${maxHeight}px) rotate(${Math.random() * 540}deg)`,
         offset: 0.4
       },
       // Start slow descent
       {
-        transform: `translate(${horizontalDistance * 0.8}px, ${maxHeight * 0.6}px) rotate3d(1, 1, 1, ${Math.random() * 720}deg)`,
+        transform: `translate(${horizontalDistance * 0.8}px, ${maxHeight * 0.6}px) rotate(${Math.random() * 720}deg)`,
         offset: 0.7
       },
       // Accelerated descent
       {
-        transform: `translate(${horizontalDistance}px, ${Math.abs(maxHeight * 0.5)}px) rotate3d(1, 1, 1, ${Math.random() * 1080}deg)`,
+        transform: `translate(${horizontalDistance}px, ${Math.abs(maxHeight * 0.5)}px) rotate(${Math.random() * 1080}deg)`,
         offset: 1
       }
     ];
@@ -115,6 +115,7 @@ export default memo(function Tiger(props: any) {
       { opacity: 0, offset: 0 },     // Initially invisible
       { opacity: 1, offset: 0.1 },  // Brief invisibility period
       { opacity: 1, offset: 0.2 },  // Quick fade in
+      { opacity: 1, offset: 0.55 },  // Quick fade in
       { opacity: 0, offset: 0.8 },   // Maintain visibility
       { opacity: 0, offset: 1 }      // Fade out
     ];
