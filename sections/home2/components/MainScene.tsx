@@ -4,7 +4,7 @@ import BearDressup from "@/components/BearDressup";
 import BeraLevelContainer from "./BeraLevelContainer";
 import { useRouter } from "next/navigation";
 import BearControlModal from "./BearControlModal";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import PlayerEquipmentChoiceModal from "./PlayerEquipmentChoiceModal";
 import HomeBg from '@/sections/home/components/bg';
 import { useGlobalUser } from "@/context/UserContext";
@@ -16,7 +16,49 @@ const MainScene = () => {
   const { userInfo } = useGlobalUser();
   const bgRef = useRef(null);
 
+  const [bearScale, setBearScale] = useState(0.8);
+  const [bearPosition, setBearPosition] = useState({ left: '15%', bottom: '20%' });
+  
   const userLevel = userInfo?.level || 1;
+
+  useEffect(() => {
+    const updateBearDisplay = () => {
+      const screenWidth = window.innerWidth;
+      
+      // 处理缩放
+      const newScale = 0.8 * (screenWidth / 390);
+      const clampedScale = Math.min(Math.max(newScale, 0.5), 0.8);
+      setBearScale(clampedScale);
+      
+      let newLeftPercent = 15;
+      let newBottomPercent = 20;
+      
+      if (screenWidth <= 375) {
+        const adjustment = (390 - screenWidth) / 20; 
+        newLeftPercent = 8 + adjustment; 
+        newBottomPercent = 15 - adjustment / 2; 
+      } 
+
+      else if (screenWidth < 390) {
+        newLeftPercent = 15 + (390 - screenWidth) / 20;
+      } 
+
+      else if (screenWidth > 450) {
+        newLeftPercent = 15 - (screenWidth - 450) / 40; 
+        newBottomPercent = 20 + (screenWidth - 450) / 50; 
+      }
+      
+      setBearPosition({
+        left: `${newLeftPercent}%`,
+        bottom: `${newBottomPercent}%`
+      });
+    };
+    
+    updateBearDisplay();
+    window.addEventListener('resize', updateBearDisplay);
+    
+    return () => window.removeEventListener('resize', updateBearDisplay);
+  }, []);
   
   const contentElement = (
     <>
@@ -27,7 +69,11 @@ const MainScene = () => {
       </div>
       <DropCoins />
       <img src="/images/raffle/entry-raffle.png" onClick={() => router.push('/raffle')} className='w-[90px] h-[90px] absolute top-[25%] left-0' alt="" />
-      <div className='absolute left-[15%] bottom-[20%]'>
+      <div className='absolute' style={{
+        left: bearPosition.left,
+        bottom: bearPosition.bottom,
+        transform: `scale(${bearScale})`
+      }}>
         <BearDressup onClick={() => setOpenBearControlModal(true)} />
       </div>
       <div className='w-full mx-auto absolute bottom-[90px]'>
