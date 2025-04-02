@@ -64,7 +64,7 @@ export const TabBarWrapper = ({
     if (search.has('game') && gameTab?.id) {
       setActiveTab(gameTab.id);
       setGameVisible(true);
-      setShowTabBar(false);
+      // setShowTabBar(false);
       return;
     }
     setShowTabBar(true);
