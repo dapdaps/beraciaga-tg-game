@@ -66,7 +66,7 @@ const GameView = () => {
 
   return (
     <motion.div
-      className="w-full h-full"
+      className="w-full h-full pb-[68px] bg-black"
       variants={{
         visible: {
           display: 'block',
