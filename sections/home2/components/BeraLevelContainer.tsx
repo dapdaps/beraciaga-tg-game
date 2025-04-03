@@ -100,7 +100,7 @@ const BeraLevelContainer = () => {
 
   const updateLevelData = levels.find((level: any) => level.level === userInfo.level) as Level;
 
-  const canUpgrade = Big(currentCoins || 0).gte(updateLevelData.upgrade_coins || 0);
+  const canUpgrade = Big(currentCoins || 0).gte(updateLevelData?.upgrade_coins || 0);
 
   const handleUpdate = async () => {
     toast.dismiss();
@@ -127,13 +127,13 @@ const BeraLevelContainer = () => {
           Lv.{userInfo?.level || 1}
         </span>
         <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end">
-          {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData.upgrade_coins, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
+          {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
         </span>
       </div>
       <div className="px-3 w-[260px] pl-4 mt-1">
         <ProgressBar 
           current={currentCoins} 
-          total={updateLevelData.upgrade_coins}
+          total={updateLevelData?.upgrade_coins || 0}
           level={userInfo?.level}
         />
       </div>
@@ -141,7 +141,7 @@ const BeraLevelContainer = () => {
         <BaseButton onClick={handleUpdate}>
           <div className="flex flex-col items-center">
             <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
-            {numberFormatter(updateLevelData.upgrade_coins, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
+            {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData?.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData?.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
             </div>
             <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
               update

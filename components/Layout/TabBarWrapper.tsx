@@ -5,7 +5,6 @@ import { TABS, useLayoutStore } from '@/stores/useLayoutStore';
 import TabBar from '../TabBar/TabBar';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const GameView = lazy(() => import('@/sections/game'));
 
 interface TabBarWrapperProps {
   children: ReactNode;
@@ -27,6 +26,8 @@ export const TabBarWrapper = ({
     setGameVisible,
     setActiveTab,
   } = useLayoutStore();
+
+  const GameView = gameVisible ? lazy(() => import('@/sections/game')) : null;
 
   const handleTabClick = (tab: any) => {
     const _url = new URL(location.href);
@@ -79,9 +80,11 @@ export const TabBarWrapper = ({
         <div className={`h-full overflow-y-auto overflow-x-hidden ${gameVisible ? 'hidden' : ''}`}>
           {children}
         </div>
-        <Suspense fallback={<></>}>
-          <GameView />
-        </Suspense>
+        {gameVisible && (
+          <Suspense fallback={<></>}>
+            {GameView && <GameView />}
+          </Suspense>
+        )}
       </main>
       {(tabbar && showTabBar) && <TabBar onTabClick={handleTabClick} />}
     </div>
