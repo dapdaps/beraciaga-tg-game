@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, type ReactNode, lazy, Suspense } from 'react';
 import { TABS, useLayoutStore } from '@/stores/useLayoutStore';
 import TabBar from '../TabBar/TabBar';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import GameView from '@/sections/game';
+
+const GameView = lazy(() => import('@/sections/game'));
 
 interface TabBarWrapperProps {
   children: ReactNode;
@@ -78,7 +79,9 @@ export const TabBarWrapper = ({
         <div className={`h-full overflow-y-auto overflow-x-hidden ${gameVisible ? 'hidden' : ''}`}>
           {children}
         </div>
-        {/* <GameView /> */}
+        <Suspense fallback={<></>}>
+          <GameView />
+        </Suspense>
       </main>
       {(tabbar && showTabBar) && <TabBar onTabClick={handleTabClick} />}
     </div>
