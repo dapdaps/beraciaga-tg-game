@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAudio } from '@/hooks/useAudio';
 import Big from 'big.js';
-import { Equipment, useUserStore } from '@/stores/useUserStore';
+import { Equipment, Level, UserInfo, useUserStore } from '@/stores/useUserStore';
 import { getRandomNumber } from '@/utils/utils';
 import { useRingStore } from '@/stores/useRingStore';
 import { maxBy } from 'lodash-es';
@@ -44,8 +44,20 @@ const mockCalcLatestCoins = () => {
   };
 };
 
-const calcLatestCoins = (props: { coins_per_hour: number; creat_timestamp: number; userEquipmentCategoryList?: Record<string, Equipment[]>; addSpeed: number; }) => {
-  const { coins_per_hour, creat_timestamp, userEquipmentCategoryList, addSpeed } = props;
+interface CalcLatestCoinsProps {
+  coins_per_hour: number;
+  creat_timestamp: number;
+  userEquipmentCategoryList?: Record<string, Equipment[]>;
+  addSpeed: number;
+  userInfo?: Partial<UserInfo>;
+  levels?: Level[];
+}
+
+const calcLatestCoins = (props: CalcLatestCoinsProps) => {
+  const { coins_per_hour, creat_timestamp, userEquipmentCategoryList, addSpeed, userInfo, levels } = props;
+
+  const upgradedLevels = levels?.filter((l) => l.level < (userInfo?.level ?? 1)) ?? [];
+  const upgraded_coins = upgradedLevels.reduce((previousValue, currentValue) => Big(previousValue).plus(currentValue.upgrade_coins), Big(0));
 
   const currentTimestamp = new Date().getTime();
   // const currentTimestamp = 1735650107000;
@@ -95,10 +107,14 @@ const calcLatestCoins = (props: { coins_per_hour: number; creat_timestamp: numbe
 
   });
 
+  if (userInfo?.bind_source === "okx_invite") {
+    results.push(Big(userInfo?.bind_okx_reward_coins ?? 0));
+  }
+
   const total = [baseResult, ...results].map((it: any) => it.value).reduce((a, b) => Big(a).plus(b), Big(0));
 
   return {
-    value: total,
+    value: Big(total).minus(upgraded_coins || 0),
     coinsPerSecond: Big(currentCoinsPerHour).div(Big(60).times(60)).times(Big(1).plus(addSpeed)),
   };
 };
@@ -202,15 +218,11 @@ export function useCoins(options?: { debug?: boolean }) {
   }, [debug, coins.length]);
 
   useEffect(() => {
-    if (debug) return; 
+    if (debug) return;
     
     if (!userInfo || !userInfo.creat_timestamp || !userInfo.level || userEquipmentListLoading || userInfoLoading || levelsLoading) return;
 
-    console.log("userInfo: %o", userInfo);
-    let creatTimestamp = userInfo?.creat_timestamp;
-    if (userInfo.stats?.upgrade_time) {
-      creatTimestamp = userInfo.stats.upgrade_time * 1000;
-    }
+    const creatTimestamp = userInfo?.creat_timestamp;
     let coinsPerHour = levels?.find((l) => l.level === userInfo?.level)?.coins_per_hour ?? 0;
     if (!coinsPerHour) {
       const maxLevel = maxBy(levels, "level");
@@ -222,8 +234,9 @@ export function useCoins(options?: { debug?: boolean }) {
       creat_timestamp: creatTimestamp,
       userEquipmentCategoryList,
       addSpeed,
+      userInfo,
+      levels,
     });
-    console.log('_latestCoins: %o', Big(_latestCoins).toString());
     setLatestCoins(_latestCoins);
     setCurrentCoins(_latestCoins);
 
@@ -235,6 +248,8 @@ export function useCoins(options?: { debug?: boolean }) {
         creat_timestamp: creatTimestamp,
         userEquipmentCategoryList,
         addSpeed,
+        userInfo,
+        levels,
       });
       
       setLatestCoins(_latestCoins);
