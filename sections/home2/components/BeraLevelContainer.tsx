@@ -8,6 +8,7 @@ import { useGlobalUser } from "@/context/UserContext";
 import { postUpgrade } from "@/apis/look";
 import useToast from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { maxBy } from 'lodash-es';
 
 const LevelContainer = ({
   children,
@@ -90,7 +91,8 @@ const BeraLevelContainer = () => {
     levels,
     userInfo,
     currentCoins,
-    WebApp
+    WebApp,
+    user,
   } = useGlobalUser();
   
   const router = useRouter();
@@ -98,7 +100,10 @@ const BeraLevelContainer = () => {
 
   if (!userInfo) return null;
 
-  const updateLevelData = levels.find((level: any) => level.level === userInfo.level) as Level;
+  let updateLevelData = levels.find((level: any) => level.level === userInfo.level) as Level;
+  if (!updateLevelData) {
+    updateLevelData = maxBy<Level>(levels, "level") as Level;
+  }
 
   const canUpgrade = Big(currentCoins || 0).gte(updateLevelData?.upgrade_coins || 0);
 
@@ -111,6 +116,8 @@ const BeraLevelContainer = () => {
           toast.success({
             title: 'Bera Upgrade success!'
           });
+          // reload user info
+          user.getUserInfo();
         }
       } catch (error) {
         console.log('handleUpdate', error);
@@ -126,8 +133,8 @@ const BeraLevelContainer = () => {
         <span className="font-cherryBomb text-[26px] leading-[26px] text-stroke-2 text-white">
           Lv.{userInfo?.level || 1}
         </span>
-        <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end">
-          {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
+        <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end whitespace-nowrap">
+          {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData?.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData?.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
         </span>
       </div>
       <div className="px-3 w-[260px] pl-4 mt-1">

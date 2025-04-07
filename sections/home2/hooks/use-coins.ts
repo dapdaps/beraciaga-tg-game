@@ -4,6 +4,7 @@ import Big from 'big.js';
 import { Equipment, useUserStore } from '@/stores/useUserStore';
 import { getRandomNumber } from '@/utils/utils';
 import { useRingStore } from '@/stores/useRingStore';
+import { maxBy } from 'lodash-es';
 
 // seconds
 const coins_duration = 2;
@@ -205,8 +206,16 @@ export function useCoins(options?: { debug?: boolean }) {
     
     if (!userInfo || !userInfo.creat_timestamp || !userInfo.level || userEquipmentListLoading || userInfoLoading || levelsLoading) return;
 
-    const creatTimestamp = userInfo?.creat_timestamp;
-    const coinsPerHour = levels?.find((l) => l.level === userInfo?.level)?.coins_per_hour ?? 0;
+    console.log("userInfo: %o", userInfo);
+    let creatTimestamp = userInfo?.creat_timestamp;
+    if (userInfo.stats?.upgrade_time) {
+      creatTimestamp = userInfo.stats.upgrade_time * 1000;
+    }
+    let coinsPerHour = levels?.find((l) => l.level === userInfo?.level)?.coins_per_hour ?? 0;
+    if (!coinsPerHour) {
+      const maxLevel = maxBy(levels, "level");
+      coinsPerHour = maxLevel?.coins_per_hour ?? 0;
+    }
 
     const { value: _latestCoins } = calcLatestCoins({
       coins_per_hour: coinsPerHour,
@@ -214,6 +223,7 @@ export function useCoins(options?: { debug?: boolean }) {
       userEquipmentCategoryList,
       addSpeed,
     });
+    console.log('_latestCoins: %o', Big(_latestCoins).toString());
     setLatestCoins(_latestCoins);
     setCurrentCoins(_latestCoins);
 

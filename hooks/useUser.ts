@@ -122,6 +122,7 @@ export function useUser() {
       setUserInfo({
         ...res.data,
         creat_timestamp: res.data.creat_timestamp * 1000,
+        level: res.data.stats?.level,
       });
     } catch (err) {
       console.log(err);

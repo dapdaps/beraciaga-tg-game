@@ -108,6 +108,12 @@ export interface UserInfo {
   bind_okx_reward_coins: number;
   bind_okx_reward_coupons: number;
   level: number;
+  stats: {
+    coins: string;
+    gem: number;
+    level: number;
+    upgrade_time: number;
+  };
 }
 
 export interface Equipment {
