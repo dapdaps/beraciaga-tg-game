@@ -17,7 +17,13 @@ export default memo(function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   const {
-    user: { fetchLookUserProfile, getUserInfo, getLevels },
+    user: {
+      fetchLookUserProfile,
+      getUserInfo,
+      getLevels,
+      getUserEquipmentList,
+      getEquipmentList
+    },
     userLooksItem,
     startJourney,
     updater,
@@ -31,6 +37,8 @@ export default memo(function Home() {
       await fetchLookUserProfile();
       await getUserInfo();
       await getLevels();
+      await getUserEquipmentList();
+      getEquipmentList();
     } catch (error) {
       console.log(error, '<===');
     } finally {
@@ -56,8 +64,10 @@ export default memo(function Home() {
       Promise.all([
         fetchLookUserProfile(),
         getUserInfo(),
-        getLevels()
+        getLevels(),
+        getUserEquipmentList()
       ]);
+      getEquipmentList();
     }
   }, [updater]);
 

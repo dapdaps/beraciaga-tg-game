@@ -223,6 +223,9 @@ export function useCoins(options?: { debug?: boolean }) {
     if (!userInfo || !userInfo.creat_timestamp || !userInfo.level || userEquipmentListLoading || userInfoLoading || levelsLoading) return;
 
     const creatTimestamp = userInfo?.creat_timestamp;
+    // if (userInfo?.stats?.upgrade_time) {
+    //   // creatTimestamp = (userInfo?.stats?.upgrade_time || 0) * 1000;
+    // }
     let coinsPerHour = levels?.find((l) => l.level === userInfo?.level)?.coins_per_hour ?? 0;
     if (!coinsPerHour) {
       const maxLevel = maxBy(levels, "level");

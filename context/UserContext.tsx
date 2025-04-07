@@ -9,7 +9,7 @@ const DEBUG_MODE = process.env.NODE_ENV === 'development';
 const UserContext = createContext<any>({});
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const { coins, currentCoins, handleCollected, addSpeed } = useCoins({ debug: DEBUG_MODE });
+  const { coins, currentCoins, handleCollected, addSpeed } = useCoins({ debug: false });
   const [updater, setUpdater] = useState(0);
 
   
