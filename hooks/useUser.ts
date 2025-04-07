@@ -33,7 +33,7 @@ export function useUser() {
     setAddSpeed,
     userLooksItem,
     setUserLooksItem,
-    startJourney, 
+    startJourney,
     setStartJourney,
     visibleStartBera,
     setVisibleStartBera,
@@ -129,7 +129,6 @@ export function useUser() {
     }
     setUserInfoLoading(false);
   };
-
 
   const fetchLookUserProfile = async () => {
     try {

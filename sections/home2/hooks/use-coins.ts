@@ -50,14 +50,10 @@ interface CalcLatestCoinsProps {
   userEquipmentCategoryList?: Record<string, Equipment[]>;
   addSpeed: number;
   userInfo?: Partial<UserInfo>;
-  levels?: Level[];
 }
 
 const calcLatestCoins = (props: CalcLatestCoinsProps) => {
-  const { coins_per_hour, creat_timestamp, userEquipmentCategoryList, addSpeed, userInfo, levels } = props;
-
-  const upgradedLevels = levels?.filter((l) => l.level < (userInfo?.level ?? 1)) ?? [];
-  const upgraded_coins = upgradedLevels.reduce((previousValue, currentValue) => Big(previousValue).plus(currentValue.upgrade_coins), Big(0));
+  const { coins_per_hour, creat_timestamp, userEquipmentCategoryList, addSpeed, userInfo } = props;
 
   const currentTimestamp = new Date().getTime();
   // const currentTimestamp = 1735650107000;
@@ -107,14 +103,13 @@ const calcLatestCoins = (props: CalcLatestCoinsProps) => {
 
   });
 
-  if (userInfo?.bind_source === "okx_invite") {
-    results.push({ value: Big(userInfo?.bind_okx_reward_coins ?? 0) });
-  }
+  // Add the remaining coins before the user upgrades
+  results.push({ value: Big(userInfo?.stats?.coins ?? 0) });
 
   const total = [baseResult, ...results].map((it: any) => it.value).reduce((a, b) => Big(a).plus(b), Big(0));
 
   return {
-    value: Big(total).minus(upgraded_coins || 0),
+    value: total,
     coinsPerSecond: Big(currentCoinsPerHour).div(Big(60).times(60)).times(Big(1).plus(addSpeed)),
   };
 };
@@ -222,10 +217,10 @@ export function useCoins(options?: { debug?: boolean }) {
     
     if (!userInfo || !userInfo.creat_timestamp || !userInfo.level || userEquipmentListLoading || userInfoLoading || levelsLoading) return;
 
-    const creatTimestamp = userInfo?.creat_timestamp;
-    // if (userInfo?.stats?.upgrade_time) {
-    //   // creatTimestamp = (userInfo?.stats?.upgrade_time || 0) * 1000;
-    // }
+    let creatTimestamp = userInfo?.creat_timestamp;
+    if (userInfo?.stats?.upgrade_time) {
+      creatTimestamp = (userInfo?.stats?.upgrade_time || 0) * 1000;
+    }
     let coinsPerHour = levels?.find((l) => l.level === userInfo?.level)?.coins_per_hour ?? 0;
     if (!coinsPerHour) {
       const maxLevel = maxBy(levels, "level");
@@ -238,7 +233,6 @@ export function useCoins(options?: { debug?: boolean }) {
       userEquipmentCategoryList,
       addSpeed,
       userInfo,
-      levels,
     });
     setLatestCoins(_latestCoins);
     setCurrentCoins(_latestCoins);
@@ -252,7 +246,6 @@ export function useCoins(options?: { debug?: boolean }) {
         userEquipmentCategoryList,
         addSpeed,
         userInfo,
-        levels,
       });
       
       setLatestCoins(_latestCoins);
