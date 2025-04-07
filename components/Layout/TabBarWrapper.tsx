@@ -27,7 +27,9 @@ export const TabBarWrapper = ({
     setActiveTab,
   } = useLayoutStore();
 
-  const GameView = gameVisible ? lazy(() => import('@/sections/game')) : null;
+  // ⚠️ Note: Why can’t it be handled this way? After switching tabs, the game content should not be reloaded
+  // const GameView = gameVisible ? lazy(() => import('@/sections/game')) : null;
+  const GameView = lazy(() => import('@/sections/game'));
 
   const handleTabClick = (tab: any) => {
     const _url = new URL(location.href);
@@ -80,11 +82,15 @@ export const TabBarWrapper = ({
         <div className={`h-full overflow-y-auto overflow-x-hidden ${gameVisible ? 'hidden' : ''}`}>
           {children}
         </div>
-        {gameVisible && (
+        {/*⚠️ Note: Why can’t it be handled this way? After switching tabs, the game content should not be reloaded*/}
+        {/*{gameVisible && (
           <Suspense fallback={<></>}>
             {GameView && <GameView />}
           </Suspense>
-        )}
+        )}*/}
+        <Suspense fallback={<></>}>
+          <GameView />
+        </Suspense>
       </main>
       {(tabbar && showTabBar) && <TabBar onTabClick={handleTabClick} />}
     </div>

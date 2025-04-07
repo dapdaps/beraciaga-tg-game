@@ -9,9 +9,9 @@ export function useRequestByToken<TData, TParams extends any[]>(service: Service
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!WebApp.initData) return;
+    if (!WebApp?.initData) return;
     setReady(true);
-  }, [WebApp.initData]);
+  }, [WebApp?.initData]);
 
   return useRequest(service, {
     ...options,
