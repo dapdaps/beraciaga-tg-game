@@ -108,7 +108,7 @@ const calcLatestCoins = (props: CalcLatestCoinsProps) => {
   });
 
   if (userInfo?.bind_source === "okx_invite") {
-    results.push(Big(userInfo?.bind_okx_reward_coins ?? 0));
+    results.push({ value: Big(userInfo?.bind_okx_reward_coins ?? 0) });
   }
 
   const total = [baseResult, ...results].map((it: any) => it.value).reduce((a, b) => Big(a).plus(b), Big(0));
