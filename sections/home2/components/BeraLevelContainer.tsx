@@ -10,6 +10,10 @@ import useToast from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { maxBy } from 'lodash-es';
 
+const getLevelBackgroundConfig = (level: number) => {
+  return LevelBackgroundMappings[level] || LevelBackgroundMappings[1];
+};
+
 const LevelContainer = ({
   children,
   className,
@@ -19,6 +23,8 @@ const LevelContainer = ({
   className?: string;
   level?: number;
 }) => {
+  const levelConfig = getLevelBackgroundConfig(level);
+  
   return (
     <div className={clsx("relative w-[367px] h-[74px]", className)}>
       <svg
@@ -31,7 +37,7 @@ const LevelContainer = ({
       >
         <path
           d="M366 30.5V58C366 66.2843 359.284 73 351 73H16C7.71573 73 1 66.2843 1 58V16C1 7.71573 7.71573 1 16 1H80.5355C84.6996 1 88.6763 2.73101 91.5139 5.77872L95.5223 10.0841C98.7382 13.5382 103.245 15.5 107.965 15.5H351C359.284 15.5 366 22.2157 366 30.5Z"
-          fill={LevelBackgroundMappings[level].background}
+          fill={levelConfig.background}
           stroke="#4B371F"
           stroke-width="2"
         />
@@ -49,11 +55,11 @@ const LevelContainer = ({
 
 const ProgressBar = ({ current, total, className = "", level = 1 }: { current: number; total: number; className?: string; level?: number }) => {
   const totalSegments = 7;
+  const levelConfig = getLevelBackgroundConfig(level);
   
   const isMax = Big(current || 0).gte(total || 1);
 
   const ratio = Big(current || 0).div(total || 1);
-
 
   const progress = isMax 
     ? totalSegments 
@@ -67,8 +73,8 @@ const ProgressBar = ({ current, total, className = "", level = 1 }: { current: n
     <div
       className={clsx(
         "flex items-center gap-1 p-1 rounded-lg border-2 w-fit",
-        LevelBackgroundMappings[level].progress.background,
-        LevelBackgroundMappings[level].progress.stroke,
+        levelConfig.progress.background,
+        levelConfig.progress.stroke,
         className
       )}
     >
@@ -77,8 +83,8 @@ const ProgressBar = ({ current, total, className = "", level = 1 }: { current: n
           key={index}
           className={`w-[30px] h-[14px] rounded-md flex-shrink-0 ${
             index <= progress
-              ? `border-2 ${LevelBackgroundMappings[level].progress.barBorder} ${LevelBackgroundMappings[level].progress.barBg} shadow-[inset_0px_4px_0px_0px_rgba(255,255,255,0.50)]`
-              : `${LevelBackgroundMappings[level].progress.defaultBg}`
+              ? `border-2 ${levelConfig.progress.barBorder} ${levelConfig.progress.barBg} shadow-[inset_0px_4px_0px_0px_rgba(255,255,255,0.50)]`
+              : `${levelConfig.progress.defaultBg}`
           }`}
         />
       ))}
@@ -100,7 +106,9 @@ const BeraLevelContainer = () => {
 
   if (!userInfo) return null;
 
-  let updateLevelData = levels.find((level: any) => level.level === userInfo.level) as Level;
+  const userLevel = userInfo?.level || 1;
+
+  let updateLevelData = levels.find((level: any) => level.level === userLevel) as Level;
   if (!updateLevelData) {
     updateLevelData = maxBy<Level>(levels, "level") as Level;
   }
@@ -128,10 +136,10 @@ const BeraLevelContainer = () => {
   }
 
   return (
-    <LevelContainer level={userInfo?.level} className="mx-auto pt-[0.5px]">
+    <LevelContainer level={userLevel} className="mx-auto pt-[0.5px]">
       <div className="flex items-center justify-between px-3 w-[260px] pl-4">
         <span className="font-cherryBomb text-[26px] leading-[26px] text-stroke-2 text-white">
-          Lv.{userInfo?.level || 1}
+          Lv.{userLevel}
         </span>
         <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end whitespace-nowrap">
           {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData?.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData?.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
@@ -141,7 +149,7 @@ const BeraLevelContainer = () => {
         <ProgressBar 
           current={currentCoins} 
           total={updateLevelData?.upgrade_coins || 0}
-          level={userInfo?.level}
+          level={userLevel}
         />
       </div>
       <div className="absolute right-0 top-0">
