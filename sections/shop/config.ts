@@ -1,13 +1,14 @@
 // Corresponds to the category field in the backend
 export enum ProductType {
-  Spins = 'spins',
-  TreasureBox = 'treasureBox',
+  Spins = 'Spin',
+  TreasureBox = 'Box',
   Points = 'BeraCoin',
   Outfit = 'Outfit',
 }
 
 export interface IProductTypes {
   label: string;
+  value: ProductType;
   icon: string;
   iconX: number;
   iconY: number;
@@ -18,6 +19,7 @@ export interface IProductTypes {
 export const ProductTypes: Record<ProductType, IProductTypes> = {
   [ProductType.Spins]: {
     label: 'SPINS',
+    value: ProductType.Spins,
     icon: '/images/shop/card-icon-spins.svg',
     iconX: -46,
     iconY: -20,
@@ -26,6 +28,7 @@ export const ProductTypes: Record<ProductType, IProductTypes> = {
   },
   [ProductType.TreasureBox]: {
     label: 'TREASURE BOX',
+    value: ProductType.TreasureBox,
     icon: '/images/shop/card-icon-treasure-box.svg',
     iconX: -30,
     iconY: -15,
@@ -34,6 +37,7 @@ export const ProductTypes: Record<ProductType, IProductTypes> = {
   },
   [ProductType.Points]: {
     label: 'POINTS',
+    value: ProductType.Points,
     icon: '/images/shop/card-icon-points.svg',
     iconX: -30,
     iconY: -15,
@@ -42,6 +46,7 @@ export const ProductTypes: Record<ProductType, IProductTypes> = {
   },
   [ProductType.Outfit]: {
     label: 'OUTFIT',
+    value: ProductType.Outfit,
     icon: '/images/shop/card-icon-outfit.svg',
     iconX: -15,
     iconY: -15,

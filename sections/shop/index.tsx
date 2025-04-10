@@ -34,7 +34,7 @@ const ShopView = () => {
                 iconX={ProductTypes[categories[index]].iconX}
                 iconY={ProductTypes[categories[index]].iconY}
                 className={clsx(index !== 0 ? "mt-[35px]" : "")}
-                innerClassName="pr-[50px] pl-[20px]"
+                innerClassName="pr-[50px] pl-[20px] whitespace-nowrap"
               >
                 {
                   item?.map?.((product, index) => (
