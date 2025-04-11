@@ -38,6 +38,7 @@ const Scene = (props: Props) => {
         bgSrc={`/svg/bg/${scene.path}/top-bg.svg`}
         src={`/svg/bg/${scene.path}/top.svg`}
         duration={60 * _speed}
+        backgroundSize={scene.height?.backgroundSize}
       />
       <div className="absolute left-0 bottom-0 z-[2]">
         <ImgAnimate

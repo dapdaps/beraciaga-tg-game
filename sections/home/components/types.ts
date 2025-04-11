@@ -9,6 +9,7 @@ export interface SceneItem {
     mid?: string | number;
     botBg?: string | number;
     bot?: string | number;
+    backgroundSize?: string | number;
   };
   y?: {
     top?: string | number;
@@ -26,9 +27,185 @@ export type Scenes =
   'City' |
   'Residence' |
   'Night' |
-  'Park';
+  'Park' |
+  'Figure01' |
+  'Figure02' |
+  'Figure03' |
+  'Figure04' |
+  'Figure05' |
+  'Figure06' |
+  'Figure07' |
+  'Figure08' |
+  'SolidColor01' |
+  'SolidColor02' |
+  'SolidColor03' |
+  'SolidColor04' |
+  'SolidColor05' |
+  'SolidColor06' |
+  'SolidColor07' |
+  'SolidColor08';
 
 export const SceneList: Record<Scenes, SceneItem> = {
+  SolidColor01: {
+    name: 'solidColor01',
+    path: 'solid-color01',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor02: {
+    name: 'solidColor02',
+    path: 'solid-color02',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor03: {
+    name: 'solidColor03',
+    path: 'solid-color03',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor04: {
+    name: 'solidColor04',
+    path: 'solid-color04',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor05: {
+    name: 'solidColor05',
+    path: 'solid-color05',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor06: {
+    name: 'solidColor06',
+    path: 'solid-color06',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor07: {
+    name: 'solidColor07',
+    path: 'solid-color07',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  SolidColor08: {
+    name: 'solidColor08',
+    path: 'solid-color08',
+    height: {
+      top: '100vh',
+      mid: 0,
+      botBg: 0,
+      bot: 0,
+    },
+  },
+  Figure01: {
+    name: 'figure01',
+    path: 'figure01',
+    height: {
+      top: '90vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure02: {
+    name: 'figure02',
+    path: 'figure02',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure03: {
+    name: 'figure03',
+    path: 'figure03',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure04: {
+    name: 'figure04',
+    path: 'figure04',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure05: {
+    name: 'figure05',
+    path: 'figure05',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure06: {
+    name: 'figure06',
+    path: 'figure06',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure07: {
+    name: 'figure07',
+    path: 'figure07',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
+  Figure08: {
+    name: 'figure08',
+    path: 'figure08',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+  },
   Desert: {
     name: 'desert',
     path: 'desert',
