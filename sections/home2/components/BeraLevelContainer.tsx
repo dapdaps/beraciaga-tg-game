@@ -251,6 +251,46 @@ const LevelBackgroundMappings: any = {
       barBorder: "border-[#FF8DA1]",
       defaultBg: "bg-[#F48B9E]",
     },
+  },
+  7: {
+    background: "#F5FC88",
+    progress: {
+      stroke: "border-[#C5CD43]",
+      background: "bg-[#849438]",
+      barBg: "bg-[#ECFF89]",
+      barBorder: "border-[#D8E14B]",
+      defaultBg: "bg-[#ABB965]",
+    },
+  },
+  8: {
+    background: "#FFE78F",
+    progress: {
+      stroke: "border-[#E49F63]",
+      background: "bg-[#CE892C]",
+      barBg: "bg-[#FFE380]",
+      barBorder: "border-[#F8C200]",
+      defaultBg: "bg-[#E2AE66]",
+    },
+  },
+  9: {
+    background: "#79BBFF",
+    progress: {
+      stroke: "border-[#A2CCF8]",
+      background: "bg-[#3072B5]",
+      barBg: "bg-[#B4D9FF]",
+      barBorder: "border-[#5BACFF]",
+      defaultBg: "bg-[#78ACE1]",
+    },
+  },
+  10: {
+    background: "#BEC29A",
+    progress: {
+      stroke: "border-[#C8CE91]",
+      background: "bg-[#899140]",
+      barBg: "bg-[#D6E177]",
+      barBorder: "border-[#C5D15A]",
+      defaultBg: "bg-[#BABF86]",
+    },
   }
 };
 

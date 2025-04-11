@@ -10,14 +10,14 @@ const Hat = ({
 
     if (!item) return null;
 
-    const HatComponent = HAT_MAPPING[item?.look_id as keyof typeof HAT_MAPPING] || HAT_MAPPING.H_001;
+    const svgPath = HAT_MAPPING[item?.look_id as keyof typeof HAT_MAPPING] || HAT_MAPPING.H_001;
 
-    if (!HatComponent) return null
+    if (!svgPath) return null
     
     return (
-        <g>
-          <HatComponent />
-        </g>
+        <svg width="360" height="340">
+            <image xlinkHref={svgPath} width="360" height="340" />
+        </svg>
     )
 }
 
