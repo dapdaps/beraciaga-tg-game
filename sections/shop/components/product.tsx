@@ -7,21 +7,18 @@ import { ProductType } from '@/sections/shop/config';
 const Product: React.FC<any> = (props) => {
   const { className, product, onBuy, buying } = props;
 
+  const isOutfit = product?.category === ProductType.Outfit;
+
   return (
     <div className="p-[5px] relative">
-      <div
-        className={clsx('h-[160px] bg-[position:bottom_55px_center] bg-no-repeat bg-[length:75%_auto] rounded-[16px] border-2 border-[#D7C69D] bg-[#FFFAEA] relative flex flex-col items-center', className)}
-        style={{
-          backgroundImage: `url("${product?.logo}")`,
-        }}
-      >
+      <div className={clsx('h-[160px] rounded-[16px] border-2 border-[#D7C69D] bg-[#FFFAEA] relative flex flex-col items-center', className)}>
         {
-          product?.category === ProductType.Outfit ? (
-            <div className="text-[#FFB254] text-center font-cherryBomb text-stroke-2 text-[15px] font-normal leading-none uppercase pt-[9px]">
+          isOutfit ? (
+            <div className="w-full text-[#FFB254] text-center font-cherryBomb text-stroke-2 text-[15px] font-normal leading-none uppercase pt-[9px]">
               <div className="">
                 Clothing
               </div>
-              <div className="text-[12px] text-[#F7F9EA] mt-[3px]">
+              <div className="w-full text-[12px] text-[#F7F9EA] mt-[3px] whitespace-nowrap overflow-hidden overflow-ellipsis">
                 {product?.name}
               </div>
             </div>
@@ -50,6 +47,14 @@ const Product: React.FC<any> = (props) => {
             </div>
           )
         }
+        <img
+          src={product?.logo || '/images/shop/product-empty.svg'}
+          alt=""
+          className={clsx(
+            "object-center object-contain h-[70px] max-w-[75%]",
+            isOutfit ? 'mt-0' : 'mt-[10px]'
+          )}
+        />
         <button
           type="button"
           className="absolute left-0 bottom-0 rounded-[14px] border-2 border-[#4B371F] bg-[#FFB050] w-full h-[48px] flex-shrink-0 p-[2px]"
@@ -60,7 +65,7 @@ const Product: React.FC<any> = (props) => {
         >
           <div className="flex justify-center items-center flex-col gap-[2px] bg-[url('/images/shop/product-light.svg')] bg-no-repeat bg-[position:-3px_2px] bg-[length:52px_8.5px] rounded-[14px] border-2 border-[#AF7026] bg-[#FFCF23] w-full h-full text-[#F7F9EA] text-center text-stroke-2 stroke-[#4B371F] font-cherryBomb text-[12px] font-normal leading-none tracking-[1px] uppercase">
             {
-              (product?.type === ProductType.Outfit && product?.total_sold > 0) ? (
+              (isOutfit && product?.total_sold > 0) ? (
                 <div className="text-[#F7F9EA] text-center font-cherryBomb text-stroke-2 text-[12px] font-normal leading-none">
                   {product?.total_sold} only
                 </div>
