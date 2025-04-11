@@ -1,4 +1,4 @@
-import { useRequest } from 'ahooks';
+import { useDebounceFn, useRequest } from 'ahooks';
 import { get, post } from '@/utils/http';
 import { useTelegram } from '@/hooks/useTelegram';
 import { useEffect, useState } from 'react';
@@ -33,6 +33,12 @@ export function useLuckyBera() {
     manual: true,
   });
 
+  const { run: reloadSpinData } = useDebounceFn((lastSpinResult: any) => {
+    getUserInfo();
+    getSpinUserData();
+    setLastSpinResult(lastSpinResult);
+  }, { wait: 5000 });
+
   const { runAsync: handleSpinResult, data: spinResultData, loading: spinResultDataLoading } = useRequestByToken<SpinResultData | boolean, any>(async () => {
     const res = await post("/api/spin", {
       spin: spinMultiplier,
@@ -41,9 +47,7 @@ export function useLuckyBera() {
       toast.fail({ title: `Spin failed: ${res.message || res.data}` });
       return false;
     }
-    getUserInfo();
-    getSpinUserData();
-    setLastSpinResult(res.data);
+    reloadSpinData(res.data);
     return res.data;
   }, {
     manual: true,
