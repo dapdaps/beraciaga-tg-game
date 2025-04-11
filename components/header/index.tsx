@@ -24,7 +24,7 @@ const AppHeader = (props: any) => {
 
     return start + addSpeed;
   }, [addSpeed]);
-  
+
   if (!userInfo) return null;
   
   return (
@@ -48,14 +48,22 @@ const AppHeader = (props: any) => {
           <HeaderAvatar level={userInfo.level} size={54} bgColor="#FFF5A8" />
         )
       }
-      <CapsuleButton>
+      <CapsuleButton firstClass="!h-9">
         <div className='flex items-center justify-between px-[1px]'>
           <img src='/images/home/coin.png' alt='coin' className='w-6 h-6' />
           <span className='text-stroke-2 text-[16px] text-[#FFF4C2] font-cherryBomb'>
             {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })}
           </span>
-          <div className="flex-shrink-0 font-montserrat italic text-[#6376FF] text-[14px] font-[900] bg-[url(/images/bg-im.png)] bg-contain bg-no-repeat w-[28px] h-[28px] rounded-full flex items-center justify-center">
-          {speed}X
+          <div
+            className="flex-shrink-0 font-montserrat italic text-[#6376FF] text-[14px] font-[900] bg-[url(/images/bg-im.png)] bg-contain bg-no-repeat w-[32px] h-[32px] rounded-full flex items-center justify-center"
+          >
+            <span
+              style={{
+                transform: `scale(${Math.max(0, (14 - (speed?.toString().length)) / 14)})`,
+              }}
+            >
+              {speed}X
+            </span>
           </div>
         </div>
       </CapsuleButton>
