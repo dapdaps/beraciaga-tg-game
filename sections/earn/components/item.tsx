@@ -14,6 +14,8 @@ const Item: React.FC<any> = (props: Props) => {
     disabled
   } = props;
 
+  const isTelegram = [QuestCategory.Telegram].includes(quest?.category);
+
   return (
     <div className={clsx("w-full h-[68px] bg-[#FFFAEA] border-[2px] border-[#D7C69D] rounded-[16px] p-[8px_10px_8px] flex justify-between items-center gap-[10px]", className)}>
       <div className="flex items-center gap-[8px] flex-1">
@@ -35,7 +37,7 @@ const Item: React.FC<any> = (props: Props) => {
       </div>
       <div className="shrink-0">
         {
-          (quest?.completed && ![QuestCategory.Telegram].includes(quest?.category)) ? (
+          (quest?.completed && !isTelegram) ? (
             <img src="/images/icon-done.svg" alt="" className="w-[28px] h-[28px] rounded-full" />
           ) : (
             <LightingButton
@@ -43,7 +45,7 @@ const Item: React.FC<any> = (props: Props) => {
               outerClassName={quest?.completed ? "!opacity-50" : ""}
               onClick={() => onClick(quest)}
             >
-              {quest?.visited ? 'Verify' : quest.buttonText}
+              {(quest?.visited && !quest?.completed) ? 'Verify' : quest.buttonText}
             </LightingButton>
           )
         }
