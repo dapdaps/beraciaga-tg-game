@@ -37,7 +37,7 @@ const FrensView = (props: any) => {
               <HeaderAvatar size={74} isLevel={false} className="shrink-0" />
               <div className="flex-1 w-0 flex flex-col justify-center gap-[11px]">
                 <div className="text-[#F7F9EA] text-stroke-2 font-cherryBomb text-[16px] leading-[100%] font-normal whitespace-nowrap overflow-ellipsis">
-                  @{userData.username}
+                  @{userData?.username}
                 </div>
                 <div className="flex items-center gap-[10px]">
                   <LightingButton
@@ -106,9 +106,9 @@ const FrensView = (props: any) => {
                     list?.length > 0 ? list.map((user, i: number) => (
                       <div key={i} className="odd:bg-[rgba(0,_0,_0,_0.10)] flex justify-between items-center gap-[10px] p-[9px] rounded-[10px] whitespace-nowrap text-[#F7F9EA] text-stroke-2 font-cherryBomb text-[16px] font-normal">
                         <div className="flex-1 w-0 flex items-center gap-[10px]">
-                          <LazyImage src={user.avatar} width="30px" height="30px" className="rounded-full shrink-0" />
+                          <LazyImage src={user?.avatar} width="30px" height="30px" className="rounded-full shrink-0" />
                           <div className="flex-1 w-0 overflow-hidden overflow-ellipsis">
-                            @{user.username}
+                            @{user?.username}
                           </div>
                         </div>
                         <div className="shrink-0 flex items-center gap-[6px]">
