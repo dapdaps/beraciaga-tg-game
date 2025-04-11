@@ -141,8 +141,36 @@ const BeraLevelContainer = () => {
         <span className="font-cherryBomb text-[26px] leading-[26px] text-stroke-2 text-white">
           Lv.{userLevel}
         </span>
-        <span className="text-white font-cherryBomb text-[14px] leading-[14px] self-end whitespace-nowrap">
-          {numberFormatter(currentCoins, Big(currentCoins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(currentCoins || 0).gt(1e9), isShortUppercase: true })} / {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData?.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData?.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
+        <span className="flex items-center gap-[4px] text-white font-cherryBomb text-[14px] leading-[14px] self-end whitespace-nowrap">
+          <span>
+            {numberFormatter(
+              currentCoins,
+              Big(currentCoins || 0).gte(1e9) ? 6: 3,
+              true,
+              {
+                isShort: Big(currentCoins || 0).gte(1e9),
+                isShortUppercase: false,
+                isZeroPrecision: Big(updateLevelData?.upgrade_coins || 0).gte(1e9),
+                shortUnitRender: (shortUnit) => {
+                  return ` ${shortUnit}`;
+                }
+              })}
+          </span>
+          <span>/</span>
+          <span>
+            {numberFormatter(
+              updateLevelData?.upgrade_coins || 0,
+              3,
+              true,
+              {
+                isShort: Big(updateLevelData?.upgrade_coins || 0).gte(1e9),
+                isShortUppercase: false,
+                isZeroPrecision: Big(updateLevelData?.upgrade_coins || 0).gte(1e9),
+                shortUnitRender: (shortUnit) => {
+                  return ` ${shortUnit}`;
+                }
+              })}
+          </span>
         </span>
       </div>
       <div className="px-3 w-[260px] pl-4 mt-1">
@@ -152,18 +180,10 @@ const BeraLevelContainer = () => {
           level={userLevel}
         />
       </div>
-      <div className="absolute right-0 top-0">
-        <BaseButton onClick={handleUpdate}>
-          <div className="flex flex-col items-center">
-            <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
-            {numberFormatter(updateLevelData?.upgrade_coins || 0, Big(updateLevelData?.upgrade_coins || 0).gt(1e9) ? 6 : 3, true, { isShort: Big(updateLevelData?.upgrade_coins || 0).gt(1e9), isShortUppercase: true })}
-            </div>
-            <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
-              update
-            </div>
-          </div>
-        </BaseButton>
-      </div>
+      <UpgradeButton
+        handleUpdate={handleUpdate}
+        updateLevelData={updateLevelData}
+      />
       {/* <OutOfGoldModal visible={true}/> */}
     </LevelContainer>
   );
@@ -232,4 +252,44 @@ const LevelBackgroundMappings: any = {
       defaultBg: "bg-[#F48B9E]",
     },
   }
+};
+
+const UpgradeButton = (props: any) => {
+  const {
+    handleUpdate,
+    updateLevelData,
+  } = props;
+
+  const upgradeCoins = numberFormatter(
+    updateLevelData?.upgrade_coins || 0,
+    3,
+    true,
+    {
+      isShort: Big(updateLevelData?.upgrade_coins || 0).gte(1e9),
+      isShortUppercase: false,
+      isZeroPrecision: Big(updateLevelData?.upgrade_coins || 0).gte(1e9),
+      shortUnitRender: (shortUnit) => {
+        return ` ${shortUnit}`;
+      }
+    });
+
+  return (
+    <div className="absolute right-0 top-0">
+      <BaseButton onClick={handleUpdate}>
+        <div className="flex flex-col items-center">
+          <div
+            className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]"
+            style={{
+              fontSize: Math.max(0, (16 - Math.max(0, (upgradeCoins?.replace(/,/, "")?.length - 6)))),
+            }}
+          >
+            {upgradeCoins}
+          </div>
+          <div className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]">
+            update
+          </div>
+        </div>
+      </BaseButton>
+    </div>
+  );
 };

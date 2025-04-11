@@ -26,9 +26,18 @@ export const numberFormatter = (
     isShort?: boolean;
     round?: Big.RoundingMode;
     isShortUppercase?: boolean;
+    shortUnitRender?(shortUnit: string): string;
   }
 ): any => {
-  const { prefix = '', isLTIntegerZero, isZeroPrecision, isShort, round, isShortUppercase } = options || {};
+  const {
+    prefix = '',
+    isLTIntegerZero,
+    isZeroPrecision,
+    isShort,
+    round,
+    isShortUppercase,
+    shortUnitRender = (shortUnit: string) => shortUnit,
+  } = options || {};
 
   const isValid = () => {
     try {
@@ -84,20 +93,45 @@ export const numberFormatter = (
   if (isSimple) {
     if (isShort) {
       const formatter = (split: number, unit: string): string => {
-        const _num = Big(value)
+        let _num = Big(value)
           .div(split)
-          .toFixed(precision, 0)
-          .replace(/(?:\.0*|(\.\d+?)0+)$/, '$1');
+          .toFixed(precision, 0);
+        if (!isZeroPrecision) {
+          _num = _num.replace(/(?:\.0*|(\.\d+?)0+)$/, '$1');
+        }
         const inter = _num.split('.')?.[0]?.replace(/\d(?=(\d{3})+\b)/g, '$&,');
         const decimal = _num.split('.')?.[1] ?? '';
-        return `${prefix}${inter}${decimal ? '.' + decimal : ''}${unit}`;
+        return `${prefix}${inter}${decimal ? '.' + decimal : ''}${shortUnitRender(unit)}`;
       };
+      // 1,000,000,000,000,000,000,000,000 Septillion
+      if (Big(value).gte(1e24)) {
+        return formatter(1e24, isShortUppercase ? 'SP' : 'sp');
+      }
+      // 1,000,000,000,000,000,000,000 Sextillion
+      if (Big(value).gte(1e21)) {
+        return formatter(1e21, isShortUppercase ? 'SX' : 'sx');
+      }
+      // 1,000,000,000,000,000,000 Quintillion
+      if (Big(value).gte(1e18)) {
+        return formatter(1e18, isShortUppercase ? 'QU' : 'qu');
+      }
+      // 1,000,000,000,000,000 Quadrillion
+      if (Big(value).gte(1e15)) {
+        return formatter(1e15, isShortUppercase ? 'Q' : 'q');
+      }
+      // 1,000,000,000,000 Trillion
+      if (Big(value).gte(1e12)) {
+        return formatter(1e12, isShortUppercase ? 'T' : 't');
+      }
+      // 1,000,000,000 Billion
       if (Big(value).gte(1e9)) {
         return formatter(1e9, isShortUppercase ? 'B' : 'b');
       }
+      // 1,000,000 Million
       if (Big(value).gte(1e6)) {
         return formatter(1e6, isShortUppercase ? 'M' : 'm');
       }
+      // 1,000 Thousand
       if (Big(value).gte(1e3)) {
         return formatter(1e3, isShortUppercase ? 'K' : 'k');
       }
