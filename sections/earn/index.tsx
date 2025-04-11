@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuest } from '@/hooks/useQuest';
+import { QuestCategory, useQuest } from '@/hooks/useQuest';
 import Skeleton from 'react-loading-skeleton';
 import AppHeader from '@components/header';
 import PaperclipCard from '@components/paperclip-card';
@@ -36,7 +36,7 @@ const EarnView = () => {
                   quest={quest}
                   key={index}
                   pending={pending}
-                  disabled={quest.completed}
+                  disabled={quest.completed && ![QuestCategory.Telegram].includes(quest.category)}
                   onClick={handleClick}
                   onVerify={handleVerify}
                 />

@@ -89,6 +89,12 @@ export function useQuest() {
       handleVerify(params);
       return;
     }
+    if (params.completed) {
+      if ([QuestCategory.Telegram].includes(params?.category)) {
+        window.open(params?.url);
+        return;
+      }
+    }
     const visited = questVisited[params.id];
     if (visited) {
       handleVerify(params);
@@ -96,7 +102,7 @@ export function useQuest() {
     }
     setQuestVisited({ id: params.id, visited: true });
     if (params.url) {
-      WebApp?.openLink?.(params.url);
+      window.open(params?.url);
     }
   };
 

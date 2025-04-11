@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { numberFormatter } from '@/utils/number-formatter';
 import LightingButton from '@components/Button/lighting-button';
-import { Quest } from '@/hooks/useQuest';
+import { Quest, QuestCategory } from '@/hooks/useQuest';
 
 const Item: React.FC<any> = (props: Props) => {
   const {
@@ -35,11 +35,12 @@ const Item: React.FC<any> = (props: Props) => {
       </div>
       <div className="shrink-0">
         {
-          quest?.completed ? (
+          (quest?.completed && ![QuestCategory.Telegram].includes(quest?.category)) ? (
             <img src="/images/icon-done.svg" alt="" className="w-[28px] h-[28px] rounded-full" />
           ) : (
             <LightingButton
               disabled={pending[quest.id] || disabled}
+              outerClassName={quest?.completed ? "!opacity-50" : ""}
               onClick={() => onClick(quest)}
             >
               {quest?.visited ? 'Verify' : quest.buttonText}
