@@ -12,7 +12,8 @@ const Clothes = ({
     const level = vehicleItem?.level || 0;
     const hasPassedLimitMinCarLevel = level >= LimitMinCarLevel;
     
-    const posture = level < LimitMinCarLevel ? 'stand' : (hasPassedLimitMinCarLevel ? 'sit' : 'stand');
+    // const posture = level < LimitMinCarLevel ? 'stand' : (hasPassedLimitMinCarLevel ? 'sit' : 'stand');
+    const posture = 'stand';
     const svgPath = (CLOTHES_MAPPING as any)[posture][clothesItem.look_id as any];
     
     if (!svgPath) return null;
