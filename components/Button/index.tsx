@@ -24,14 +24,15 @@ export const CapsuleButton = ({
   };
 
 
-export const BaseButton = ({ children, interClassName, onClick }: {
+export const BaseButton = ({ children, interClassName, onClick, disabled }: {
     children: React.ReactNode;
     interClassName?: string;
     onClick?: () => void;
+    disabled?: boolean;
   }) => {
     return (
-      <div className="inline-block" onClick={onClick}>
-        <div className="rounded-[16px] border-2 border-[#4B371F] bg-[#FFB050] p-1 inline-block">
+      <div className="inline-block" onClick={disabled ? undefined : onClick}>
+        <div className={clsx('rounded-[16px] border-2 border-[#4B371F] bg-[#FFB050] p-1 inline-block', disabled && 'opacity-30')}>
           <div className={clsx("rounded-[12px] border-2 border-[#AF7026] bg-[#FFCF23] flex items-center justify-center px-2 py-1 relative h-[52px] min-w-[90px]", interClassName)}>
             <div className='absolute top-[2px] left-[2px]'>
             <svg width="56" height="12" viewBox="0 0 56 12" fill="none" xmlns="http://www.w3.org/2000/svg">

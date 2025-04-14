@@ -1,15 +1,15 @@
 import Modal from "@/components/modal";
 import BearDressup from "@/components/BearDressup";
-import Bear from "@/components/BearDressup/Bear";
 import clsx from "clsx";
 
 import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import html2canvas from "html2canvas";
-import Skin from "./bear-svg/Skin";
 import { CATEGORIES, Category, CATEGORY_NAMES } from "@/components/BearDressup/mappings";
 import Clothes from "@/components/BearDressup/Clothes";
 import { useGlobalUser } from "@/context/UserContext";
+import Face from "@/components/BearDressup/Face";
+import Skin from "@/components/BearDressup/Skin";
 
 const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category: Category; isUnlocked: boolean, userLooksFlattened?: any }) => {
   if (!isUnlocked) {
@@ -27,11 +27,14 @@ const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category:
   return (
     <div className="w-[96px] h-[106px] border-[2px] border-[#DCC9B1] rounded-xl bg-white p-[5px] flex flex-col items-center">
       <div className="w-[86px] h-[86px] rounded-xl border-[2px] border-[#DCB988] bg-[#FFF1DC] flex items-center justify-center relative">
-        {category === 'skin' && <Skin lookId={userLooksFlattened?.skin?.look_id} />}
+        {category === 'skin' && (
+          <div className="w-full h-full scale-[0.27] translate-x-[-32%] -translate-y-[40%]">
+            <Skin  item={userLooksFlattened?.skin} />   
+          </div>
+        ) }
         {category === 'face' && (
-          <Bear
-            showBody={false}
-            userLooks={userLooksFlattened} 
+          <Face
+            item={userLooksFlattened.face}
             className="scale-[0.45] translate-x-[5%] translate-y-[9%]"
           />
         )}

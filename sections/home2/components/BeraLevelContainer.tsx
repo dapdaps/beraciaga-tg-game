@@ -313,9 +313,11 @@ const UpgradeButton = (props: any) => {
       }
     });
 
+    console.log(updateLevelData?.upgrade_coins, '>>>updateLevelData?.upgrade_coins')
+
   return (
     <div className="absolute right-0 top-0">
-      <BaseButton onClick={handleUpdate}>
+      <BaseButton onClick={handleUpdate} disabled={!updateLevelData?.upgrade_coins}>
         <div className="flex flex-col items-center">
           <div
             className="font-cherryBomb text-white text-stroke-2 leading-[16px] text-[16px]"
