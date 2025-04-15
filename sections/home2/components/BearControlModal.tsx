@@ -1,7 +1,6 @@
 import Modal from "@/components/modal";
 import BearDressup from "@/components/BearDressup";
 import clsx from "clsx";
-
 import IconChangeLook from "@public/svg/home/changeLook.svg";
 import IconPhoto from "@public/svg/home/photo.svg";
 import html2canvas from "html2canvas";
@@ -10,6 +9,11 @@ import Clothes from "@/components/BearDressup/Clothes";
 import { useGlobalUser } from "@/context/UserContext";
 import Face from "@/components/BearDressup/Face";
 import Skin from "@/components/BearDressup/Skin";
+import { useEffect, useRef } from "react";
+import { Canvg } from 'canvg';
+import { createRoot } from 'react-dom/client';
+
+
 
 const EquipmentItem = ({ category, isUnlocked, userLooksFlattened }: { category: Category; isUnlocked: boolean, userLooksFlattened?: any }) => {
   if (!isUnlocked) {
@@ -160,13 +164,83 @@ const BearControlModal = ({
     userInfo,
   } = useGlobalUser();
 
+  const bearRoleRef = useRef<HTMLDivElement>(null);
+
+  const prepareSvgForCapture = async () => {
+    if (!bearRoleRef.current) return;
+    
+    // 找到所有SVG元素
+    const svgElements = bearRoleRef.current.querySelectorAll('svg');
+    
+    // 处理每个SVG
+    for (const svgElement of Array.from(svgElements)) {
+      const svgString = new XMLSerializer().serializeToString(svgElement);
+      const bbox = svgElement.getBoundingClientRect();
+      
+      // 创建一个Canvas元素来代替SVG
+      const canvas = document.createElement('canvas');
+      canvas.width = bbox.width;
+      canvas.height = bbox.height;
+      
+      // 设置Canvas的样式以匹配SVG
+      Object.assign(canvas.style, {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: `${bbox.width}px`,
+        height: `${bbox.height}px`,
+      });
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) continue;
+      
+      // 使用Canvg渲染SVG到Canvas
+      const v = await Canvg.from(ctx, svgString);
+      await v.render();
+      
+      // 临时隐藏SVG并插入Canvas
+      svgElement.style.display = 'none';
+      svgElement.parentNode?.insertBefore(canvas, svgElement);
+      
+      // 记录这对匹配的元素，以便稍后恢复
+      svgElement.setAttribute('data-has-canvas-replacement', 'true');
+    }
+  };
+  // 恢复原始SVG
+  const restoreSvgElements = () => {
+    if (!bearRoleRef.current) return;
+    
+    // 找到所有被替换的SVG
+    const replacedSvgs = bearRoleRef.current.querySelectorAll('svg[data-has-canvas-replacement="true"]');
+    
+    for (const svg of Array.from(replacedSvgs)) {
+      // 删除Canvas元素
+      const canvas = svg.previousSibling;
+      if (canvas && canvas instanceof HTMLCanvasElement) {
+        canvas.remove();
+      }
+      
+      // 恢复SVG显示
+      svg.style.display = '';
+      svg.removeAttribute('data-has-canvas-replacement');
+    }
+  };
   const handlePhoto = async () => {
-    const element = document.querySelector("#beraRole");
+    const element = bearRoleRef.current;
     if (element) {
       try {
-        const canvas = await html2canvas(element as HTMLElement, {
-          scale: 2, 
+        await prepareSvgForCapture();
+        
+        // 截图
+        const canvas = await html2canvas(element, {
+          logging: false,
+          useCORS: true,
+          allowTaint: true
         });
+        
+        restoreSvgElements();
+        
+        // 下载图片
         const dataUrl = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.download = "beraRole.png";
@@ -174,9 +248,17 @@ const BearControlModal = ({
         link.click();
       } catch (error) {
         console.error("Failed to generate image:", error);
+        restoreSvgElements();
       }
     }
   };
+
+  // 当modal关闭时确保恢复SVG
+  useEffect(() => {
+    if (!show) {
+      restoreSvgElements();
+    }
+  }, [show]);
 
   return (
     <Modal
@@ -205,6 +287,7 @@ const BearControlModal = ({
             <div className="border-[2px] border-[#DCB988] bg-[#FFF5A8] rounded-xl overflow-hidden w-[223px] h-[223px]">
               <div
                 id="beraRole"
+                ref={bearRoleRef}
                 className="bg-[#FFF5A8] w-full h-full flex justify-center items-center"
               >
                 <div className="w-full h-full scale-[0.6] translate-x-[-20px] translate-y-[-40px]">

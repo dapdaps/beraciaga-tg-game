@@ -313,8 +313,6 @@ const UpgradeButton = (props: any) => {
       }
     });
 
-    console.log(updateLevelData?.upgrade_coins, '>>>updateLevelData?.upgrade_coins')
-
   return (
     <div className="absolute right-0 top-0">
       <BaseButton onClick={handleUpdate} disabled={!updateLevelData?.upgrade_coins}>
