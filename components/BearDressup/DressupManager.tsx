@@ -19,6 +19,9 @@ const LazyGlasses = lazy(() => import('./Glasses').then(module => ({
 const LazyNecklace = lazy(() => import('./Necklace').then(module => ({ 
   default: module.default 
 })));
+const LazySkin = lazy(() => import('./Skin').then(module => ({
+  default: module.default 
+})));
 
 const componentMap = {
   'clothes': LazyClothes,
@@ -27,6 +30,7 @@ const componentMap = {
   'face': LazyFace,
   'glasses': LazyGlasses,
   'necklace': LazyNecklace,
+  'skin': LazySkin,
 };
 
 type LoadingState = {

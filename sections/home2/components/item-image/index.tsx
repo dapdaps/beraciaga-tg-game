@@ -22,7 +22,6 @@ const ItemWrapper: React.FC<{ children: React.ReactNode, className?: string }> =
 
 const Background: React.FC<{ item: EquipmentItem }> = ({ item }) => {
   const bgId = BACKGROUNDS_MAPPING[item.look_id as keyof typeof BACKGROUNDS_MAPPING];
-  console.log('Background ID:', bgId);
   if (!bgId) return null;
   const bg = `bg-[${bgId}]`;
   return (
@@ -35,6 +34,10 @@ const DefaultImage = ({ item }: { item: EquipmentItem }) => (
 );
 
 const categoryConfigs = {
+  skin: {
+    type: 'skin',
+    className: '!scale-[0.2] !translate-y-[-38%] !-translate-x-[24%]',
+  },
   background: {
     component: Background,
     type: 'background',

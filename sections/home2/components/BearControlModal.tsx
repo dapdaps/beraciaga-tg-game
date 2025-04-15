@@ -219,6 +219,8 @@ const BearControlModal = ({
         canvas.remove();
       }
       
+      // 恢复SVG显示
+      (svg as SVGElement).style.display = '';
       svg.removeAttribute('data-has-canvas-replacement');
     }
   };

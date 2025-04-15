@@ -12,7 +12,7 @@ const PlayerEquipmentChoiceModal = ({
   show: boolean;
   onClose: () => void;
 }) => {
-  const [activeTab, setActiveTab] = useState<string>(CATEGORY_NAMES.face);
+  const [activeTab, setActiveTab] = useState<string>(CATEGORY_NAMES.skin);
   const { tgUserId, setUpdater } = useGlobalUser();
   // 记录用户实际修改过的装备状态
   const [equipmentChanges, setEquipmentChanges] = useState<Record<string, boolean>>({});
@@ -60,7 +60,7 @@ const PlayerEquipmentChoiceModal = ({
       <div className="bg-[url(/images/home/modal-player.png)] relative bg-contain bg-no-repeat w-[370px] h-[552px] px-2 pt-5">
         <div className="w-full mx-auto">
           <div className="relative top-[4px] flex rounded-t-[10px] w-full overflow-x-auto whitespace-nowrap scrollbar-hidden">
-            {CATEGORIES.filter(item => !['skin'].includes(item)).map((tab, index) => (
+            {CATEGORIES.map((tab, index) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(CATEGORY_NAMES[tab])}
