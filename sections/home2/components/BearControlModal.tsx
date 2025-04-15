@@ -11,7 +11,6 @@ import Face from "@/components/BearDressup/Face";
 import Skin from "@/components/BearDressup/Skin";
 import { useEffect, useRef } from "react";
 import { Canvg } from 'canvg';
-import { createRoot } from 'react-dom/client';
 
 
 
@@ -220,8 +219,6 @@ const BearControlModal = ({
         canvas.remove();
       }
       
-      // 恢复SVG显示
-      svg.style.display = '';
       svg.removeAttribute('data-has-canvas-replacement');
     }
   };
