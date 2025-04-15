@@ -17,6 +17,13 @@ export interface SceneItem {
     botBg?: string | number;
     bot?: string | number;
   };
+  fileType?: {
+    top?: string;
+    topBg?: string;
+    mid?: string;
+    botBg?: string;
+    bot?: string;
+  };
 }
 
 export type Scenes =
@@ -46,6 +53,118 @@ export type Scenes =
   'SolidColor08';
 
 export const SceneList: Record<Scenes, SceneItem> = {
+  Figure01: {
+    name: 'figure01',
+    path: 'figure01',
+    height: {
+      top: '90vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure02: {
+    name: 'figure02',
+    path: 'figure02',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure03: {
+    name: 'figure03',
+    path: 'figure03',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure04: {
+    name: 'figure04',
+    path: 'figure04',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure05: {
+    name: 'figure05',
+    path: 'figure05',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure06: {
+    name: 'figure06',
+    path: 'figure06',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure07: {
+    name: 'figure07',
+    path: 'figure07',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
+  Figure08: {
+    name: 'figure08',
+    path: 'figure08',
+    height: {
+      top: '60vh',
+      mid: 0,
+      botBg: 0,
+      bot: '40vh',
+    },
+    fileType: {
+      top: 'png',
+      bot: 'png',
+    },
+  },
   SolidColor01: {
     name: 'solidColor01',
     path: 'solid-color01',
@@ -124,86 +243,6 @@ export const SceneList: Record<Scenes, SceneItem> = {
       mid: 0,
       botBg: 0,
       bot: 0,
-    },
-  },
-  Figure01: {
-    name: 'figure01',
-    path: 'figure01',
-    height: {
-      top: '90vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure02: {
-    name: 'figure02',
-    path: 'figure02',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure03: {
-    name: 'figure03',
-    path: 'figure03',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure04: {
-    name: 'figure04',
-    path: 'figure04',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure05: {
-    name: 'figure05',
-    path: 'figure05',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure06: {
-    name: 'figure06',
-    path: 'figure06',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure07: {
-    name: 'figure07',
-    path: 'figure07',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
-    },
-  },
-  Figure08: {
-    name: 'figure08',
-    path: 'figure08',
-    height: {
-      top: '60vh',
-      mid: 0,
-      botBg: 0,
-      bot: '40vh',
     },
   },
   Desert: {
